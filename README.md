@@ -8,5 +8,7 @@ Scott Henry ROCKS!!!
 
 Quote: Psychologists are just people who weren't smart enough to be psychics.
 
-Q: What happened to the lost beef shipment? 
-A: Nobody's herd. 
+Q: What happened to the lost beef shipment?
+A: Nobody's herd.
+
+Quote: If you want a job done right, do it yourself.
