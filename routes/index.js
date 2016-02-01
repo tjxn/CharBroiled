@@ -15,12 +15,12 @@ router.get('/register', function(req, res, next) {
 //http://stackoverflow.com/questions/25463423/res-sendfile-absolute-path
 
 /* GET view page. */
-router.get('/register', function(req, res, next) {
+router.get('/view', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../views', 'view.html'));
 });
 
 /* GET edit page. */
-router.get('/register', function(req, res, next) {
+router.get('/edit', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../views', 'edit.html'));
 });
 
