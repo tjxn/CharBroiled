@@ -15,8 +15,11 @@ router.get('/login', function(req, res, next) {
 
 /* GET register page. */
 router.get('/register', function(req, res, next) {
-  //res.render('register.html', { title: 'Express-register' });
-  res.sendFile(path.join(__dirname+'/test.html'));
+  res.sendFile(path.join(__dirname, '../views', 'test.html'));
 });
+//http://stackoverflow.com/questions/25463423/res-sendfile-absolute-path
+
+
+
 
 module.exports = router;
