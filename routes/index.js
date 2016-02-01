@@ -16,7 +16,7 @@ router.get('/login', function(req, res, next) {
 /* GET register page. */
 router.get('/register', function(req, res, next) {
   //res.render('register.html', { title: 'Express-register' });
-  res.sendFile(path.join(__dirname+'/register.html'));
+  res.sendFile(path.join(__dirname+'/test.html'));
 });
 
 module.exports = router;
