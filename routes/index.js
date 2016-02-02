@@ -24,6 +24,12 @@ router.get('/edit', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../views', 'edit.html'));
 });
 
+/* GET edit page. */
+router.get('/login', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../views', 'login.html'));
+});
+
+
 
 
 module.exports = router;
