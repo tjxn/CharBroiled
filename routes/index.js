@@ -21,12 +21,12 @@ router.get('/view', function(req, res, next) {
 
 /* GET edit page. */
 router.get('/edit', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../views', 'edit.html'));
+  res.sendFile(path.join(__dirname, '../views', 'login.jade'));
 });
 
 /* GET edit page. */
 router.get('/login', function(req, res, next) {
-  res.sendFile(path.join(__dirname, '../views', 'login.html'));
+  res.sendFile(path.join(__dirname, '../views', 'login.jade'));
 });
 
 
