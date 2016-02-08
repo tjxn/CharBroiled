@@ -19,10 +19,44 @@ app.use(stormpath.init(app, {
     },
     website: true,
 
+web: {
+    register: {
+        fields: {
+            userName: {
+                enabled: true,
+                label: 'User Name',
+                name: 'User Name',
+                placeholder: 'User Name',
+                required: true,
+                type: 'text'
+            },
+            givenName: {
+                enabled: false,
+                required: false
+            },
+            surname: {
+                enabled: false,
+                required: false
+            },
+            userType: {
+                enabled: true,
+                label: 'User Type',
+                name: 'User Type',
+                placeholder: 'Enter Contributor or Viewer',
+                required: true,
+                type: 'text'
+            },
+        },
+        fieldOrder: ["userName","userType", "email", "password"],
+    },
+},
+
     expand: {
         customData: true
     }
+
 }));
+
 app.get('/', function (req, res) {
     res.render('login', {
         title: 'Welcome'
