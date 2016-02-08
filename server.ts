@@ -18,6 +18,7 @@ app.use(stormpath.init(app, {
         href: 'https://api.stormpath.com/v1/applications/MCCvNPvyq2KR5cl0x2POL'
     },
     website: true,
+
     expand: {
         customData: true
     }
