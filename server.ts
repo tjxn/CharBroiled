@@ -7,6 +7,7 @@ var stormpath = require('express-stormpath');
 var app = express();
 app.set('views', './views');
 app.set('view engine', 'jade');
+
 app.use(stormpath.init(app, {
     client: {
         apiKey: {
@@ -17,15 +18,17 @@ app.use(stormpath.init(app, {
     application: {
         href: 'https://api.stormpath.com/v1/applications/MCCvNPvyq2KR5cl0x2POL'
     },
+
     website: true,
 
 web: {
     register: {
+        enabled: true,
         fields: {
             userName: {
                 enabled: true,
                 label: 'User Name',
-                name: 'User Name',
+                name: 'userName',
                 placeholder: 'User Name',
                 required: true,
                 type: 'text'
@@ -41,7 +44,7 @@ web: {
             userType: {
                 enabled: true,
                 label: 'User Type',
-                name: 'User Type',
+                name: 'userType',
                 placeholder: 'Enter Contributor or Viewer',
                 required: true,
                 type: 'text'
