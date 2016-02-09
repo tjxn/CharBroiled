@@ -8,14 +8,9 @@ var collectFormErrors = require('express-stormpath/lib/helpers').collectFormErro
 // Declare the schema of our form:
 
 var profileForm = forms.create({
-  givenName: forms.fields.string({
-    required: true
-  }),
-  surname: forms.fields.string({ required: true }),
-  streetAddress: forms.fields.string(),
-  city: forms.fields.string(),
-  state: forms.fields.string(),
-  zip: forms.fields.string()
+  userName: forms.fields.string({required: true}),
+  email: forms.fields.string({ required: true }),
+  password: forms.fields.string({ required: true })
 });
 
 // A render function that will render our form and
@@ -25,12 +20,9 @@ var profileForm = forms.create({
 function renderForm(req,res,locals){
   res.render('profile', extend({
     title: 'My Profile',
-    givenName: req.user.givenName,
-    surname: req.user.surname,
-    streetAddress: req.user.customData.streetAddress,
-    city: req.user.customData.city,
-    state: req.user.customData.state,
-    zip: req.user.customData.zip
+    userName: req.user.userName,
+    email: req.user.email,
+    password: req.user.password
   },locals||{}));
 }
 
@@ -56,12 +48,9 @@ module.exports = function profile(){
         // The express-stormpath library will populate req.user,
         // all we have to do is set the properties that we care
         // about and then cal save() on the user object:
-        req.user.givenName = form.data.givenName;
-        req.user.surname = form.data.surname;
-        req.user.customData.streetAddress = form.data.streetAddress;
-        req.user.customData.city = form.data.city;
-        req.user.customData.state = form.data.state;
-        req.user.customData.zip = form.data.zip;
+        req.user.userName = form.data.userName;
+        req.user.email = form.data.email;
+        req.user.password = form.data.password;
         req.user.customData.save();
         req.user.save(function(err){
           if(err){
