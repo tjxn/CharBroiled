@@ -16,7 +16,6 @@ var stormpath = require('express-stormpath');
 var app = express();
 
 // view engine setup
-//app.set('views', './views');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -29,7 +28,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-//app.use('/users', users);
 
 app.use(stormpath.init(app, {
     client: {
@@ -89,7 +87,6 @@ app.get('/', function(req, res) {
     });
 });
 
-//app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 app.on('stormpath.ready', function () {
     console.log('Stormpath Ready');
     app.listen(3000);

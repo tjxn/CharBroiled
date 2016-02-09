@@ -11,7 +11,6 @@ var express = require('express');
 var stormpath = require('express-stormpath');
 var app = express();
 // view engine setup
-//app.set('views', './views');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
@@ -22,7 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
-//app.use('/users', users);
 app.use(stormpath.init(app, {
     client: {
         apiKey: {
@@ -75,7 +73,6 @@ app.get('/', function (req, res) {
         title: 'Welcome'
     });
 });
-//app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 app.on('stormpath.ready', function () {
     console.log('Stormpath Ready');
     app.listen(3000);
