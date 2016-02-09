@@ -2,10 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path    = require("path");
 
-/* GET login page(home). */
-router.get('/', function(req, res, next) {
-  res.render('login', { title: 'login' });
-});
+
 
 /* GET view page. */
 router.get('/view', function(req, res, next) {
