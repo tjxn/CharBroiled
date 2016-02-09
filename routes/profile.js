@@ -51,7 +51,8 @@ module.exports = function profile(){
         req.user.userName = form.data.userName;
         req.user.email = form.data.email;
         req.user.password = form.data.password;
-        req.user.customData.save();
+        //req.user.customData.streetAddress = form.data.streetAddress;
+        //req.user.customData.save();
         req.user.save(function(err){
           if(err){
             if(err.developerMessage){
