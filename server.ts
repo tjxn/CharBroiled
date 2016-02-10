@@ -1,5 +1,6 @@
-/// <reference path="node_modules/express/express.d.ts" />
-/// <reference path="node_modules/body-parser/body-parser.d.ts" />
+/// <reference path="express/express.d.ts" />
+/// <reference path="body-parser/body-parser.d.ts" />
+/// <reference path="ComicWebService.ts" />
 
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -23,7 +24,7 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -42,38 +43,38 @@ app.use(stormpath.init(app, {
 
     website: true,
 
-web: {
-    register: {
-        enabled: true,
-        fields: {
-            userName: {
-                enabled: true,
-                label: 'User Name',
-                name: 'userName',
-                placeholder: 'User Name',
-                required: true,
-                type: 'text'
+    web: {
+        register: {
+            enabled: true,
+            fields: {
+                userName: {
+                    enabled: true,
+                    label: 'User Name',
+                    name: 'userName',
+                    placeholder: 'User Name',
+                    required: true,
+                    type: 'text'
+                },
+                givenName: {
+                    enabled: false,
+                    required: false
+                },
+                surname: {
+                    enabled: false,
+                    required: false
+                },
+                userType: {
+                    enabled: true,
+                    label: 'User Type',
+                    name: 'userType',
+                    placeholder: 'Enter Contributor or Viewer',
+                    required: true,
+                    type: 'text'
+                },
             },
-            givenName: {
-                enabled: false,
-                required: false
-            },
-            surname: {
-                enabled: false,
-                required: false
-            },
-            userType: {
-                enabled: true,
-                label: 'User Type',
-                name: 'userType',
-                placeholder: 'Enter Contributor or Viewer',
-                required: true,
-                type: 'text'
-            },
+            fieldOrder: ["userName", "userType", "email", "password"],
         },
-        fieldOrder: ["userName","userType", "email", "password"],
     },
-},
 
     expand: {
         customData: true
@@ -81,15 +82,38 @@ web: {
 
 }));
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.render('login', {
         title: 'Welcome'
     });
 });
 
-app.use('/profile',stormpath.loginRequired,require('./routes/profile')());
+app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 
+//--------------------------------------------------------
+// ACCESSING COMIC WEB SERVICE API
+// NOTE: must give a callback function, these calls are ASYNC!!!
+//--------------------------------------------------------
 
+var panel1 = new Panel("First Panel", "www.google.ca");
+var panel2 = new Panel("First Panel", "www.google.ca");
+var comic = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
+comic.dbID = "56b44b8284566860217dad39";
+
+var api = new ComicWebService();
+api.getAComic(comic, function (error:string, response:string, body:string) {
+
+    var data = JSON.parse(body);
+
+    var title = data['Title'];
+    var pub = data['Public'];
+    var contributor3 = data['Contributors']['Contributor_3'];
+    var panel4_Text = data['Panels']['Panel_4']['Text'];
+
+    console.log(data);
+});
+//--------------------------------------------------------
+//--------------------------------------------------------
 
 app.on('stormpath.ready', function () {
     console.log('Stormpath Ready');

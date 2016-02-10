@@ -1,5 +1,5 @@
-/// <reference path="node_modules/express/express.d.ts" />
-/// <reference path="node_modules/body-parser/body-parser.d.ts" />
+/// <reference path="typescript-definitions/express.d.ts" />
+/// <reference path="typescript-definitions/body-parser.d.ts" />
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
