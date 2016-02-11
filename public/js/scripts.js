@@ -50,6 +50,7 @@ function renderPanels(elId, jsonPanels) {
         var img = document.createElement("img");
         img.alt = "Bootstrap Thumbnail First";
         img.src = panels[i].Image_URL;
+        img.id = "panelImg_"+(i+1).toString();
         //img.style.height = "300px";
         //img.style.width = "300px";
         thumbnail.appendChild(img);

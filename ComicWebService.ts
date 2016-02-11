@@ -8,6 +8,7 @@
 
 
 class ComicWebService {
+
     // USED FOR TESTING
     //panel1:Panel;
     //panel2:Panel;
