@@ -17,7 +17,7 @@ function renderPanels(elId, jsonPanels) {
 
     var TESTJSON = JSON.stringify({
         Panel_1 : {
-            "Image_URL": "http://www.potatoes.com/files/5713/4202/4172/07.jpg",
+            "Image_URL": "https://49.media.tumblr.com/8a9eb98c7d55555b5d88d6859d5631fc/tumblr_n8uo15RRCE1sy4wkto1_500.gif",
             "Text": "TEST TEXT"
         },
         Panel_2 : {
@@ -97,7 +97,6 @@ function updateModal(ele) {
     descEle.value = desc;
 }
 
-
 function addPanel(){
     //comic.ts
     comic.addPanel("Add your custom text here...","http://33.media.tumblr.com/tumblr_luknndtrik1qkq0wr.gif")
@@ -105,15 +104,24 @@ function addPanel(){
     renderPanels("pictureContainer");
 }
 
-function updateTitle(comicTitle){
+function updateTitle(elID){
     var newTitle = document.getElementById(elId).value;
     //comic.ts
     comic.setTitle(newTitle);
     saveComic(this.comic);
+    renderTitle(elID);
 }
 
 function renderTitle(elID){
     //comic.ts
     var el = document.getElementById(elId);
     el.value = comic.title();
+}
+
+function updatePanel(elID){
+    var url = document.getElementById("modalURL").value;
+    var desc = document.getElementById("modalDesc").value;
+
+    comic.updatePanel(pNum, url, desc);
+    saveComic(this.comic);
 }
