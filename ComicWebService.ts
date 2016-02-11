@@ -3,8 +3,8 @@
  * Edited by Joshua Jackson on 10-Feb-2016.
  */
 /// <reference path="express/express.d.ts" />
-/// <reference path="src/comic.ts" />
-/// <reference path="src/panel.ts" />
+/// <reference path="comic.ts" />
+/// <reference path="panel.ts" />
 
 
 class ComicWebService {

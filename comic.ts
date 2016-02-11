@@ -3,6 +3,7 @@
  * Edited by JJXN on 2/9/16
  */
 /// <reference path="panel.ts" />
+/// <reference path="panel.ts" />
 
 class Comic {
 	public dbID: string;
@@ -15,10 +16,11 @@ class Comic {
 	public Contributor_3: string;
 	public Contributor_4: string;
 	public Contributor_5: string;
+	public defaultPanel: string = "http://i.imgur.com/An1bi8f.jpg";
+    public defaultText: string = "Default text.";
 	//NOTE: Just made it a list of strings, since we don't need to link the contributor name in any way right now,
 	// and I assume that the list of contributors is stored in the database?
 	//private _contributors: string[];
-	//TODO: constructor for new comic
 	constructor(title: string, publicView: boolean, panels: Panel[], contributors: string[]) {
 		this.title = title;
 		this.publicView = publicView;
@@ -29,19 +31,21 @@ class Comic {
 		this.Contributor_4 = contributors[3];
 		this.Contributor_5 = contributors[4];
 	}
-	// TODO: constructor for existing comic
+
 	//constructor(public comicid: string) {
 	//}
 	// TODO: save the comic in the database
 	saveComic() {
+
 	}
 	// TODO: delete the comic from the database
 	deleteComic() {
 	}
-	addPanel(panel: Panel) {
+	addPanel() {
 		var i = this.panels.length;
 		if (i < this.panelLimit ) {
-			this.panels[i-1] = panel;
+            var temppanel = new Panel(this.defaultText, this.defaultPanel);
+			this.panels[i-1] = temppanel;
 		}
 		else {
 			// Return an error?
