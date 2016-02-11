@@ -1,5 +1,6 @@
 /**
  * Created by Trevor Jackson on 08-Feb-2016.
+ * Edited by Joshua Jackson on 10-Feb-2016.
  */
 /// <reference path="express/express.d.ts" />
 /// <reference path="src/comic.ts" />
@@ -29,19 +30,23 @@ class ComicWebService {
         return;
     }
 
-    getAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+    getAComicById(comicId:string, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
-
-        request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID, callback);
-
+        request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);
         return;
     }
 
-    deleteAComics(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+    getAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
+        request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID, callback);
+        return;
+    }
 
+    deleteAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+
+        var request = require('request');
         var options = {
             method: 'DELETE',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID,
@@ -49,9 +54,7 @@ class ComicWebService {
                 'content-type': 'application/x-www-form-urlencoded',
             }
         };
-
         request(options, callback);
-
         return;
     }
 

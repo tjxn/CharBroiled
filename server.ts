@@ -101,7 +101,7 @@ var comic = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jac
 comic.dbID = "56b44b8284566860217dad39";
 
 var api = new ComicWebService();
-api.getAComic(comic, function (error:string, response:string, body:string) {
+api.getAComicById(comic.dbID, function (error:string, response:string, body:string) {
 
     var data = JSON.parse(body);
 
