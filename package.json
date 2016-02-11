@@ -1,9 +1,9 @@
 {
-  "name": "untitled",
+  "name": "charbroiled",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node app.js"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
@@ -17,5 +17,18 @@
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
     "xtend": "^4.0.1"
-  }
+  },
+  "description": "Q: What do you call a cow that has 1 leg?\r A: Steak",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UBC-CS310-2015w2/CharBroiled.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UBC-CS310-2015w2/CharBroiled/issues"
+  },
+  "homepage": "https://github.com/UBC-CS310-2015w2/CharBroiled#readme"
 }

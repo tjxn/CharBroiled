@@ -119,5 +119,5 @@ function test (error:string, response:string, body:string){
 
 app.on('stormpath.ready', function () {
     console.log('Stormpath Ready');
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
 });
