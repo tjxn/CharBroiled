@@ -65,9 +65,12 @@ function renderPanels(elId, jsonPanels) {
 
         var button = document.createElement("button");
         button.id = "button_"+ toString(i+1);
-        button.href = "#modal-container-94539";
         button.className = "btn btn-primary";
         button.innerHTML = "Edit Panel";
+        button.setAttribute("data-toggle", "modal");
+        button.setAttribute("role", "button");
+        button.setAttribute("href", "#modal-container-94539");
+
 
         var par1 = document.createElement("p");
         caption.appendChild(par);
