@@ -16,8 +16,13 @@ html
                     p Welcome,
                     p
                         a.small(href="profile") Edit my profile
-
-                    a.btn.btn-primary(href="/view") Comic
+                        if user.userType = "Contributor"
+                            p
+                            a.btn.btn-primary(href="/edit") Edit Comic
+                            //Call the comic creator method here???
+                        else
+                            p
+                            a.btn.btn-primary(href="/view") View Comic
                     &nbsp
                     a.btn.btn-primary(href="/logout") Logout
 
