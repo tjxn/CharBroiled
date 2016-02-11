@@ -39,15 +39,40 @@ function renderPanels(elId, jsonPanels) {
     for (var i=0; i<panels.length; i++) {
 
         var panel = document.createElement("div");
+        panel.className = "col-md-4";
         panel.id = "panel_"+ toString(i+1);
-        panel.style.height = "500px";
-        panel.style.width = "500px";
+        //panel.style.height = "500px";
+        //panel.style.width = "500px";
+
+        var thumbnail = document.createElement("div");
+        thumbnail.className = "thumbnail";
+        panel.appendChild(thumbnail);
 
         var img = document.createElement("img");
+        img.alt = "Bootstrap Thumbnail First";
         img.src = panels[i].Image_URL;
-        img.style.height = "300px";
-        img.style.width = "300px";
-        panel.appendChild(img);
+        //img.style.height = "300px";
+        //img.style.width = "300px";
+        thumbnail.appendChild(img);
+
+        var caption = document.createElement("div");
+        caption.className = "caption";
+        thumbnail.appendChild(caption);
+
+        var par = document.createElement("p");
+        par.innerHTML = panels[i].Text;
+        caption.appendChild(par);
+
+        var button = document.createElement("button");
+        button.id = "button_"+ toString(i+1);
+        button.href = "#modal-container-94539";
+        button.className = "btn btn-primary";
+        button.innerHTML = "Edit Panel";
+
+        var par1 = document.createElement("p");
+        caption.appendChild(par);
+        caption.appendChild(par1);
+        par1.appendChild(button);
 
         el.appendChild(panel);
     }
