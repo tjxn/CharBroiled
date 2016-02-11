@@ -39,7 +39,7 @@ function renderPanels(elId, jsonPanels) {
     for (var i=0; i<panels.length; i++) {
 
         var panel = document.createElement("div");
-        panel.id = "panel_"+ toString(i+1);
+        panel.id = "panel_"+ (i+1).toString();
         panel.style.height = "500px";
         panel.style.width = "500px";
 
