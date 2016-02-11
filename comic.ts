@@ -42,21 +42,24 @@ class Comic {
         }
 
     }
+
+    updatePanel(panelnum: Panel, panelloc: number, text: string, image_URL: string) {
+        this.panels[panelloc] = Panel.updatePanel(text, image_URL);
+    }
 }
 var defaultImage:string = "http://i.imgur.com/An1bi8f.jpg";
 var defaultText:string = "Default text.";
 var defaultTitle:string = "Default title";
 var defaultPublicView: boolean = true;
 
-var currcomic = null;
 var defaultPanel = new Panel(defaultText, defaultImage);
 
-// TODO: makes a new comic (and makes it in db)
+// makes a new comic (and makes it in db).
 function newComic() {
     var comicdb = new ComicWebService();
     var defpanels:Panel[] = [defaultPanel, defaultPanel, defaultPanel];
     var defcontribs:string[] = [];
-    currcomic = new Comic(this.defaultTitle, this.defaultPublicView, defpanels, defcontribs);
+    var currcomic = new Comic(this.defaultTitle, this.defaultPublicView, defpanels, defcontribs);
     var dbID: string = "";
     comicdb.newComic(currcomic, function (error:string, response:string, body:string){
         var data = JSON.parse(body);
@@ -64,13 +67,14 @@ function newComic() {
 
     });
     currcomic.dbID = dbID;
+    return currcomic;
 }
 
 // TODO: retrieve contributor's comic
 function retrieveComic() {
 
 }
-
+// Retrieve comic by database assigned comic ID.
 function retrieveComicViaID(dbID: string){
     var comicdb = new ComicWebService();
     var title:string = "";
@@ -91,7 +95,7 @@ function retrieveComicViaID(dbID: string){
             }
             else {
                 var paneli_text = data['Panels'][tempstrng]['Text'];
-                Panels[i-1] = new Panel(paneli_text, paneli_URL);
+                panels[i-1] = new Panel(paneli_text, paneli_URL);
             }
         }
         for (j=i; j++; j<6) {
@@ -100,18 +104,35 @@ function retrieveComicViaID(dbID: string){
             var contrib = data['Contributors'][tempstrng];
             contributors[j-1] = contrib;
         }
-    }); )
-    currcomic = new Comic(title,publicView,panels,contributors);
+    });
+    var currcomic = new Comic(title,publicView,panels,contributors);
+    return currcomic;
 }
 
-// TODO: save the comic in the database
-function saveComic(comic : Comic) {
+// save the comic to the database
+function saveComic(comic: Comic) {
     var comicdb = new ComicWebService();
     comicdb.updateComic(comic, function (error:string, response:string, body:string){});
 }
 
-// TODO: delete the comic from the database
-function deleteComic(comic : Comic) {
+// delete the comic from the database
+function deleteComic(comic: Comic) {
     var comicdb = new ComicWebService();
     comicdb.deleteAComic(comic, function (error:string, response:string, body:string){});
+}
+
+function updateTitle(comic: Comic, newtitle: string) {
+    comic.title = newtitle;
+    saveComic(comic);
+    return comic;
+}
+function updatePublicView(comic: Comic, newstatus: boolean) {
+    comic.publicView = newstatus;
+    saveComic(comic);
+    return comic;
+}
+function updateContributor(comic: Comic, contributornum: number, contributorname: string){
+    if (0 < contributornum < 6) {
+
+    }
 }
