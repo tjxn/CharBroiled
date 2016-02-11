@@ -104,24 +104,28 @@ function addPanel(){
     renderPanels("pictureContainer");
 }
 
-function updateTitle(elID){
+function updateTitle(elId){
     var newTitle = document.getElementById(elId).value;
     //comic.ts
     comic.setTitle(newTitle);
     saveComic(this.comic);
-    renderTitle(elID);
+    renderTitle(elId);
 }
 
-function renderTitle(elID){
+function renderTitle(elId){
     //comic.ts
     var el = document.getElementById(elId);
     el.value = comic.title();
 }
 
-function updatePanel(elID){
+function updatePanel(elId){
     var url = document.getElementById("modalURL").value;
     var desc = document.getElementById("modalDesc").value;
 
     comic.updatePanel(pNum, url, desc);
     saveComic(this.comic);
+}
+
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
