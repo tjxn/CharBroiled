@@ -13,7 +13,6 @@ function renderPictures(elId, urls) {
 }
 
 function renderPanels(elId, jsonPanels) {
-
     var el = document.getElementById(elId);
 
     var TESTJSON = JSON.stringify({
