@@ -12,7 +12,9 @@
     <script>
         window.onload = function (event) {
             renderPanels("pictureContainer", ["http://www.potatoes.com/files/5713/4202/4172/07.jpg","http://3.bp.blogspot.com/-k6mmw9BbX4E/VXtPzM22rgI/AAAAAAAAAp0/axlLjiF-QKI/s1600/potato.gif","http://images.wisegeek.com/bag-of-potatoes.jpg"]);
+            renderTitle("comicTitle");
         };
+
     </script>
 
 </head>
@@ -77,14 +79,14 @@
 
                         <form class="navbar-form navbar-left" role="search">
                             <div class="form-group">
-                                <input type="text" class="form-control" />
+                                <input id="comicTitle" type="text" value="" class="form-control" />
                             </div>
-                            <button type="submit" class="btn btn-default">
+                            <button type="submit" onclick="updateTitle()" class="btn btn-default">
                                 Save
                             </button>
                             &nbsp;
                             &nbsp;
-                            <button href=# role="button" class="btn btn-primary">Add Panel</button>
+                            <button href=# role="button" onclick="addPanel()" class="btn btn-primary">Add Panel</button>
                         </form>
 
                 </nav>
@@ -101,7 +103,7 @@
 
             <div class="col-md-4">
                 <div class="thumbnail">
-                    <img alt="Bootstrap Thumbnail First" src="https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg" />
+                    <img alt="Bootstrap Thumbnail First" src="https://49.media.tumblr.com/8a9eb98c7d55555b5d88d6859d5631fc/tumblr_n8uo15RRCE1sy4wkto1_500.gif" />
                     <div class="caption">
                         <p>
                             Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
