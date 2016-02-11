@@ -53,6 +53,3 @@ function renderPanels(elId, jsonPanels) {
     }
 }
 
-window.onload = function (event) {
-    renderPanels("pictureContainer", ["http://www.potatoes.com/files/5713/4202/4172/07.jpg","http://3.bp.blogspot.com/-k6mmw9BbX4E/VXtPzM22rgI/AAAAAAAAAp0/axlLjiF-QKI/s1600/potato.gif","http://images.wisegeek.com/bag-of-potatoes.jpg"]);
-};
