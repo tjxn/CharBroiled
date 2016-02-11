@@ -61,15 +61,17 @@ function renderPanels(elId, jsonPanels) {
 
         var par = document.createElement("p");
         par.innerHTML = panels[i].Text;
+        par.id = "desc_"+(i+1).toString();
         caption.appendChild(par);
 
         var button = document.createElement("button");
-        button.id = "button_"+(i+1).toString;
+        button.id = "button_"+(i+1).toString();
         button.className = "btn btn-primary";
         button.innerHTML = "Edit Panel";
         button.setAttribute("data-toggle", "modal");
         button.setAttribute("role", "button");
         button.setAttribute("href", "#modal-container-94539");
+        button.setAttribute("onclick", "updateModal(this)");
 
 
         var par1 = document.createElement("p");
@@ -82,24 +84,17 @@ function renderPanels(elId, jsonPanels) {
 }
 
 function updateModal(ele) {
-    alert(ele.id);
 
     var button = document.getElementById(ele.id);
-    var i = button.id.substring(7);  // gets panel number = button number
-    var img = document.getElementById("panelImg_"+i);
+    var num = button.id.substring(7);  // gets panel number = button number
+    var img = document.getElementById("panelImg_"+num);
+    var desc = document.getElementById("desc_"+num).innerHTML;
+    //var modal = document.getElementById(button.getAttribute("href").substring(1));
+    var urlEle = document.getElementById("modalURL");
+    var descEle = document.getElementById("modalDesc");
 
-    var modal = document.getElementById(button.getAttribute("href").substring(1));
-    //alert(button.getAttribute("href").substring(1));
-    //alert(modal.id);
-
-    var urlEle = modal.getElementsByClassName("modalURL");
-    var descEle = modal.getElementsByClassName("modalDesc");
-    var url = img.getAttribute("src");
-
-    alert(url);
-
-
-    //urlEle.innerHTML =
+    urlEle.value = img.getAttribute("src");
+    descEle.value = desc;
 }
 
 
