@@ -100,7 +100,25 @@ function updateModal(ele) {
 
 
     //urlEle.innerHTML =
+}
 
 
+function addPanel(){
+    //comic.ts
+    comic.addPanel("Add your custom text here...","http://33.media.tumblr.com/tumblr_luknndtrik1qkq0wr.gif")
+    saveComic(this.comic);
+    renderPanels("pictureContainer");
+}
 
+function updateTitle(comicTitle){
+    var newTitle = document.getElementById(elId).value;
+    //comic.ts
+    comic.setTitle(newTitle);
+    saveComic(this.comic);
+}
+
+function renderTitle(elID){
+    //comic.ts
+    var el = document.getElementById(elId);
+    el.value = comic.title();
 }
