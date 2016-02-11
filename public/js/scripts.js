@@ -100,15 +100,15 @@ function updateModal(ele) {
 function addPanel(){
     //comic.ts
     comic.addPanel("Add your custom text here...","http://33.media.tumblr.com/tumblr_luknndtrik1qkq0wr.gif")
-    saveComic(this.comic);
+    //saveComic(this.comic);
     renderPanels("pictureContainer");
 }
 
 function updateTitle(elId){
     var newTitle = document.getElementById(elId).value;
     //comic.ts
-    comic.setTitle(newTitle);
-    saveComic(this.comic);
+    comic.updateTitle(newTitle);
+    //saveComic(this.comic);
     renderTitle(elId);
 }
 
@@ -123,7 +123,12 @@ function updatePanel(elId){
     var desc = document.getElementById("modalDesc").value;
 
     comic.updatePanel(pNum, url, desc);
-    saveComic(this.comic);
+    //saveComic(this.comic);
+}
+
+function renderViewTitle(elID){
+    var title = document.getElementById(elID);
+    title.innerHTML = comic.title;
 }
 
 function getURLParameter(name) {
