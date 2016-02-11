@@ -43,12 +43,12 @@ class Comic {
 	}
 }
 
-public defaultImage: string = "http://i.imgur.com/An1bi8f.jpg";
-public defaultText: string = "Default text.";
-public deaultTitle: string = "Default title";
-public defaultPublicView: boolean = true;
+var defaultImage: string = "http://i.imgur.com/An1bi8f.jpg";
+var defaultText: string = "Default text.";
+var defaultTitle: string = "Default title";
+var defaultPublicView: boolean = true;
 
-var comicdb = new ComicWebService();
+//var comicdb = new ComicWebService();
 var currcomic = null;
 var defaultPanel = new Panel(this.defaultText, this.defaultImage);
 
