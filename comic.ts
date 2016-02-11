@@ -3,7 +3,7 @@
  * Edited by JJXN on 2/9/16
  */
 /// <reference path="panel.ts" />
-/// <reference path="panel.ts" />
+/// <reference path="ComicWebService.ts" />
 
 class Comic {
 	public dbID: string;
@@ -32,15 +32,6 @@ class Comic {
 		this.Contributor_5 = contributors[4];
 	}
 
-	//constructor(public comicid: string) {
-	//}
-	// TODO: save the comic in the database
-	saveComic() {
-
-	}
-	// TODO: delete the comic from the database
-	deleteComic() {
-	}
 	addPanel() {
 		var i = this.panels.length;
 		if (i < this.panelLimit ) {
@@ -51,4 +42,19 @@ class Comic {
 			// Return an error?
 		}
 	}
+}
+
+// TODO: retrieve contributor's comic
+function retrieveComic() {
+
+}
+
+// TODO: save the comic in the database
+function saveComic(comic : Comic) {
+    ComicWebService.updateComic(comic, function (error:string, response:string, body:string){});
+}
+
+// TODO: delete the comic from the database
+function deleteComic(comic : Comic) {
+    ComicWebService.deleteAComic(comic, function (error:string, response:string, body:string){});
 }
