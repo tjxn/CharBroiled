@@ -71,6 +71,39 @@ function retrieveComic() {
 
 }
 
+function retrieveComicViaID(dbID: string){
+    var comicdb = new ComicWebService();
+    var title:string = "";
+    var publicView:boolean = true;
+    var panels:Panel[] = [];
+    var contributors:string[] = [];
+    comicdb.getAComicById(dbID, function (error:string, response:string, body:string){
+        var data = JSON.parse(body);
+
+        title = data['Title'];
+        publicView = data['Public'];
+        for(i=1; i++; i<10) {
+            var tempstrng = 'Panel_';
+            tempstrng = tempstrng.concat(String(i));
+            var paneli_URL = data['Panels'][tempstrng]['Image_URL'];
+            if (paneli_URL == ""){
+                break;
+            }
+            else {
+                var paneli_text = data['Panels'][tempstrng]['Text'];
+                Panels[i-1] = new Panel(paneli_text, paneli_URL);
+            }
+        }
+        for (j=i; j++; j<6) {
+            var tempstrng = 'Contributor_';
+            tempstrng = tempstrng.concat(String(i));
+            var contrib = data['Contributors'][tempstrng];
+            contributors[j-1] = contrib;
+        }
+    }); )
+    currcomic = new Comic(title,publicView,panels,contributors);
+}
+
 // TODO: save the comic in the database
 function saveComic(comic : Comic) {
     var comicdb = new ComicWebService();
