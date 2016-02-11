@@ -1,7 +1,7 @@
 /// <reference path="express/express.d.ts" />
 /// <reference path="body-parser/body-parser.d.ts" />
 /// <reference path="ComicWebService.ts" />
-define(["require", "exports", 'path'], function (require, exports, path) {
+define(["require", "exports", "./ComicWebService"], function (require, exports, ComicWebService_1) {
     var path = require('path');
     var favicon = require('serve-favicon');
     var logger = require('morgan');
@@ -84,15 +84,16 @@ define(["require", "exports", 'path'], function (require, exports, path) {
     var panel2 = new Panel("First Panel", "www.google.ca");
     var comic = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
     comic.dbID = "56b44b8284566860217dad39";
-    var api = new ComicWebService();
-    api.getAComicById(comic.dbID, function (error, response, body) {
+    var api = new ComicWebService_1.ComicWebService();
+    api.getAComicById(comic.dbID, test);
+    function test(error, response, body) {
         var data = JSON.parse(body);
         var title = data['Title'];
         var pub = data['Public'];
         var contributor3 = data['Contributors']['Contributor_3'];
         var panel4_Text = data['Panels']['Panel_4']['Text'];
         console.log(data);
-    });
+    }
     //--------------------------------------------------------
     //--------------------------------------------------------
     app.on('stormpath.ready', function () {
@@ -100,3 +101,4 @@ define(["require", "exports", 'path'], function (require, exports, path) {
         app.listen(3000);
     });
 });
+//# sourceMappingURL=server.js.map

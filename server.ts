@@ -101,8 +101,9 @@ var comic = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jac
 comic.dbID = "56b44b8284566860217dad39";
 
 var api = new ComicWebService();
-api.getAComicById(comic.dbID, function (error:string, response:string, body:string) {
+api.getAComicById(comic.dbID, test);
 
+function test (error:string, response:string, body:string){
     var data = JSON.parse(body);
 
     var title = data['Title'];
@@ -111,7 +112,8 @@ api.getAComicById(comic.dbID, function (error:string, response:string, body:stri
     var panel4_Text = data['Panels']['Panel_4']['Text'];
 
     console.log(data);
-});
+
+}
 //--------------------------------------------------------
 //--------------------------------------------------------
 

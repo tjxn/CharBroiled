@@ -17,21 +17,21 @@ class Panel {
         this.image_URL = image_URL;
     }
     // Currently does nothing, as we aren't storing images
-    function checkImage(image: string) {
-        return True;
+     checkImage(image: string) {
+        return true;
     }
 
-    function checkText(text: string) {
-        if (text.length > charLimit) {
-            return False;
+     checkText(text: string) {
+        if (text.length > this.charLimit) {
+            return true;
         }
         else {
-            return True;
+            return true;
         }
     }
-    function updatePanel(text: string, image_URL: string){
-        var i = checkImage(image_URL);
-        var j = checkText(text);
+     updatePanel(text: string, image_URL: string){
+        var i = this.checkImage(image_URL);
+        var j = this.checkText(text);
         if (i){
             if (j){
                 this.text = text;
