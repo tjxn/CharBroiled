@@ -16,8 +16,7 @@ class Comic {
 	public Contributor_3: string;
 	public Contributor_4: string;
 	public Contributor_5: string;
-	public defaultPanel: string = "http://i.imgur.com/An1bi8f.jpg";
-    public defaultText: string = "Default text.";
+
 	//NOTE: Just made it a list of strings, since we don't need to link the contributor name in any way right now,
 	// and I assume that the list of contributors is stored in the database?
 	//private _contributors: string[];
@@ -32,7 +31,7 @@ class Comic {
 		this.Contributor_5 = contributors[4];
 	}
 
-	addPanel() {
+	addPanel(text: string, panel_URL: string) {
 		var i = this.panels.length;
 		if (i < this.panelLimit ) {
             var temppanel = new Panel(this.defaultText, this.defaultPanel);
@@ -44,6 +43,24 @@ class Comic {
 	}
 }
 
+public defaultImage: string = "http://i.imgur.com/An1bi8f.jpg";
+public defaultText: string = "Default text.";
+public deaultTitle: string = "Default title";
+public defaultPublicView: boolean = true;
+
+var comicdb = new ComicWebService();
+var currcomic = null;
+var defaultPanel = new Panel(this.defaultText, this.defaultImage);
+
+// TODO: makes a new comic (and makes it in db)
+function newComic() {
+    var defpanels:Panel[] = [defaultPanel, defaultPanel, defaultPanel];
+    var defcontribs:string[] = [];
+    currcomic = new Comic(this.defaultTitle, this.defaultPublicView, defpanels, defcontribs);
+    this.comicbd.newComic(currcomic, function (error:string, response:string, body:string){});
+
+}
+
 // TODO: retrieve contributor's comic
 function retrieveComic() {
 
@@ -51,10 +68,10 @@ function retrieveComic() {
 
 // TODO: save the comic in the database
 function saveComic(comic : Comic) {
-    ComicWebService.updateComic(comic, function (error:string, response:string, body:string){});
+    comicdb.updateComic(comic, function (error:string, response:string, body:string){});
 }
 
 // TODO: delete the comic from the database
 function deleteComic(comic : Comic) {
-    ComicWebService.deleteAComic(comic, function (error:string, response:string, body:string){});
+    comicdb.deleteAComic(comic, function (error:string, response:string, body:string){});
 }
