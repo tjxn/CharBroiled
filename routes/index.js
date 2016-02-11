@@ -12,9 +12,10 @@ router.get('/edit', function(req, res, next) {
   res.sendFile(path.join(__dirname, '../views', 'edit.html'));
 });
 
-/* GET TEST page. */
-router.get('/test', function(req, res) {
-  res.render('test', { title: 'Hello, World!' });
+/* GET edit page. */
+router.get('/edit', function(req, res, next) {
+  res.sendFile(path.join(__dirname, '../views', 'view.html'));
 });
+
 
 module.exports = router;
