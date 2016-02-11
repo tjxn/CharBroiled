@@ -148,7 +148,9 @@ function updateModal(ele) {
     //var modal = document.getElementById(button.getAttribute("href").substring(1));
     var urlEle = document.getElementById("modalURL");
     var descEle = document.getElementById("modalDesc");
+    var hiddenInput = document.getElementById("panelNum");
 
+    hiddenInput.value = num;
     urlEle.value = img.getAttribute("src");
     descEle.value = desc;
 }
@@ -175,18 +177,21 @@ function renderTitle(elId){
 }
 
 function updatePanel(elId){
+
     var url = document.getElementById("modalURL").value;
     var desc = document.getElementById("modalDesc").value;
 
-    comic.updatePanel(pNum, url, desc);
+    var num = document.getElementById("panelNum").value;
+
+    document.getElementById("panelImg_"+num).src = url;
+    document.getElementById("desc_"+num).innerHTML = desc;
+
+    //comic.updatePanel(pNum, url, desc);
     //saveComic(this.comic);
+
 }
 
 function renderViewTitle(elID){
     var title = document.getElementById(elID);
     title.innerHTML = comic.title;
-}
-
-function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
