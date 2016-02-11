@@ -83,6 +83,62 @@ function renderPanels(elId, jsonPanels) {
     }
 }
 
+function renderViewPanels(elId, jsonPanels) {
+    var el = document.getElementById(elId);
+
+    var TESTJSON = JSON.stringify({
+        Panel_1 : {
+            "Image_URL": "https://49.media.tumblr.com/8a9eb98c7d55555b5d88d6859d5631fc/tumblr_n8uo15RRCE1sy4wkto1_500.gif",
+            "Text": "TEST TEXT"
+        },
+        Panel_2 : {
+            "Image_URL": "http://www.potatoes.com/files/5713/4202/4172/07.jpg",
+            "Text": "TEST TEXT2"
+        },
+        Panel_3 : {
+            "Image_URL": "http://www.potatoes.com/files/5713/4202/4172/07.jpg",
+            "Text": "TEST TEXT3"
+        }
+    });
+
+    var panelObj = JSON.parse(TESTJSON);
+    //alert(JSON.stringify(panelObj));
+    var panels = Object.keys(panelObj).map(function(k) { return panelObj[k] });
+    //alert(panels.length);
+
+    for (var i=0; i<panels.length; i++) {
+
+        var panel = document.createElement("div");
+        panel.className = "col-md-4";
+        panel.id = "panel_"+(i+1).toString();
+        //panel.style.height = "500px";
+        //panel.style.width = "500px";
+
+        var thumbnail = document.createElement("div");
+        thumbnail.className = "thumbnail";
+        panel.appendChild(thumbnail);
+
+        var img = document.createElement("img");
+        img.alt = "Bootstrap Thumbnail First";
+        img.src = panels[i].Image_URL;
+        img.id = "panelImg_"+(i+1).toString();
+        //img.style.height = "300px";
+        //img.style.width = "300px";
+        thumbnail.appendChild(img);
+
+        var caption = document.createElement("div");
+        caption.className = "caption";
+        thumbnail.appendChild(caption);
+
+        var par = document.createElement("p");
+        par.innerHTML = panels[i].Text;
+        par.id = "desc_"+(i+1).toString();
+        caption.appendChild(par);
+
+        el.appendChild(panel);
+    }
+}
+
 function updateModal(ele) {
 
     var button = document.getElementById(ele.id);
