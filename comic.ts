@@ -31,7 +31,7 @@ class Comic {
         this.Contributor_5 = contributors[4];
     }
 
-    addPanel(text:string, panel_URL:string) {
+    addPanel() {
         var i = this.panels.length;
         if (i < this.panelLimit) {
             var temppanel = new Panel(this.defaultText, this.defaultPanel);
@@ -43,7 +43,7 @@ class Comic {
 
     }
 
-    updatePanel(panelnum: Panel, panelloc: number, text: string, image_URL: string) {
+    updatePanel(panelloc: number, text: string, image_URL: string) {
         this.panels[panelloc] = Panel.updatePanel(text, image_URL);
     }
 }
@@ -86,7 +86,7 @@ function retrieveComicViaID(dbID: string){
 
         title = data['Title'];
         publicView = data['Public'];
-        for(i=1; i++; i<10) {
+        for(var i=1; i++; i<10) {
             var tempstrng = 'Panel_';
             tempstrng = tempstrng.concat(String(i));
             var paneli_URL = data['Panels'][tempstrng]['Image_URL'];
@@ -98,15 +98,13 @@ function retrieveComicViaID(dbID: string){
                 panels[i-1] = new Panel(paneli_text, paneli_URL);
             }
         }
-        for (j=i; j++; j<6) {
+        for (var j=i; j++; j<6) {
             var tempstrng = 'Contributor_';
             tempstrng = tempstrng.concat(String(i));
-            var contrib = data['Contributors'][tempstrng];
-            contributors[j-1] = contrib;
+            contributors[j-1] = data['Contributors'][tempstrng];
         }
     });
-    var currcomic = new Comic(title,publicView,panels,contributors);
-    return currcomic;
+    return new Comic(title,publicView,panels,contributors);
 }
 
 // save the comic to the database
