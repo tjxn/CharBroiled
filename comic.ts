@@ -34,7 +34,7 @@ class Comic {
     addPanel() {
         var i = this.panels.length;
         if (i < this.panelLimit) {
-            var temppanel = new Panel(this.defaultText, this.defaultPanel);
+            var temppanel = defaultPanel;
             this.panels[i - 1] = temppanel;
         }
         else {
