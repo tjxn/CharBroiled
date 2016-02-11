@@ -14,7 +14,6 @@
             renderPanels("pictureContainer", ["http://www.potatoes.com/files/5713/4202/4172/07.jpg","http://3.bp.blogspot.com/-k6mmw9BbX4E/VXtPzM22rgI/AAAAAAAAAp0/axlLjiF-QKI/s1600/potato.gif","http://images.wisegeek.com/bag-of-potatoes.jpg"]);
             renderTitle("comicTitle");
         };
-
     </script>
 
 </head>
@@ -46,10 +45,10 @@
         </form>
         <ul class="nav navbar-nav">
         <li class="active">
-            <a href="#">Edit</a>
+            <a href="/edit">Edit</a>
         </li>
         <li>
-            <a href="#">View</a>
+            <a href="/view">View</a>
         </li>
         </ul>
 
@@ -96,25 +95,7 @@
 </div>
 
 
-
-<div id="pictureContainer">
-
-</div>
-
-            <div class="col-md-4">
-                <div class="thumbnail">
-                    <img alt="Bootstrap Thumbnail First" src="https://49.media.tumblr.com/8a9eb98c7d55555b5d88d6859d5631fc/tumblr_n8uo15RRCE1sy4wkto1_500.gif" />
-                    <div class="caption">
-                        <p>
-                            Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                        </p>
-                         <p>
-                            <button id="modal-94539" href="#modal-container-94539" role="button" class="btn btn-primary" data-toggle="modal" onclick="updateModal(this)">Edit Panel</button>
-                        </p>
-                    </div>
-                </div>
-            </div>
-
+<div id="pictureContainer"></div>
 
             <div class="modal fade" id="modal-container-94539" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
@@ -138,7 +119,7 @@
                                 <label>Description</label>
                                 <textarea class="form-control" id="modalDesc"></textarea>
                             </div>
-                            <input type="button" class="btn btn-primary" value="Save"></input>
+                            <input type="button" onClick="updatePanel(this)" class="btn btn-primary" value="Save"></input>
                         </div>
                             </form>
                         <div class="modal-footer">
