@@ -13,7 +13,6 @@ function renderPictures(elId, urls) {
 }
 
 function renderPanels(elId, jsonPanels) {
-
     var el = document.getElementById(elId);
 
     var TESTJSON = JSON.stringify({
@@ -40,7 +39,7 @@ function renderPanels(elId, jsonPanels) {
 
         var panel = document.createElement("div");
         panel.className = "col-md-4";
-        panel.id = "panel_"+ toString(i+1);
+        panel.id = "panel_"+(i+1).toString();
         //panel.style.height = "500px";
         //panel.style.width = "500px";
 
@@ -51,6 +50,7 @@ function renderPanels(elId, jsonPanels) {
         var img = document.createElement("img");
         img.alt = "Bootstrap Thumbnail First";
         img.src = panels[i].Image_URL;
+        img.id = "panelImg_"+(i+1).toString();
         //img.style.height = "300px";
         //img.style.width = "300px";
         thumbnail.appendChild(img);
@@ -64,10 +64,13 @@ function renderPanels(elId, jsonPanels) {
         caption.appendChild(par);
 
         var button = document.createElement("button");
-        button.id = "button_"+ toString(i+1);
-        button.href = "#modal-container-94539";
+        button.id = "button_"+(i+1).toString;
         button.className = "btn btn-primary";
         button.innerHTML = "Edit Panel";
+        button.setAttribute("data-toggle", "modal");
+        button.setAttribute("role", "button");
+        button.setAttribute("href", "#modal-container-94539");
+
 
         var par1 = document.createElement("p");
         caption.appendChild(par);
@@ -78,3 +81,26 @@ function renderPanels(elId, jsonPanels) {
     }
 }
 
+function updateModal(ele) {
+    alert(ele.id);
+
+    var button = document.getElementById(ele.id);
+    var i = button.id.substring(7);  // gets panel number = button number
+    var img = document.getElementById("panelImg_"+i);
+
+    var modal = document.getElementById(button.getAttribute("href").substring(1));
+    //alert(button.getAttribute("href").substring(1));
+    //alert(modal.id);
+
+    var urlEle = modal.getElementsByClassName("modalURL");
+    var descEle = modal.getElementsByClassName("modalDesc");
+    var url = img.getAttribute("src");
+
+    alert(url);
+
+
+    //urlEle.innerHTML =
+
+
+
+}
