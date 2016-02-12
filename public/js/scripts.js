@@ -111,7 +111,7 @@ function renderViewPanels(elId, jsonPanels) {
 
         var panel = document.createElement("div");
         panel.className = "col-md-4";
-        panel.className += "panel";
+        panel.className += " panel";
         panel.id = "panel_"+(i+1).toString();
         //panel.style.height = "500px";
         //panel.style.width = "500px";
