@@ -52,8 +52,8 @@ function renderPanels(elId, jsonPanels) {
         img.alt = "Bootstrap Thumbnail First";
         img.src = panels[i].Image_URL;
         img.id = "panelImg_"+(i+1).toString();
-        //img.style.height = "300px";
-        //img.style.width = "300px";
+        img.style.height = "300px";
+        img.style.width = "300px";
         thumbnail.appendChild(img);
 
         var caption = document.createElement("div");
@@ -124,8 +124,8 @@ function renderViewPanels(elId, jsonPanels) {
         img.alt = "Bootstrap Thumbnail First";
         img.src = panels[i].Image_URL;
         img.id = "panelImg_"+(i+1).toString();
-        //img.style.height = "300px";
-        //img.style.width = "300px";
+        img.style.height = "300px";
+        img.style.width = "300px";
         thumbnail.appendChild(img);
 
         var caption = document.createElement("div");
@@ -184,8 +184,8 @@ function addPanel(){
     img.alt = "Bootstrap Thumbnail First";
     img.src = url;
     img.id = "panelImg_"+(i+1).toString();
-    //img.style.height = "300px";
-    //img.style.width = "300px";
+    img.style.height = "300px";
+    img.style.width = "300px";
     thumbnail.appendChild(img);
 
     var caption = document.createElement("div");
