@@ -59,11 +59,10 @@ var Comic = (function () {
         this.Contributor_4 = contributors[3];
         this.Contributor_5 = contributors[4];
     }
-    Comic.prototype.addPanel = function () {
+    Comic.prototype.addPanel = function (panel) {
         var i = this.panels.length;
         if (i < this.panelLimit) {
-            var temppanel = defaultPanel;
-            this.panels[i - 1] = temppanel;
+            this.panels[i - 1] = panel;
         }
         else {
         }
@@ -73,83 +72,137 @@ var Comic = (function () {
     };
     return Comic;
 })();
-var defaultImage = "http://i.imgur.com/An1bi8f.jpg";
-var defaultText = "Default text.";
-var defaultTitle = "Default title";
-var defaultPublicView = true;
-var defaultPanel = new Panel(defaultText, defaultImage);
-// makes a new comic (and makes it in db).
-function newComic() {
-    var comicdb = new ComicWebService();
-    var defpanels = [defaultPanel, defaultPanel, defaultPanel];
-    var defcontribs = [];
-    var currcomic = new Comic(this.defaultTitle, this.defaultPublicView, defpanels, defcontribs);
-    var dbID = "";
-    comicdb.newComic(currcomic, function (error, response, body) {
-        var data = JSON.parse(body);
-        dbID = data['_id'];
-    });
-    currcomic.dbID = dbID;
-    return currcomic;
-}
-// TODO: retrieve contributor's comic
-function retrieveComic() {
-}
-// Retrieve comic by database assigned comic ID.
-function retrieveComicViaID(dbID) {
-    var comicdb = new ComicWebService();
-    var title = "";
-    var publicView = true;
-    var panels = [];
-    var contributors = [];
-    comicdb.getAComicById(dbID, function (error, response, body) {
-        var data = JSON.parse(body);
-        title = data['Title'];
-        publicView = data['Public'];
-        for (var i = 1; i++; i < 10) {
-            var tempstrng = 'Panel_';
-            tempstrng = tempstrng.concat(String(i));
-            var paneli_URL = data['Panels'][tempstrng]['Image_URL'];
-            if (paneli_URL == "") {
-                break;
-            }
-            else {
-                var paneli_text = data['Panels'][tempstrng]['Text'];
-                panels[i - 1] = new Panel(paneli_text, paneli_URL);
-            }
-        }
-        for (var j = i; j++; j < 6) {
-            var tempstrng = 'Contributor_';
-            tempstrng = tempstrng.concat(String(i));
-            contributors[j - 1] = data['Contributors'][tempstrng];
-        }
-    });
-    return new Comic(title, publicView, panels, contributors);
-}
-// save the comic to the database
-function saveComic(comic) {
-    var comicdb = new ComicWebService();
-    comicdb.updateComic(comic, function (error, response, body) { });
-}
-// delete the comic from the database
-function deleteComic(comic) {
-    var comicdb = new ComicWebService();
-    comicdb.deleteAComic(comic, function (error, response, body) { });
-}
-function updateTitle(comic, newtitle) {
-    comic.title = newtitle;
-    saveComic(comic);
-    return comic;
-}
-function updatePublicView(comic, newstatus) {
-    comic.publicView = newstatus;
-    saveComic(comic);
-    return comic;
-}
-function updateContributor(comic, contributornum, contributorname) {
-    if (0 < contributornum < 6) {
+var ComicManager = (function () {
+    function ComicManager() {
+        this.defaultImage = "http://i.imgur.com/An1bi8f.jpg";
+        this.defaultText = "Default text.";
+        this.defaultTitle = "Default title";
+        this.defaultPublicView = true;
+        this.defaultPanel = new Panel(this.defaultText, this.defaultImage);
+        var defpanels = [this.defaultPanel, this.defaultPanel, this.defaultPanel];
+        var defcontribs = ["", "", "", "", ""];
+        this.currComic = new Comic(this.defaultTitle, this.defaultPublicView, defpanels, defcontribs);
     }
-}
+    // makes a new comic (and makes it in db).
+    ComicManager.prototype.newComic = function () {
+        var comicdb = new ComicWebService();
+        var dbID = "";
+        comicdb.newComic(this.currComic, function (error, response, body) {
+            var data = JSON.parse(body);
+            dbID = data['_id'];
+        });
+        this.currComic.dbID = dbID;
+    };
+    // TODO: retrieve contributor's comic
+    ComicManager.prototype.retrieveComic = function () {
+    };
+    // Retrieve comic by database assigned comic ID.
+    ComicManager.prototype.retrieveComicViaID = function (dbID) {
+        var comicdb = new ComicWebService();
+        var title = "";
+        var publicView = true;
+        var panels = [];
+        var contributors = [];
+        comicdb.getAComicById(dbID, function (error, response, body) {
+            var data = JSON.parse(body);
+            title = data['Title'];
+            publicView = data['Public'];
+            for (var i = 1; i++; i < 10) {
+                var tempstrng = 'Panel_';
+                tempstrng = tempstrng.concat(String(i));
+                var paneli_URL = data['Panels'][tempstrng]['Image_URL'];
+                if (paneli_URL == "") {
+                    break;
+                }
+                else {
+                    var paneli_text = data['Panels'][tempstrng]['Text'];
+                    panels[i - 1] = new Panel(paneli_text, paneli_URL);
+                }
+            }
+            for (var j = i; j++; j < 6) {
+                var tempstrng = 'Contributor_';
+                tempstrng = tempstrng.concat(String(i));
+                contributors[j - 1] = data['Contributors'][tempstrng];
+            }
+        });
+        this.updateTitle(title);
+        this.updatePublicView(publicView);
+        this.updateContributors(contributors);
+        this.updatePanels(panels);
+    };
+    // save the comic to the database
+    ComicManager.prototype.saveComic = function () {
+        var comicdb = new ComicWebService();
+        comicdb.updateComic(this.currComic, function (error, response, body) {
+        });
+    };
+    // delete the comic from the database
+    ComicManager.prototype.deleteComic = function () {
+        var comicdb = new ComicWebService();
+        comicdb.deleteAComic(this.currComic, function (error, response, body) {
+        });
+    };
+    ComicManager.prototype.getTitle = function () {
+        return this.currComic.title;
+    };
+    ComicManager.prototype.updateTitle = function (newtitle) {
+        this.currComic.title = newtitle;
+        this.saveComic();
+    };
+    ComicManager.prototype.getPublicView = function () {
+        return this.currComic.publicView;
+    };
+    ComicManager.prototype.updatePublicView = function (newstatus) {
+        this.currcComic.publicView = newstatus;
+        this.saveComic();
+    };
+    ComicManager.prototype.getContributors = function () {
+        var contribs = [];
+        contribs[0] = this.currComic.Contributor_1;
+        contribs[1] = this.currComic.Contributor_2;
+        contribs[2] = this.currComic.Contributor_3;
+        contribs[3] = this.currComic.Contributor_4;
+        contribs[4] = this.currComic.Contributor_5;
+        return contribs;
+    };
+    // contributors MUST have 5 elements!!
+    ComicManager.prototype.updateContributors = function (contributors) {
+        this.currComic.Contributor_1 = contributors[0];
+        this.currComic.Contributor_2 = contributors[1];
+        this.currComic.Contributor_3 = contributors[2];
+        this.currComic.Contributor_4 = contributors[3];
+        this.currComic.Contributor_5 = contributors[4];
+    };
+    // get all the panels!
+    ComicManager.prototype.getPanels = function () {
+        return this.currComic.panels;
+    };
+    // get one panel. panelloc refers to loc in panel AKA: Panel 1 have a panelloc of 0.
+    ComicManager.prototype.getPanel = function (panelloc) {
+        return this.currComic.panels[panelloc];
+    };
+    // update all panels (irregardless of what was there before).
+    // NOTE: need to add a check for panels.length not being greater than 9.
+    ComicManager.prototype.updatePanels = function (panels) {
+        this.currComic.panels = panels;
+        this.saveComic();
+    };
+    // updates one panel. panelloc refers to the panel in the array AKA: Panel 1 has a panelloc of 0.
+    ComicManager.prototype.updatePanel = function (panelloc, text, image_URL) {
+        this.currComic.updatePanel(panelloc, text, image_URL);
+        this.saveComic();
+    };
+    // Adds a panel with the default settings.
+    ComicManager.prototype.addPanel = function () {
+        this.currComic.updatePanel(this.defaultPanel);
+        this.saveComic();
+    };
+    return ComicManager;
+})();
+var ComicTalk;
+(function (ComicTalk) {
+    ComicTalk.ComicInstance = new ComicManager();
+})(ComicTalk || (ComicTalk = {}));
 /**
  * Created by Trevor Jackson on 08-Feb-2016.
  * Edited by Joshua Jackson on 10-Feb-2016.
@@ -398,6 +451,8 @@ app.get('/', function (req, res) {
     });
 });
 app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
+//app.use('/edit', stormpath.loginRequired, require('./routes/index')());
+//app.use('/view', stormpath.loginRequired, require('./routes/index')());
 //--------------------------------------------------------
 // ACCESSING COMIC WEB SERVICE API
 // NOTE: must give a callback function, these calls are ASYNC!!!

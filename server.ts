@@ -89,7 +89,8 @@ app.get('/', function (req, res) {
 });
 
 app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
-
+//app.use('/edit', stormpath.loginRequired, require('./routes/index')());
+//app.use('/view', stormpath.loginRequired, require('./routes/index')());
 //--------------------------------------------------------
 // ACCESSING COMIC WEB SERVICE API
 // NOTE: must give a callback function, these calls are ASYNC!!!

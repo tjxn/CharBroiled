@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path    = require("path");
+var stormpath = require('express-stormpath');
 
 /* GET view page. */
 router.get('/view', function(req, res, next) {
