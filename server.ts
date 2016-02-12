@@ -8,27 +8,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-
 var express = require('express');
 var stormpath = require('express-stormpath');
 
 var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
 
 app.use(stormpath.init(app, {
     client: {
@@ -82,15 +65,24 @@ app.use(stormpath.init(app, {
 
 }));
 
-app.get('/', function (req, res) {
-    res.render('login', {
-        title: 'Welcome'
-    });
-});
+var routes = require('./routes/index');
+var users = require('./routes/users');
 
-app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
-//app.use('/edit', stormpath.loginRequired, require('./routes/index')());
-//app.use('/view', stormpath.loginRequired, require('./routes/index')());
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(routes);
+
+app.use('/profile',stormpath.loginRequired,require('./routes/profile')());
 //--------------------------------------------------------
 // ACCESSING COMIC WEB SERVICE API
 // NOTE: must give a callback function, these calls are ASYNC!!!
