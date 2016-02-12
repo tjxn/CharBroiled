@@ -39,6 +39,7 @@ function renderPanels(elId, jsonPanels) {
 
         var panel = document.createElement("div");
         panel.className = "col-md-4";
+        panel.className += " panel";
         panel.id = "panel_"+(i+1).toString();
         //panel.style.height = "500px";
         //panel.style.width = "500px";
@@ -110,6 +111,7 @@ function renderViewPanels(elId, jsonPanels) {
 
         var panel = document.createElement("div");
         panel.className = "col-md-4";
+        panel.className += "panel";
         panel.id = "panel_"+(i+1).toString();
         //panel.style.height = "500px";
         //panel.style.width = "500px";
@@ -157,9 +159,60 @@ function updateModal(ele) {
 
 function addPanel(){
     //comic.ts
-    comic.addPanel("Add your custom text here...","http://33.media.tumblr.com/tumblr_luknndtrik1qkq0wr.gif")
+    //comic.addPanel("Add your custom text here...","http://33.media.tumblr.com/tumblr_luknndtrik1qkq0wr.gif")
     //saveComic(this.comic);
-    renderPanels("pictureContainer");
+    //renderPanels("pictureContainer");
+
+    var i = document.getElementsByClassName("panel").length;
+    //alert(i);
+    var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
+    var desc = "enter text here";
+    var el = document.getElementById("pictureContainer");
+
+    var panel = document.createElement("div");
+    panel.className = "col-md-4";
+    panel.className += " panel";
+    panel.id = "panel_"+(i+1).toString();
+    //panel.style.height = "500px";
+    //panel.style.width = "500px";
+
+    var thumbnail = document.createElement("div");
+    thumbnail.className = "thumbnail";
+    panel.appendChild(thumbnail);
+
+    var img = document.createElement("img");
+    img.alt = "Bootstrap Thumbnail First";
+    img.src = url;
+    img.id = "panelImg_"+(i+1).toString();
+    //img.style.height = "300px";
+    //img.style.width = "300px";
+    thumbnail.appendChild(img);
+
+    var caption = document.createElement("div");
+    caption.className = "caption";
+    thumbnail.appendChild(caption);
+
+    var par = document.createElement("p");
+    par.innerHTML = desc;
+    par.id = "desc_"+(i+1).toString();
+    caption.appendChild(par);
+
+    var button = document.createElement("button");
+    button.id = "button_"+(i+1).toString();
+    button.className = "btn btn-primary";
+    button.innerHTML = "Edit Panel";
+    button.setAttribute("data-toggle", "modal");
+    button.setAttribute("role", "button");
+    button.setAttribute("href", "#modal-container-94539");
+    button.setAttribute("onclick", "updateModal(this)");
+
+
+    var par1 = document.createElement("p");
+    caption.appendChild(par);
+    caption.appendChild(par1);
+    par1.appendChild(button);
+
+    el.appendChild(panel);
 }
 
 function updateTitle(elId){
