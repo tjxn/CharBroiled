@@ -1,0 +1,37 @@
+//
+   Created by ScottHenry on 2016-01-31.
+// FROM https://stormpath.com/blog/build-nodejs-express-stormpath-app/
+
+html
+    head
+        title=title
+        link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
+    body
+        div.container
+            div.jumbotron
+                h1 Hello!
+
+                //WELCOME PAGE
+                if user
+                    p Welcome,
+                    p
+                        a.small(href="profile") Edit my profile
+                        if user.userType = "Contributor"
+                            p
+                            a.btn.btn-primary(href="/edit") Edit Comic
+                            //Call the comic creator method here???
+                        else
+                            p
+                            a.btn.btn-primary(href="/view") View Comic
+                    nbsp
+                    a.btn.btn-primary(href="/logout") Logout
+
+                else
+                    //LOGIN PAGE
+                    p Welcome to my app, ready to get started?
+                    p
+                        a.btn.btn-primary(href="/login") Login now
+                    p
+                        span.small Don't have an account?
+                        span &nbsp;
+                        a.small(href="/register") Register now
