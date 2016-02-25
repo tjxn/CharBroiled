@@ -1,3 +1,4 @@
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,11 +10,13 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
-    <input type="hidden" id="myID" value="" />
+    <input type="hidden" id="userEmail" value="" />
+    <input type="text" id="comicID" value="" />
 
     <script>
         window.onload = function (event) {
-            findID();
+            findUserEmail();
+            findComicID();
             renderPanels("pictureContainer", ["http://www.potatoes.com/files/5713/4202/4172/07.jpg","http://3.bp.blogspot.com/-k6mmw9BbX4E/VXtPzM22rgI/AAAAAAAAAp0/axlLjiF-QKI/s1600/potato.gif","http://images.wisegeek.com/bag-of-potatoes.jpg"]);
             renderTitle("comicTitle");
         };
@@ -142,3 +145,4 @@
 <script src="js/typescripts.js"></script>
 
 </body>
+</html>

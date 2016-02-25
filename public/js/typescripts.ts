@@ -2,6 +2,7 @@
 /// <reference path="../../panel" />
 /// <reference path="../../ComicManager" />
 /// <reference path="../../typings/browser/ambient/jquery/jquery.d.ts"/>
+/// <reference path="../../typings/main/ambient/request/request.d.ts" />
 
 import Comic = require("../../comic");
 import Panel = require("../../panel");
@@ -32,9 +33,17 @@ function testingCall() {
     });
 }
 
-function findID() {
-    var ID = (<HTMLInputElement> document.getElementById("myID"));
-    $.get('/findMyID', function (data) {
+function findUserEmail() {
+    var ID = (<HTMLInputElement> document.getElementById("userEmail"));
+    $.get('/findUserEmail', function (data) {
+        ID.value = data.toString();
+    });
+}
+
+function findComicID() {
+    var ID = (<HTMLInputElement> document.getElementById("comicID"));
+
+    $.get('/comicID', function (data) {
         ID.value = data.toString();
     });
 }
@@ -43,7 +52,7 @@ function comicJSON() {
 
     var title = (<HTMLInputElement> document.getElementById("comicTitle"));
     var publicPrivate = true
-    var myID = (<HTMLInputElement> document.getElementById("myID"));
+    var userEmail = (<HTMLInputElement> document.getElementById("userEmail"));
     var el = document.getElementsByName
 
 
@@ -51,7 +60,7 @@ function comicJSON() {
         {
             Title: title.value, Public: publicPrivate,
             Contributors: {
-                Contributor_1: myID.value,
+                Contributor_1: userEmail.value,
                 Contributor_2: "",
                 Contributor_3: "",
                 Contributor_4: "",
@@ -104,16 +113,18 @@ function comicJSON() {
 function updateTitle(){
 
     var comic = comicJSON();
+    var comicID = (<HTMLInputElement> document.getElementById("comicID"));
 
     $.ajax({
-        type: "POST",
-        url: "/saveComic/",
+        type: "PUT",
+        url: "/saveComic/" + comicID.value,
         contentType: "application/json; charset=utf-8",
         data: comic,
         async: true,
+        dataType: 'json',
         timeout: 4000,
         success: function (data) {
-            alert('Comic Saved');
+            alert(data.Status);
         },
         error: function (xhr, status, thrownError) {
             alert('ERROR - updateTitle()');

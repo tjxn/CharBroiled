@@ -51,7 +51,7 @@ router.post('/newComic', function (req, res, next) {
         res.send(currComic.dbID);
     });
 });
-router.post('/saveComic/', function (req, res, next) {
+router.put('/saveComic/:id', function (req, res, next) {
     var api = new ComicWebService();
     var data = req.body;
     var panel1 = new Panel(data['Panels']['Panel_1'].Title, data['Panels']['Panel_1'].Image_URL);
@@ -74,13 +74,27 @@ router.post('/saveComic/', function (req, res, next) {
     var comic = new Comic(data['Title'], true, panels, contributors);
     comic.dbID = "56c8dcbaa759dc110004e6c5";
     api.updateComic(comic, function (err, response, body) {
-        res.send('saved');
+        res.send(JSON.stringify({ Status: "Comic Saved" }));
     });
 });
 /* GET home page. */
-router.get('/findMyID', function (req, res, next) {
+router.get('/findUserEmail', function (req, res, next) {
     console.log(req.user.email);
     res.send(req.user.email.toString());
+});
+/* GET home page. */
+router.get('/comicID', function (req, res, next) {
+    console.log(req.user.customData.comic1);
+    res.send(req.user.customData.comic1.toString());
+});
+// --------------------------------------------------
+//                 RESTFUL API
+//                   /comic
+// --------------------------------------------------
+// Retrieve ID of comic(s) associated with the user
+router.get('/comic', function (req, res, next) {
+    console.log(req.user.customData.comic1);
+    res.send(req.user.customData.comic1.toString());
 });
 module.exports = router;
 //# sourceMappingURL=index.js.map

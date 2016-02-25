@@ -2,6 +2,7 @@
 /// <reference path="../../panel" />
 /// <reference path="../../ComicManager" />
 /// <reference path="../../typings/browser/ambient/jquery/jquery.d.ts"/>
+/// <reference path="../../typings/main/ambient/request/request.d.ts" />
 var $ = require('jquery');
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
@@ -22,21 +23,27 @@ function testingCall() {
         el.innerText = data.toString();
     });
 }
-function findID() {
-    var ID = document.getElementById("myID");
-    $.get('/findMyID', function (data) {
+function findUserEmail() {
+    var ID = document.getElementById("userEmail");
+    $.get('/findUserEmail', function (data) {
+        ID.value = data.toString();
+    });
+}
+function findComicID() {
+    var ID = document.getElementById("comicID");
+    $.get('/comicID', function (data) {
         ID.value = data.toString();
     });
 }
 function comicJSON() {
     var title = document.getElementById("comicTitle");
     var publicPrivate = true;
-    var myID = document.getElementById("myID");
+    var userEmail = document.getElementById("userEmail");
     var el = document.getElementsByName;
     var comic = JSON.stringify({
         Title: title.value, Public: publicPrivate,
         Contributors: {
-            Contributor_1: myID.value,
+            Contributor_1: userEmail.value,
             Contributor_2: "",
             Contributor_3: "",
             Contributor_4: "",
@@ -85,15 +92,17 @@ function comicJSON() {
 }
 function updateTitle() {
     var comic = comicJSON();
+    var comicID = document.getElementById("comicID");
     $.ajax({
-        type: "POST",
-        url: "/saveComic/",
+        type: "PUT",
+        url: "/saveComic/" + comicID.value,
         contentType: "application/json; charset=utf-8",
         data: comic,
         async: true,
+        dataType: 'json',
         timeout: 4000,
         success: function (data) {
-            alert('Comic Saved');
+            alert(data.Status);
         },
         error: function (xhr, status, thrownError) {
             alert('ERROR - updateTitle()');
