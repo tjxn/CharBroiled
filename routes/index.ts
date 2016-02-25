@@ -118,16 +118,30 @@ router.get('/comicID', function (req, res, next) {
 
 // --------------------------------------------------
 //                 RESTFUL API
-//                   /comic
 // --------------------------------------------------
 
-// Retrieve ID of comic(s) associated with the user
+// Retrieve IDs of comic(s) the user has contributed to
 router.get('/comic', function (req, res, next) {
-
     console.log(req.user.customData.comic1);
     res.send(req.user.customData.comic1.toString());
 });
 
+// Retrieve JSON representation of a comic
+router.get('/comic/:id', function (req, res, next) {
+    var api = new ComicWebService();
 
+    api.getAComic(req.params.id, function(request, response, body){
+        res.send(body);
+    });
+});
+
+
+// Retrieve JSON representation of a comic
+router.delete('/comic/:id', function (req, res, next) {
+    var api = new ComicWebService();
+    api.deleteAComic(req.params.id, function(request, response, body){
+        res.send(JSON.stringify({Status : "Comic Deleted"}));
+    });
+});
 
 export = router;
