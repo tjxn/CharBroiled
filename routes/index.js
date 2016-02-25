@@ -6,9 +6,9 @@
 var express = require("express");
 var Tools = require('../scripts');
 var path = require("path");
-var ComicWebService = require("../ComicWebService");
-var Panel = require("../panel");
-var Comic = require("../comic");
+var ComicWebService = require("../public/js/ComicWebService");
+var Panel = require("../public/js/panel");
+var Comic = require("../public/js/comic");
 var router = express.Router();
 /* GET edit page. */
 router.get('/view', function (req, res, next) {

@@ -1,17 +1,20 @@
-/// <reference path="../../comic" />
-/// <reference path="../../panel" />
+/// <reference path="comic" />
+/// <reference path="panel" />
 /// <reference path="../../ComicManager" />
 /// <reference path="../../typings/browser/ambient/jquery/jquery.d.ts"/>
 /// <reference path="../../typings/main/ambient/request/request.d.ts" />
 
-import Comic = require("../../comic");
-import Panel = require("../../panel");
+import Comic = require("./comic");
+import Panel = require("./panel");
 import ComicManager = require("../../ComicManager");
 import $ = require('jquery');
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
  */
 
+// para: elementID of pictureContainer, array of urls for pictures' source
+// creates img element for each url and add to given pictureContainer.
+// return: none
 function renderPictures(elId, urls) {
 
     var el = (<HTMLInputElement> document.getElementById(elId));
@@ -33,28 +36,71 @@ function testingCall() {
     });
 }
 
-function findUserEmail() {
+// para: none
+//
+// return:
+function setUserEmail() {
     var ID = (<HTMLInputElement> document.getElementById("userEmail"));
     $.get('/findUserEmail', function (data) {
         ID.value = data.toString();
     });
 }
 
-function findComicID() {
+
+// the comicID is passed in the URL
+
+// para: none
+// parses the id param from URL, creates input field and sets value to the id param's value.
+// return: none
+function setComicID() {
+    /* DEPRECATED PART - comicID is passed in URL
     var ID = (<HTMLInputElement> document.getElementById("comicID"));
 
     $.get('/comicID', function (data) {
         ID.value = data.toString();
     });
+    */
+    var comicID = getURLParameterByName("id");
+    var ID = (<HTMLInputElement> document.getElementById("comicID"));
+    ID.value = comicID;
+    alert(comicID);
+
+    // CANNOT ACCESS Panel AND Comic
+    //var panel1 = [];
+    //var panel2 = [];
+    //var comic2 = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
+    //alert("comic title: " + comic2.title);
+    //var comic = comicJSON();
 }
 
+// para: string id of parameter to parse
+// parses the value of the specified param
+// return: string value of the specified param
+function getURLParameterByName(name: string) {
+    var url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+// para: none
+// pulls all info for the comic from the page and compiles into comic JSON string obj.
+// return: comic in JSON string format
 function comicJSON() {
 
     var title = (<HTMLInputElement> document.getElementById("comicTitle"));
-    var publicPrivate = true
+    var publicPrivate = true;
     var userEmail = (<HTMLInputElement> document.getElementById("userEmail"));
-    var el = document.getElementsByName
+    //var el = document.getElementsByName;
 
+    //var panels = [];
+    //var contributors = [];
+
+    //var comicObj = new Comic("test title", true, panels, contributors);
+    //alert(comicObj.title);
 
     var comic = JSON.stringify(
         {
@@ -114,6 +160,7 @@ function updateTitle(){
 
     var comic = comicJSON();
     var comicID = (<HTMLInputElement> document.getElementById("comicID"));
+    alert("updateTitle for id: " + comicID.value);
 
     $.ajax({
         type: "PUT",
@@ -166,16 +213,16 @@ function renderPanels(elId, jsonPanels) {
 
     var TESTJSON = JSON.stringify({
         Panel_1: {
-            "Image_URL": "https://49.media.tumblr.com/8a9eb98c7d55555b5d88d6859d5631fc/tumblr_n8uo15RRCE1sy4wkto1_500.gif",
-            "Text": "TEST TEXT"
+            "Image_URL": "http://cdn.toptenreviews.com/rev/prod/large/1219-i-am-bored-box.jpg",
+            "Text": "Jim is bored."
         },
         Panel_2: {
-            "Image_URL": "http://www.potatoes.com/files/5713/4202/4172/07.jpg",
-            "Text": "TEST TEXT2"
+            "Image_URL": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQdzsYYH6_rIt2kiB15jRv8VWw1zaKWTJNg3L4f9jSW2Ziy0Rf9",
+            "Text": "lets recharge my electric fork!"
         },
         Panel_3: {
-            "Image_URL": "http://www.potatoes.com/files/5713/4202/4172/07.jpg",
-            "Text": "TEST TEXT3"
+            "Image_URL": "https://media.giphy.com/media/XevXoNu5WZxe0/giphy.gif",
+            "Text": "R.I.P Jim 2016."
         }
     });
 
