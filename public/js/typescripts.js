@@ -60,12 +60,16 @@ function getComic(id) {
 // sends GET request to get comic JSON object. Sets value of comicStr element.
 // return: none
 function setComicJSON(id) {
-    //var ID = (<HTMLInputElement> document.getElementById("comicStr"));
+    var ID = document.getElementById("comicStr");
     var comicStr;
     $.get('/comicJSON/' + id, function (data) {
-        comicJSONObj = JSON.parse(data.toString());
-        //console.log(comicJSONObj);
-        //ID.value = comicJSONObj;
+        alert("data: " + data);
+        comicJSONObj = JSON.parse(data);
+        console.log(comicJSONObj);
+        ID.value = comicJSONObj;
+        alert("title: " + comicJSONObj.Title);
+        comicJSONObj.Title = "PROOF OF CONCEPT";
+        alert("title: " + comicJSONObj.Title);
     });
 }
 // para: string id of parameter to parse
@@ -150,11 +154,12 @@ function updateTitle() {
     var comic = JSON.stringify(comicJSONObj);
     alert("updateTitle for id: " + comicID.value);
     alert("comic data: " + comic);
+    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
         contentType: "application/json; charset=utf-8",
-        data: comic,
+        data: comicJSONObj,
         async: true,
         dataType: 'json',
         timeout: 4000,

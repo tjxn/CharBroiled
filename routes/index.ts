@@ -37,8 +37,10 @@ router.get('/comicJSON/:id', function (req, res, next) {
     var id = req.params.id;
     var api = new ComicWebService();
 
-    api.getAComicById(id, function(err:string, response:string, body:string){
+    api.getAComic(id, function(err:string, response:string, body:string){
+        res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(body));
+        //res.json(body);
     });
 
 });

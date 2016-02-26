@@ -16,7 +16,7 @@ cloudinary.config({
     api_secret: 'o2O9I2tAhbVa0XwmBXwq4oDbZ7Q'
 });
 var router = express.Router();
-/* GET edit page. */
+/* GET view page. */
 router.get('/view', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'view.html'));
 });
@@ -28,9 +28,15 @@ router.get('/edit', function (req, res, next) {
 router.get('/comicJSON/:id', function (req, res, next) {
     var id = req.params.id;
     var api = new ComicWebService();
-    api.getAComicById(id, function (err, response, body) {
+    api.getAComic(id, function (err, response, body) {
+        res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(body));
+        //res.json(body);
     });
+});
+/* GET account page. */
+router.get('/account', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
 /* GET home page. */
 router.get('/test', function (req, res, next) {
@@ -44,7 +50,6 @@ router.post('/testingCall', function (req, res, next) {
     console.log(req.body);
     res.send("Hello From Server");
 });
-
 /* GET home page. */
 router.post('/image', function (req, res, next) {
     cloudinary.uploader.upload("http://www.motherwebbs.com/wp-content/uploads/2014/04/steak300x200.jpg", function (result) {
@@ -52,7 +57,6 @@ router.post('/image', function (req, res, next) {
         res.send(result);
     });
 });
-
 /* GET home page. */
 router.post('/newComic', function (req, res, next) {
     var api = new ComicWebService();
