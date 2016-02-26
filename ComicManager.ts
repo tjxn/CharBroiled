@@ -48,7 +48,7 @@ class ComicManager {
         var publicView:boolean = true;
         var panels:Panel[] = [];
         var contributors:string[] = [];
-        comicdb.getAComicById(dbID, function (error:string, response:string, body:string) {
+        comicdb.getAComic(dbID, function (error:string, response:string, body:string) {
             var data = JSON.parse(body);
 
             title = data['Title'];
@@ -88,7 +88,7 @@ class ComicManager {
 // delete the comic from the database
     deleteComic() {
         var comicdb = new ComicWebService();
-        comicdb.deleteAComic(this.currComic, function (error:string, response:string, body:string) {
+        comicdb.deleteAComic(this.currComic.dbID, function (error:string, response:string, body:string) {
         });
     }
 

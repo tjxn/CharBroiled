@@ -36,7 +36,7 @@ var ComicManager = (function () {
         var publicView = true;
         var panels = [];
         var contributors = [];
-        comicdb.getAComicById(dbID, function (error, response, body) {
+        comicdb.getAComic(dbID, function (error, response, body) {
             var data = JSON.parse(body);
             title = data['Title'];
             publicView = data['Public'];
@@ -72,7 +72,7 @@ var ComicManager = (function () {
     // delete the comic from the database
     ComicManager.prototype.deleteComic = function () {
         var comicdb = new ComicWebService();
-        comicdb.deleteAComic(this.currComic, function (error, response, body) {
+        comicdb.deleteAComic(this.currComic.dbID, function (error, response, body) {
         });
     };
     ComicManager.prototype.getTitle = function () {

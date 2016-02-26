@@ -1,3 +1,8 @@
+/**
+ * Created by jes97210 on 2/4/16.
+ * Edited by JJXN on 2/9/16
+ */
+/// <reference path="./panel" />
 var Comic = (function () {
     //NOTE: Just made it a list of strings, since we don't need to link the contributor name in any way right now,
     // and I assume that the list of contributors is stored in the database?

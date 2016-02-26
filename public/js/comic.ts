@@ -3,9 +3,8 @@
  * Edited by JJXN on 2/9/16
  */
 /// <reference path="./panel" />
-/// <reference path="./ComicWebService" />
+
 import Panel = require ('./panel');
-import ComicWebService = require ('./ComicWebService');
 
 class Comic {
      dbID:string;
