@@ -49,17 +49,17 @@ app.use(stormpath.init(app, {
         register: {
             enabled: true,
             fields: {
-                userName: {
+                /*userName: {
                     enabled: true,
                     label: 'User Name',
                     name: 'userName',
                     placeholder: 'User Name',
                     required: true,
                     type: 'text'
-                },
+                },*/
                 givenName: {
-                    enabled: false,
-                    required: false
+                    enabled: true,
+                    required: true
                 },
                 surname: {
                     enabled: false,
@@ -74,7 +74,7 @@ app.use(stormpath.init(app, {
                     type: 'text'
                 },
             },
-            fieldOrder: ["userName", "userType", "email", "password"],
+            fieldOrder: ["givenName", "email", "password", "userType"],
         },
     },
 
