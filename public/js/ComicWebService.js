@@ -8,38 +8,19 @@
 /// <reference path="./../../typings/main/ambient/request/request.d.ts" />
 ///  <reference path="./../../typings/main/ambient/form-data/form-data.d.ts" />
 var ComicWebService = (function () {
-    // USED FOR TESTING
-    //panel1:Panel;
-    //panel2:Panel;
-    //comic:Comic;
     function ComicWebService() {
-        // USED FOR TESTING
-        //this.panel1 = new Panel("First Panel", "www.google.ca");
-        //this.panel2 = new Panel("First Panel", "www.google.ca");
-        //this.comic = new Comic("Api Comic - First", false, [this.panel1, this.panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
-        //this.comic.dbID = "56b44b8284566860217dad39";
     }
     ;
-    ComicWebService.prototype.getAllComics = function (callback) {
-        var request = require('request');
-        request.get('http://glacial-retreat-45891.herokuapp.com/comic', callback);
-        return;
-    };
-    ComicWebService.prototype.getAComicById = function (comicId, callback) {
+    ComicWebService.prototype.getAComic = function (comicId, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);
         return;
     };
-    ComicWebService.prototype.getAComic = function (comic, callback) {
-        var request = require('request');
-        request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID, callback);
-        return;
-    };
-    ComicWebService.prototype.deleteAComic = function (comic, callback) {
+    ComicWebService.prototype.deleteAComic = function (comicId, callback) {
         var request = require('request');
         var options = {
             method: 'DELETE',
-            url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID,
+            url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comicId,
             headers: {
                 'content-type': 'application/x-www-form-urlencoded'
             }
@@ -131,36 +112,36 @@ var ComicWebService = (function () {
                         Text: comic.panels[0].text
                     },
                     Panel_2: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[1].image_URL,
+                        Text: comic.panels[1].text
                     },
                     Panel_3: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[2].image_URL,
+                        Text: comic.panels[2].text
                     },
                     Panel_4: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[3].image_URL,
+                        Text: comic.panels[3].text
                     },
                     Panel_5: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[4].image_URL,
+                        Text: comic.panels[4].text
                     },
                     Panel_6: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[5].image_URL,
+                        Text: comic.panels[5].text
                     },
                     Panel_7: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[6].image_URL,
+                        Text: comic.panels[6].text
                     },
                     Panel_8: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[7].image_URL,
+                        Text: comic.panels[7].text
                     },
                     Panel_9: {
-                        Image_URL: "",
-                        Text: ""
+                        Image_URL: comic.panels[8].image_URL,
+                        Text: comic.panels[8].text
                     }
                 }
             },

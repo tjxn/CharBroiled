@@ -87,7 +87,9 @@ app.use(stormpath.init(app, {
 // -----------------------------------
 //              ROUTING
 // -----------------------------------
-
+app.get('/image', function(req, res){
+    res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
+});
 app.get('/', function (req, res) {
     res.render('login', {
         title: 'Welcome'
@@ -107,7 +109,7 @@ var comic = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jac
 comic.dbID = "56c8dcbaa759dc110004e6c5";
 
 var api = new ComicWebService();
-api.getAComicById(comic.dbID, test);
+api.getAComic(comic.dbID, test);
 
 function test(error:string, response:string, body:string) {
     var data = JSON.parse(body);
