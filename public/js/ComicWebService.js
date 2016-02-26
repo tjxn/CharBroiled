@@ -2,70 +2,53 @@
  * Created by Trevor Jackson on 08-Feb-2016.
  * Edited by Joshua Jackson on 10-Feb-2016.
  */
-/// <reference path="express/express.d.ts" />
+/// <reference path="../../express/express.d.ts" />
 /// <reference path="comic.ts" />
 /// <reference path="panel.ts" />
-/// <reference path="./typings/main/ambient/request/request.d.ts" />
-///  <reference path="./typings/main/ambient/form-data/form-data.d.ts" />
-
-import Comic = require ("./comic");
-
-class ComicWebService {
-
+/// <reference path="./../../typings/main/ambient/request/request.d.ts" />
+///  <reference path="./../../typings/main/ambient/form-data/form-data.d.ts" />
+var ComicWebService = (function () {
     // USED FOR TESTING
     //panel1:Panel;
     //panel2:Panel;
     //comic:Comic;
-
-    constructor() {
+    function ComicWebService() {
         // USED FOR TESTING
         //this.panel1 = new Panel("First Panel", "www.google.ca");
         //this.panel2 = new Panel("First Panel", "www.google.ca");
         //this.comic = new Comic("Api Comic - First", false, [this.panel1, this.panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
         //this.comic.dbID = "56b44b8284566860217dad39";
-    };
-
-    result:string;
-
-    getAllComics(callback:(error:string, response:string, body:string) => void) {
-
+    }
+    ;
+    ComicWebService.prototype.getAllComics = function (callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic', callback);
         return;
-    }
-
-    getAComicById(comicId:string, callback:(error:string, response:string, body:string) => void) {
-
+    };
+    ComicWebService.prototype.getAComicById = function (comicId, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);
         return;
-    }
-
-    getAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
-
+    };
+    ComicWebService.prototype.getAComic = function (comic, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID, callback);
         return;
-    }
-
-    deleteAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
-
+    };
+    ComicWebService.prototype.deleteAComic = function (comic, callback) {
         var request = require('request');
         var options = {
             method: 'DELETE',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID,
             headers: {
-                'content-type': 'application/x-www-form-urlencoded',
+                'content-type': 'application/x-www-form-urlencoded'
             }
         };
         request(options, callback);
         return;
-    }
-
-    newComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
-
+    };
+    ComicWebService.prototype.newComic = function (comic, callback) {
         var request = require('request');
-
         var options = {
             method: 'POST',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic',
@@ -122,15 +105,11 @@ class ComicWebService {
             },
             json: true
         };
-
         request(options, callback);
-
         return;
-    }
-
-    updateComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+    };
+    ComicWebService.prototype.updateComic = function (comic, callback) {
         var request = require("request");
-
         var options = {
             method: 'PUT',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID,
@@ -187,11 +166,10 @@ class ComicWebService {
             },
             json: true
         };
-
         request(options, callback);
-
-        return
-    }
-
-}
-export = ComicWebService;
+        return;
+    };
+    return ComicWebService;
+})();
+module.exports = ComicWebService;
+//# sourceMappingURL=ComicWebService.js.map

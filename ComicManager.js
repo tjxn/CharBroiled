@@ -1,11 +1,11 @@
 /**
  * Created by Trevor Jackson on 14-Feb-2016.
  */
-/// <reference path="./panel" />
-/// <reference path="./ComicWebService" />
-var Panel = require('./panel');
-var Comic = require('./comic');
-var ComicWebService = require('./ComicWebService');
+/// <reference path="./public/js/panel" />
+/// <reference path="./public/js/ComicWebService" />
+var Panel = require('./public/js/panel');
+var Comic = require('./public/js/comic');
+var ComicWebService = require('./public/js/ComicWebService');
 var ComicManager = (function () {
     function ComicManager() {
         this.defaultImage = "http://i.imgur.com/An1bi8f.jpg";

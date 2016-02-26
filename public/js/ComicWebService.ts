@@ -2,53 +2,70 @@
  * Created by Trevor Jackson on 08-Feb-2016.
  * Edited by Joshua Jackson on 10-Feb-2016.
  */
-/// <reference path="express/express.d.ts" />
+/// <reference path="../../express/express.d.ts" />
 /// <reference path="comic.ts" />
 /// <reference path="panel.ts" />
-/// <reference path="./typings/main/ambient/request/request.d.ts" />
-///  <reference path="./typings/main/ambient/form-data/form-data.d.ts" />
-var ComicWebService = (function () {
+/// <reference path="./../../typings/main/ambient/request/request.d.ts" />
+///  <reference path="./../../typings/main/ambient/form-data/form-data.d.ts" />
+
+import Comic = require ("./comic");
+
+class ComicWebService {
+
     // USED FOR TESTING
     //panel1:Panel;
     //panel2:Panel;
     //comic:Comic;
-    function ComicWebService() {
+
+    constructor() {
         // USED FOR TESTING
         //this.panel1 = new Panel("First Panel", "www.google.ca");
         //this.panel2 = new Panel("First Panel", "www.google.ca");
         //this.comic = new Comic("Api Comic - First", false, [this.panel1, this.panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
         //this.comic.dbID = "56b44b8284566860217dad39";
-    }
-    ;
-    ComicWebService.prototype.getAllComics = function (callback) {
+    };
+
+    result:string;
+
+    getAllComics(callback:(error:string, response:string, body:string) => void) {
+
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic', callback);
         return;
-    };
-    ComicWebService.prototype.getAComicById = function (comicId, callback) {
+    }
+
+    getAComicById(comicId:string, callback:(error:string, response:string, body:string) => void) {
+
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);
         return;
-    };
-    ComicWebService.prototype.getAComic = function (comic, callback) {
+    }
+
+    getAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID, callback);
         return;
-    };
-    ComicWebService.prototype.deleteAComic = function (comic, callback) {
+    }
+
+    deleteAComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+
         var request = require('request');
         var options = {
             method: 'DELETE',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID,
             headers: {
-                'content-type': 'application/x-www-form-urlencoded'
+                'content-type': 'application/x-www-form-urlencoded',
             }
         };
         request(options, callback);
         return;
-    };
-    ComicWebService.prototype.newComic = function (comic, callback) {
+    }
+
+    newComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
+
         var request = require('request');
+
         var options = {
             method: 'POST',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic',
@@ -105,11 +122,15 @@ var ComicWebService = (function () {
             },
             json: true
         };
+
         request(options, callback);
+
         return;
-    };
-    ComicWebService.prototype.updateComic = function (comic, callback) {
+    }
+
+    updateComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
         var request = require("request");
+
         var options = {
             method: 'PUT',
             url: 'http://glacial-retreat-45891.herokuapp.com/comic/' + comic.dbID,
@@ -166,10 +187,11 @@ var ComicWebService = (function () {
             },
             json: true
         };
+
         request(options, callback);
-        return;
-    };
-    return ComicWebService;
-})();
-module.exports = ComicWebService;
-//# sourceMappingURL=ComicWebService.js.map
+
+        return
+    }
+
+}
+export = ComicWebService;

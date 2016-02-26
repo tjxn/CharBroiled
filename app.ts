@@ -1,13 +1,13 @@
 /// <reference path="./express/express.d.ts" />
-/// <reference path="./panel.ts" />
-/// <reference path="./Comic.ts" />
-/// <reference path="./ComicWebService.ts" />
+/// <reference path="./public/js/panel.ts" />
+/// <reference path="./public/js/comic.ts" />
+/// <reference path="./public/js/ComicWebService.ts" />
 
 import express = require("express");
 import Tools = require('./scripts');
-var Panel = require('./panel');
-var ComicWebService = require('./ComicWebService');
-var Comic = require('./comic');
+var Panel = require('./public/js/panel');
+var ComicWebService = require('./public/js/ComicWebService');
+var Comic = require('./public/js/comic');
 
 let path = require('path');
 let favicon = require('serve-favicon');
