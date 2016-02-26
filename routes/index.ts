@@ -191,7 +191,7 @@ function jsonToComic(data:Object):Comic{
         ];
 
 
-    var comic = new Comic(data['Title'], true, panels, contributors);
+    var comic = new Comic(data['Title'], data['Public'], panels, contributors);
     return comic;
 }
 

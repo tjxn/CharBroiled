@@ -69,8 +69,6 @@ function setComicID() {
 
 function getComic(id: string) {
     var comicStr = (<HTMLInputElement> document.getElementById("comicStr"));
-
-    alert("getComic: " + comicStr.value);
     return comicJSONObj;
 }
 
@@ -82,9 +80,21 @@ function setComicJSON(id: string) {
     var comicStr;
 
     $.get('/comicJSON/' + id, function (data) {
-        alert("data: "+ data);
+
         comicJSONObj = JSON.parse(data);
-        console.log(comicJSONObj);
+
+        var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
+        comicTitle.value = comicJSONObj.Title;
+
+        var publicPrivate = (<HTMLInputElement>  document.getElementById("optradio"));
+
+        if (comicJSONObj.Public == true){
+            var publicPrivate = (<HTMLInputElement>  document.getElementById("publicBtn"));
+            publicPrivate.checked = true;
+        }else{
+            var publicPrivate = (<HTMLInputElement>  document.getElementById("privateBtn"));
+            publicPrivate.checked = true;
+        }
     });
 }
 
@@ -101,11 +111,18 @@ function getURLParameterByName(name: string) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function updateTitle(){
+function saveComic(){
 
     var comicID = (<HTMLInputElement> document.getElementById("comicID"));
     var newTitle = (<HTMLInputElement> document.getElementById("comicTitle"));
     comicJSONObj.Title = newTitle.value;
+
+    var publicPrivate = (<HTMLInputElement> document.getElementById("publicBtn"));
+    if (publicPrivate.checked == true){
+        comicJSONObj.Public = true;
+    }else{
+        comicJSONObj.Public = false;
+    }
 
     var comic = JSON.stringify(comicJSONObj);
 
@@ -121,7 +138,7 @@ function updateTitle(){
             alert(data.Status);
         },
         error: function (xhr, status, thrownError) {
-            alert('ERROR - updateTitle()');
+            alert('ERROR - saveComic()');
             alert(xhr.responseText);
             alert(xhr.statusText);
             alert(status);
@@ -385,10 +402,7 @@ function updatePanel(elId) {
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoComic(){
-    alert('started');
-
     $.get('/comic', function (data) {
-        alert('here');
         window.location.replace("/edit?id=" + data);
     });
 }

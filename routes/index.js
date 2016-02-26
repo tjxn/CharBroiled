@@ -145,7 +145,7 @@ function jsonToComic(data) {
         data['Contributors']['Contributor_4'],
         data['Contributors']['Contributor_5']
     ];
-    var comic = new Comic(data['Title'], true, panels, contributors);
+    var comic = new Comic(data['Title'], data['Public'], panels, contributors);
     return comic;
 }
 module.exports = router;
