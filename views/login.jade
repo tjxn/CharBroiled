@@ -18,7 +18,7 @@ html
                         a.small(href="profile") Edit my profile
                         if user.userType = "Contributor"
                             p
-                            a.btn.btn-primary(href="/edit") Edit Comic
+                            a.btn.btn-primary(onclick='gotoComic()') Edit Comic
                             span &nbsp;
                             span &nbsp;
                             a.btn.btn-primary(href="/account") Account Page
@@ -39,3 +39,6 @@ html
                         span.small Don't have an account?
                         span &nbsp;
                         a.small(href="/register") Register now
+
+script(type='text/javascript' src='js/typescripts.js')
+script(type='text/javascript' src='js/jquery.min.js')

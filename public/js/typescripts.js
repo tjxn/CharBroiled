@@ -60,16 +60,12 @@ function getComic(id) {
 // sends GET request to get comic JSON object. Sets value of comicStr element.
 // return: none
 function setComicJSON(id) {
-    var ID = document.getElementById("comicStr");
+    var hiddenString = document.getElementById("comicStr");
     var comicStr;
     $.get('/comicJSON/' + id, function (data) {
         alert("data: " + data);
         comicJSONObj = JSON.parse(data);
         console.log(comicJSONObj);
-        ID.value = comicJSONObj;
-        alert("title: " + comicJSONObj.Title);
-        comicJSONObj.Title = "PROOF OF CONCEPT";
-        alert("title: " + comicJSONObj.Title);
     });
 }
 // para: string id of parameter to parse
@@ -85,81 +81,16 @@ function getURLParameterByName(name) {
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
-// DEPRECATED - superceeded by getComic(id)
-// para: none
-//
-// return: comic in JSON string format
-function comicJSON() {
-    var title = document.getElementById("comicTitle");
-    var publicPrivate = true;
-    var userEmail = document.getElementById("userEmail");
-    //var el = document.getElementsByName;
-    //var panels = [];
-    //var contributors = [];
-    //var comicObj = new Comic("test title", true, panels, contributors);
-    //alert(comicObj.title);
-    var comic = JSON.stringify({
-        Title: title.value, Public: publicPrivate,
-        Contributors: {
-            Contributor_1: userEmail.value,
-            Contributor_2: "",
-            Contributor_3: "",
-            Contributor_4: "",
-            Contributor_5: ""
-        },
-        Panels: {
-            Panel_1: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_2: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_3: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_4: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_5: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_6: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_7: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_8: {
-                Image_URL: "",
-                Text: ""
-            },
-            Panel_9: {
-                Image_URL: "",
-                Text: ""
-            }
-        }
-    });
-    alert("comicJSON returning: " + comic);
-    return comic;
-}
 function updateTitle() {
     var comicID = document.getElementById("comicID");
+    var newTitle = document.getElementById("comicTitle");
+    comicJSONObj.Title = newTitle.value;
     var comic = JSON.stringify(comicJSONObj);
-    alert("updateTitle for id: " + comicID.value);
-    alert("comic data: " + comic);
-    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
         contentType: "application/json; charset=utf-8",
-        data: comicJSONObj,
+        data: comic,
         async: true,
         dataType: 'json',
         timeout: 4000,
@@ -212,11 +143,9 @@ function renderPanels(elId, jsonPanels) {
         }
     });
     var panelObj = JSON.parse(TESTJSON);
-    //alert(JSON.stringify(panelObj));
     var panels = Object.keys(panelObj).map(function (k) {
         return panelObj[k];
     });
-    //alert(panels.length);
     for (var i = 0; i < panels.length; i++) {
         var panel = document.createElement("div");
         panel.className = "col-md-4";
@@ -381,6 +310,16 @@ function updatePanel(elId) {
     document.getElementById("desc_" + num).innerHTML = desc;
     //comic.updatePanel(pNum, url, desc);
     //saveComic(this.comic);
+}
+// used in login.jade
+// looks up the id of the comic associated with a user
+// redirects the user to the edit page of that comic
+function gotoComic() {
+    alert('started');
+    $.get('/comic', function (data) {
+        alert('here');
+        window.location.replace("/edit?id=" + data);
+    });
 }
 //function renderViewTitle(elID){
 //    var title = document.getElementById(elID);
