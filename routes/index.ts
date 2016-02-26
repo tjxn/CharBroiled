@@ -14,7 +14,7 @@ import Comic = require("../public/js/comic");
 
 var router = express.Router();
 
-/* GET edit page. */
+/* GET view page. */
 router.get('/view', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'view.html'));
 });
@@ -22,6 +22,11 @@ router.get('/view', function (req, res, next) {
 /* GET edit page. */
 router.get('/edit', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'edit.html'));
+});
+
+/* GET account page. */
+router.get('/account', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
 
 /* GET home page. */
