@@ -4,7 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="description" content="Scott's Awesome and snuck this into a commit!">
     <meta name="author" content="LayoutIt!">
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -86,10 +86,16 @@
                             <div class="form-group">
                                 <input id="comicTitle" type="text" value="" class="form-control" />
                             </div>
-                            <button type="button" onclick="updateTitle()" class="btn btn-default">
+                            &nbsp;
+                            <label class="radio-inline"><input type="radio" name="optradio">Public</label>
+                            <label class="radio-inline"><input type="radio" name="optradio">Private</label>
+                            &nbsp;
+                            <button type="button" onclick="updateTitle()" class="btn btn-default" data-toggle="modal" data-target="#myModal">
                                 Save
                             </button>
+                            &nbsp;
                             <button  href=# role="button" type="button" onclick="addPanel()" class="btn btn-primary">Add Panel</button>
+                            &nbsp;
                             <button id="TestCall" href=# role="button" type="button" onclick="testingCall()" class="btn btn-primary">Testing Call</button>
                         </form>
 
@@ -101,7 +107,6 @@
 
 
 <div id="pictureContainer"></div>
-
             <div class="modal fade" id="modal-container-94539" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -139,6 +144,30 @@
                 </div>
 
             </div>
+
+
+
+<div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Your data has been saved!</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
