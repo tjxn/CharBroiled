@@ -24,6 +24,17 @@ router.get('/edit', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'edit.html'));
 });
 
+/* GET edit page. */
+router.get('/comicJSON/:id', function (req, res, next) {
+    var id = req.params.id;
+    var api = new ComicWebService();
+
+    api.getAComicById(id, function(err:string, response:string, body:string){
+        res.send(JSON.stringify(body));
+    });
+
+});
+
 /* GET home page. */
 router.get('/test', function (req, res, next) {
     console.log("test");
@@ -91,9 +102,8 @@ router.put('/saveComic/:id', function (req, res, next) {
             data['Contributors']['Contributor_5']
         ];
 
-
     var comic = new Comic(data['Title'], true, panels, contributors);
-    comic.dbID = "56c8dcbaa759dc110004e6c5";
+    comic.dbID = req.params.id;
     api.updateComic(comic, function (err:string, response:string, body:string) {
         res.send(JSON.stringify({Status : "Comic Saved"}));
     });

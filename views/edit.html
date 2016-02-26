@@ -10,15 +10,17 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
+    <input type="hidden" id="comicStr" value="" />
     <input type="hidden" id="userEmail" value="" />
-    <input type="text" id="comicID" value="" />
+    <input type="hidden" id="comicID" value="" />
 
     <script>
         window.onload = function (event) {
+
+            var id = setComicID();
+            setComicJSON(id);
             setUserEmail();
-            setComicID();
             renderPanels("pictureContainer", ["http://www.potatoes.com/files/5713/4202/4172/07.jpg","http://3.bp.blogspot.com/-k6mmw9BbX4E/VXtPzM22rgI/AAAAAAAAAp0/axlLjiF-QKI/s1600/potato.gif","http://images.wisegeek.com/bag-of-potatoes.jpg"]);
-            renderTitle("comicTitle");
         };
     </script>
 

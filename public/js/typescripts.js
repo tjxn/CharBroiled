@@ -7,6 +7,7 @@ var $ = require('jquery');
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
  */
+var comicJSONObj;
 // para: elementID of pictureContainer, array of urls for pictures' source
 // creates img element for each url and add to given pictureContainer.
 // return: none
@@ -27,36 +28,39 @@ function testingCall() {
     });
 }
 // para: none
-//
-// return:
+// sends GET request to get user's email. Sets value of userEmail element.
+// return: none
 function setUserEmail() {
     var ID = document.getElementById("userEmail");
     $.get('/findUserEmail', function (data) {
         ID.value = data.toString();
     });
 }
-// the comicID is passed in the URL
 // para: none
 // parses the id param from URL, creates input field and sets value to the id param's value.
 // return: none
 function setComicID() {
-    /* DEPRECATED PART - comicID is passed in URL
-    var ID = (<HTMLInputElement> document.getElementById("comicID"));
-
-    $.get('/comicID', function (data) {
-        ID.value = data.toString();
-    });
-    */
     var comicID = getURLParameterByName("id");
     var ID = document.getElementById("comicID");
     ID.value = comicID;
-    alert(comicID);
-    // CANNOT ACCESS Panel AND Comic
-    //var panel1 = [];
-    //var panel2 = [];
-    //var comic2 = new Comic("Api Comic - First", false, [panel1, panel2], ["Trevor Jackson", "Joshua", "Scott", "Jelena", "Tania"]);
-    //alert("comic title: " + comic2.title);
-    //var comic = comicJSON();
+    return comicID;
+}
+function getComic(id) {
+    var comicStr = document.getElementById("comicStr");
+    alert("getComic: " + comicStr.value);
+    return comicJSONObj;
+}
+// para: id for comic to get
+// sends GET request to get comic JSON object. Sets value of comicStr element.
+// return: none
+function setComicJSON(id) {
+    //var ID = (<HTMLInputElement> document.getElementById("comicStr"));
+    var comicStr;
+    $.get('/comicJSON/' + id, function (data) {
+        comicJSONObj = JSON.parse(data.toString());
+        //console.log(comicJSONObj);
+        //ID.value = comicJSONObj;
+    });
 }
 // para: string id of parameter to parse
 // parses the value of the specified param
@@ -71,8 +75,9 @@ function getURLParameterByName(name) {
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+// DEPRECATED - superceeded by getComic(id)
 // para: none
-// pulls all info for the comic from the page and compiles into comic JSON string obj.
+//
 // return: comic in JSON string format
 function comicJSON() {
     var title = document.getElementById("comicTitle");
@@ -131,12 +136,14 @@ function comicJSON() {
             }
         }
     });
+    alert("comicJSON returning: " + comic);
     return comic;
 }
 function updateTitle() {
-    var comic = comicJSON();
     var comicID = document.getElementById("comicID");
+    var comic = JSON.stringify(comicJSONObj);
     alert("updateTitle for id: " + comicID.value);
+    alert("comic data: " + comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -353,11 +360,6 @@ function addPanel() {
 //    comic.updateTitle(newTitle);
 //    //saveComic(this.comic);
 //    renderTitle(elId);
-//}
-//function renderTitle(elId){
-//    //comic.ts
-//    var el = document.getElementById(elId);
-//    el.value = comic.title();
 //}
 function updatePanel(elId) {
     var url = document.getElementById("modalURL");
