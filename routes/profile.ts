@@ -15,9 +15,10 @@ let collectFormErrors = require('express-stormpath/lib/helpers').collectFormErro
 // Declare the schema of our form:
 
 var profileForm = forms.create({
-    userName: forms.fields.string({required: true}),
+    givenName: forms.fields.string({required: true}),
     email: forms.fields.string({ required: true }),
     password: forms.fields.string({ required: true })
+
 });
 
 // A render function that will render our form and
@@ -27,7 +28,7 @@ var profileForm = forms.create({
 function renderForm(req,res,locals?){
     res.render('profile', extend({
         title: 'My Profile',
-        userName: req.user.userName,
+        givenName: req.user.givenName,
         email: req.user.email,
         password: req.user.password
     },locals||{}));
@@ -55,9 +56,11 @@ module.exports = function profile(){
                 // The express-stormpath library will populate req.user,
                 // all we have to do is set the properties that we care
                 // about and then cal save() on the user object:
-                req.user.userName = form.data.userName;
+                //req.user.userName = form.data.userName;
+                req.user.givenName = form.data.givenName;
                 req.user.email = form.data.email;
                 req.user.password = form.data.password;
+
                 req.user.customData.comic1 = "";
                 //req.user.customData.streetAddress = form.data.streetAddress;
                 //req.user.customData.save();
