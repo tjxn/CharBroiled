@@ -168,15 +168,15 @@ router.delete('/comic/:id', function (req, res, next) {
 
 function jsonToComic(data:Object):Comic{
 
-    var panel1 = new Panel(data['Panels']['Panel_1'].Title, data['Panels']['Panel_1'].Image_URL);
-    var panel2 = new Panel(data['Panels']['Panel_2'].Title, data['Panels']['Panel_2'].Image_URL);
-    var panel3 = new Panel(data['Panels']['Panel_3'].Title, data['Panels']['Panel_3'].Image_URL);
-    var panel4 = new Panel(data['Panels']['Panel_4'].Title, data['Panels']['Panel_4'].Image_URL);
-    var panel5 = new Panel(data['Panels']['Panel_5'].Title, data['Panels']['Panel_5'].Image_URL);
-    var panel6 = new Panel(data['Panels']['Panel_6'].Title, data['Panels']['Panel_6'].Image_URL);
-    var panel7 = new Panel(data['Panels']['Panel_7'].Title, data['Panels']['Panel_7'].Image_URL);
-    var panel8 = new Panel(data['Panels']['Panel_8'].Title, data['Panels']['Panel_8'].Image_URL);
-    var panel9 = new Panel(data['Panels']['Panel_9'].Title, data['Panels']['Panel_9'].Image_URL);
+    var panel1 = new Panel(data['Panels']['Panel_1'].Text, data['Panels']['Panel_1'].Image_URL);
+    var panel2 = new Panel(data['Panels']['Panel_2'].Text, data['Panels']['Panel_2'].Image_URL);
+    var panel3 = new Panel(data['Panels']['Panel_3'].Text, data['Panels']['Panel_3'].Image_URL);
+    var panel4 = new Panel(data['Panels']['Panel_4'].Text, data['Panels']['Panel_4'].Image_URL);
+    var panel5 = new Panel(data['Panels']['Panel_5'].Text, data['Panels']['Panel_5'].Image_URL);
+    var panel6 = new Panel(data['Panels']['Panel_6'].Text, data['Panels']['Panel_6'].Image_URL);
+    var panel7 = new Panel(data['Panels']['Panel_7'].Text, data['Panels']['Panel_7'].Image_URL);
+    var panel8 = new Panel(data['Panels']['Panel_8'].Text, data['Panels']['Panel_8'].Image_URL);
+    var panel9 = new Panel(data['Panels']['Panel_9'].Text, data['Panels']['Panel_9'].Image_URL);
 
 
     var panels = [panel1, panel2, panel3, panel4, panel5, panel6, panel7, panel8, panel9];

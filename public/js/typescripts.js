@@ -66,6 +66,7 @@ function renderComic(id) {
     var comicStr;
     $.get('/comicJSON/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
+        console.log(data);
         var comicTitle = document.getElementById("comicTitle");
         comicTitle.value = comicJSONObj.Title;
         var publicPrivate = document.getElementById("optradio");
@@ -105,10 +106,7 @@ function saveComic() {
     else {
         comicJSONObj.Public = false;
     }
-    console.log("saving comic:");
-    console.log(comicJSONObj);
     var comic = JSON.stringify(comicJSONObj);
-    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -349,8 +347,6 @@ function updatePanel(elId) {
     //\var num = Number(numStr);
     comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
-    console.log("testing:");
-    console.log(comicJSONObj);
     saveComic();
 }
 // used in login.jade

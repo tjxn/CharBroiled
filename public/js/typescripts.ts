@@ -85,7 +85,7 @@ function renderComic(id: string) {
     $.get('/comicJSON/' + id, function (data) {
 
         comicJSONObj = JSON.parse(data);
-
+        console.log(data);
         var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
         comicTitle.value = comicJSONObj.Title;
 
@@ -129,10 +129,7 @@ function saveComic(){
         comicJSONObj.Public = false;
     }
 
-    console.log("saving comic:");
-    console.log(comicJSONObj);
     var comic = JSON.stringify(comicJSONObj);
-    console.log(comic);
 
     $.ajax({
         type: "PUT",
@@ -423,8 +420,7 @@ function updatePanel(elId) {
 
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
-    console.log("testing:");
-    console.log(comicJSONObj);
+
     saveComic();
 
 }
