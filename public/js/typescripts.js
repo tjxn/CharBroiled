@@ -92,6 +92,10 @@ function renderViewComic(id) {
             //console.log(comicJSONObj.Panels);
             renderPanels("pictureContainer", comicJSONObj.Panels, false);
         }
+        else {
+            var comicTitle = document.getElementById("comicTitle");
+            comicTitle.value = "Comic has been made Private";
+        }
     });
 }
 // para: string id of parameter to parse
@@ -307,12 +311,18 @@ function updatePanel(elId) {
     comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
     saveComic();
 }
-// used in login.jade
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoComic() {
     $.get('/comic', function (data) {
         window.location.replace("/edit?id=" + data);
+    });
+}
+// looks up the id of the comic associated with a user
+// redirects the user to the edit page of that comic
+function gotoViewComic() {
+    $.get('/comic', function (data) {
+        window.location.replace("/view?id=" + data);
     });
 }
 //# sourceMappingURL=typescripts.js.map
