@@ -67,15 +67,18 @@ function setComicID() {
     return comicID;
 }
 
+/*
 function getComic(id: string) {
     var comicStr = (<HTMLInputElement> document.getElementById("comicStr"));
     return comicJSONObj;
 }
+*/
 
 // para: id for comic to get
 // sends GET request to get comic JSON object. Sets value of comicStr element.
+// renders comic onto page.
 // return: none
-function setComicJSON(id: string) {
+function renderComic(id: string) {
     var hiddenString = (<HTMLInputElement> document.getElementById("comicStr"));
     var comicStr;
 
@@ -95,6 +98,8 @@ function setComicJSON(id: string) {
             var publicPrivate = (<HTMLInputElement>  document.getElementById("privateBtn"));
             publicPrivate.checked = true;
         }
+        //console.log(comicJSONObj.Panels);
+        renderPanels("pictureContainer", comicJSONObj.Panels);
     });
 }
 
@@ -124,7 +129,10 @@ function saveComic(){
         comicJSONObj.Public = false;
     }
 
+    console.log("saving comic:");
+    console.log(comicJSONObj);
     var comic = JSON.stringify(comicJSONObj);
+    console.log(comic);
 
     $.ajax({
         type: "PUT",
@@ -169,9 +177,10 @@ function newComic() {
     });
 }
 
-function renderPanels(elId, jsonPanels) {
+function renderPanels(elId: string, jsonPanels: JSON) {
     var el = document.getElementById(elId);
 
+    /*
     var TESTJSON = JSON.stringify({
         Panel_1: {
             "Image_URL": "http://cdn.toptenreviews.com/rev/prod/large/1219-i-am-bored-box.jpg",
@@ -186,18 +195,22 @@ function renderPanels(elId, jsonPanels) {
             "Text": "R.I.P Jim 2016."
         }
     });
+    */
 
-    var panelObj = JSON.parse(TESTJSON);
+    var panels = jsonPanels;
+    /*
     var panels = Object.keys(panelObj).map(function (k) {
         return panelObj[k]
     });
+    */
 
-    for (var i = 0; i < panels.length; i++) {
+    var length = lengthJSON(panels);
+    for (var i = 1; i <= length; i++) {
 
         var panel = document.createElement("div");
         panel.className = "col-md-4";
         panel.className += " panel";
-        panel.id = "panel_" + (i + 1).toString();
+        panel.id = "panel_" + (i).toString();
         //panel.style.height = "500px";
         //panel.style.width = "500px";
 
@@ -207,8 +220,8 @@ function renderPanels(elId, jsonPanels) {
 
         var img = document.createElement("img");
         img.alt = "Bootstrap Thumbnail First";
-        img.src = panels[i].Image_URL;
-        img.id = "panelImg_" + (i + 1).toString();
+        img.src = panels["Panel_"+i].Image_URL;
+        img.id = "panelImg_" + (i).toString();
         img.style.height = "300px";
         img.style.width = "300px";
         thumbnail.appendChild(img);
@@ -218,12 +231,12 @@ function renderPanels(elId, jsonPanels) {
         thumbnail.appendChild(caption);
 
         var par = document.createElement("p");
-        par.innerHTML = panels[i].Text;
-        par.id = "desc_" + (i + 1).toString();
+        par.innerHTML = panels["Panel_"+i].Text;
+        par.id = "desc_" + (i).toString();
         caption.appendChild(par);
 
         var button = document.createElement("button");
-        button.id = "button_" + (i + 1).toString();
+        button.id = "button_" + (i).toString();
         button.className = "btn btn-primary";
         button.innerHTML = "Edit Panel";
         button.setAttribute("data-toggle", "modal");
@@ -240,6 +253,19 @@ function renderPanels(elId, jsonPanels) {
         el.appendChild(panel);
     }
 }
+
+function lengthJSON(json: JSON) {
+    var count = 0;
+    var i;
+
+    for (i in json) {
+        if (json.hasOwnProperty(i)) {
+            count++;
+        }
+    }
+    return count;
+}
+
 
 function renderViewPanels(elId, jsonPanels) {
     var el = document.getElementById(elId);
@@ -384,17 +410,22 @@ function addPanel() {
 
 function updatePanel(elId) {
 
-    var url = (<HTMLInputElement>  document.getElementById("modalURL"));
+    var url = (<HTMLInputElement>  document.getElementById("modalURL")).value;
     var desc = (<HTMLInputElement> document.getElementById("modalDesc")).value;
 
-    var num = (<HTMLInputElement>  document.getElementById("panelNum")).value;
-    var temp = (<HTMLImageElement> document.getElementById("panelImg_" + num));
-    temp.src = url.value;
+    var numStr = (<HTMLInputElement>  document.getElementById("panelNum")).value;
+    var panelImg = (<HTMLImageElement> document.getElementById("panelImg_" + numStr));
+    panelImg.src = url;
 
-    (<HTMLInputElement>  document.getElementById("desc_" + num)).innerHTML = desc;
+    (<HTMLInputElement>  document.getElementById("desc_" + numStr)).innerHTML = desc;
 
-    //comic.updatePanel(pNum, url, desc);
-    //saveComic(this.comic);
+    //\var num = Number(numStr);
+
+    comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
+    comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
+    console.log("testing:");
+    console.log(comicJSONObj);
+    saveComic();
 
 }
 

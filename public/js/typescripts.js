@@ -51,14 +51,17 @@ function setComicID() {
     ID.value = comicID;
     return comicID;
 }
-function getComic(id) {
-    var comicStr = document.getElementById("comicStr");
+/*
+function getComic(id: string) {
+    var comicStr = (<HTMLInputElement> document.getElementById("comicStr"));
     return comicJSONObj;
 }
+*/
 // para: id for comic to get
 // sends GET request to get comic JSON object. Sets value of comicStr element.
+// renders comic onto page.
 // return: none
-function setComicJSON(id) {
+function renderComic(id) {
     var hiddenString = document.getElementById("comicStr");
     var comicStr;
     $.get('/comicJSON/' + id, function (data) {
@@ -74,6 +77,8 @@ function setComicJSON(id) {
             var publicPrivate = document.getElementById("privateBtn");
             publicPrivate.checked = true;
         }
+        //console.log(comicJSONObj.Panels);
+        renderPanels("pictureContainer", comicJSONObj.Panels);
     });
 }
 // para: string id of parameter to parse
@@ -100,7 +105,10 @@ function saveComic() {
     else {
         comicJSONObj.Public = false;
     }
+    console.log("saving comic:");
+    console.log(comicJSONObj);
     var comic = JSON.stringify(comicJSONObj);
+    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -143,6 +151,7 @@ function newComic() {
 }
 function renderPanels(elId, jsonPanels) {
     var el = document.getElementById(elId);
+    /*
     var TESTJSON = JSON.stringify({
         Panel_1: {
             "Image_URL": "http://cdn.toptenreviews.com/rev/prod/large/1219-i-am-bored-box.jpg",
@@ -157,15 +166,19 @@ function renderPanels(elId, jsonPanels) {
             "Text": "R.I.P Jim 2016."
         }
     });
-    var panelObj = JSON.parse(TESTJSON);
+    */
+    var panels = jsonPanels;
+    /*
     var panels = Object.keys(panelObj).map(function (k) {
-        return panelObj[k];
+        return panelObj[k]
     });
-    for (var i = 0; i < panels.length; i++) {
+    */
+    var length = lengthJSON(panels);
+    for (var i = 1; i <= length; i++) {
         var panel = document.createElement("div");
         panel.className = "col-md-4";
         panel.className += " panel";
-        panel.id = "panel_" + (i + 1).toString();
+        panel.id = "panel_" + (i).toString();
         //panel.style.height = "500px";
         //panel.style.width = "500px";
         var thumbnail = document.createElement("div");
@@ -173,8 +186,8 @@ function renderPanels(elId, jsonPanels) {
         panel.appendChild(thumbnail);
         var img = document.createElement("img");
         img.alt = "Bootstrap Thumbnail First";
-        img.src = panels[i].Image_URL;
-        img.id = "panelImg_" + (i + 1).toString();
+        img.src = panels["Panel_" + i].Image_URL;
+        img.id = "panelImg_" + (i).toString();
         img.style.height = "300px";
         img.style.width = "300px";
         thumbnail.appendChild(img);
@@ -182,11 +195,11 @@ function renderPanels(elId, jsonPanels) {
         caption.className = "caption";
         thumbnail.appendChild(caption);
         var par = document.createElement("p");
-        par.innerHTML = panels[i].Text;
-        par.id = "desc_" + (i + 1).toString();
+        par.innerHTML = panels["Panel_" + i].Text;
+        par.id = "desc_" + (i).toString();
         caption.appendChild(par);
         var button = document.createElement("button");
-        button.id = "button_" + (i + 1).toString();
+        button.id = "button_" + (i).toString();
         button.className = "btn btn-primary";
         button.innerHTML = "Edit Panel";
         button.setAttribute("data-toggle", "modal");
@@ -199,6 +212,16 @@ function renderPanels(elId, jsonPanels) {
         par1.appendChild(button);
         el.appendChild(panel);
     }
+}
+function lengthJSON(json) {
+    var count = 0;
+    var i;
+    for (i in json) {
+        if (json.hasOwnProperty(i)) {
+            count++;
+        }
+    }
+    return count;
 }
 function renderViewPanels(elId, jsonPanels) {
     var el = document.getElementById(elId);
@@ -317,14 +340,18 @@ function addPanel() {
 //    renderTitle(elId);
 //}
 function updatePanel(elId) {
-    var url = document.getElementById("modalURL");
+    var url = document.getElementById("modalURL").value;
     var desc = document.getElementById("modalDesc").value;
-    var num = document.getElementById("panelNum").value;
-    var temp = document.getElementById("panelImg_" + num);
-    temp.src = url.value;
-    document.getElementById("desc_" + num).innerHTML = desc;
-    //comic.updatePanel(pNum, url, desc);
-    //saveComic(this.comic);
+    var numStr = document.getElementById("panelNum").value;
+    var panelImg = document.getElementById("panelImg_" + numStr);
+    panelImg.src = url;
+    document.getElementById("desc_" + numStr).innerHTML = desc;
+    //\var num = Number(numStr);
+    comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
+    comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
+    console.log("testing:");
+    console.log(comicJSONObj);
+    saveComic();
 }
 // used in login.jade
 // looks up the id of the comic associated with a user
