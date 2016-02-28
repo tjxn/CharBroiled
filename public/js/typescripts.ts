@@ -107,12 +107,14 @@ function renderViewComic(id: string) {
     $.get('/comicJSON/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
         console.log(data);
+        var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
         if (comicJSONObj.Public == true) {
-            var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
             comicTitle.value = comicJSONObj.Title;
 
             //console.log(comicJSONObj.Panels);
             renderPanels("pictureContainer", comicJSONObj.Panels, false);
+        } else {
+            comicTitle.value = "This comic is private.";
         }
     });
 }
@@ -143,8 +145,9 @@ function saveComic(){
         comicJSONObj.Public = false;
     }
 
-    var comic = JSON.stringify(comicJSONObj);
 
+    var comic = JSON.stringify(comicJSONObj);
+    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -209,61 +212,60 @@ function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     */
 
     var panels = jsonPanels;
-    /*
-    var panels = Object.keys(panelObj).map(function (k) {
-        return panelObj[k]
-    });
-    */
-
     var length = lengthJSON(panels);
     for (var i = 1; i <= length; i++) {
 
-        var panel = document.createElement("div");
-        panel.className = "col-md-4";
-        panel.className += " panel";
-        panel.id = "panel_" + (i).toString();
-        //panel.style.height = "500px";
-        //panel.style.width = "500px";
+        var url = panels['Panel_'+i].Image_URL;
+        var desc = panels['Panel_'+i].Text;
+        if (url != "" || desc != "") {
 
-        var thumbnail = document.createElement("div");
-        thumbnail.className = "thumbnail";
-        panel.appendChild(thumbnail);
+            var panel = document.createElement("div");
+            panel.className = "col-md-4";
+            panel.className += " panel";
+            panel.id = "panel_" + (i).toString();
+            //panel.style.height = "500px";
+            //panel.style.width = "500px";
 
-        var img = document.createElement("img");
-        img.alt = "Bootstrap Thumbnail First";
-        img.src = panels["Panel_"+i].Image_URL;
-        img.id = "panelImg_" + (i).toString();
-        img.style.height = "300px";
-        img.style.width = "300px";
-        thumbnail.appendChild(img);
+            var thumbnail = document.createElement("div");
+            thumbnail.className = "thumbnail";
+            panel.appendChild(thumbnail);
 
-        var caption = document.createElement("div");
-        caption.className = "caption";
-        thumbnail.appendChild(caption);
+            var img = document.createElement("img");
+            img.alt = "Bootstrap Thumbnail First";
+            img.src = panels["Panel_" + i].Image_URL;
+            img.id = "panelImg_" + (i).toString();
+            img.style.height = "300px";
+            img.style.width = "300px";
+            thumbnail.appendChild(img);
 
-        var par = document.createElement("p");
-        par.innerHTML = panels["Panel_"+i].Text;
-        par.id = "desc_" + (i).toString();
-        caption.appendChild(par);
+            var caption = document.createElement("div");
+            caption.className = "caption";
+            thumbnail.appendChild(caption);
 
-        if(edit) {
-            var button = document.createElement("button");
-            button.id = "button_" + (i).toString();
-            button.className = "btn btn-primary";
-            button.innerHTML = "Edit Panel";
-            button.setAttribute("data-toggle", "modal");
-            button.setAttribute("role", "button");
-            button.setAttribute("href", "#modal-container-94539");
-            button.setAttribute("onclick", "updateModal(this)");
-
-
-            var par1 = document.createElement("p");
+            var par = document.createElement("p");
+            par.innerHTML = panels["Panel_" + i].Text;
+            par.id = "desc_" + (i).toString();
             caption.appendChild(par);
-            caption.appendChild(par1);
-            par1.appendChild(button);
-        }
 
-        el.appendChild(panel);
+            if (edit) {
+                var button = document.createElement("button");
+                button.id = "button_" + (i).toString();
+                button.className = "btn btn-primary";
+                button.innerHTML = "Edit Panel";
+                button.setAttribute("data-toggle", "modal");
+                button.setAttribute("role", "button");
+                button.setAttribute("href", "#modal-container-94539");
+                button.setAttribute("onclick", "updateModal(this)");
+
+
+                var par1 = document.createElement("p");
+                caption.appendChild(par);
+                caption.appendChild(par1);
+                par1.appendChild(button);
+            }
+
+            el.appendChild(panel);
+        }
     }
 }
 
@@ -280,7 +282,6 @@ function lengthJSON(json: JSON) {
 }
 
 function updateModal(ele) {
-
     var button = (<HTMLInputElement>  document.getElementById(ele.id));
     var num = button.id.substring(7);  // gets panel number = button number
     var img = (<HTMLInputElement>  document.getElementById("panelImg_" + num));
@@ -296,12 +297,8 @@ function updateModal(ele) {
 }
 
 function addPanel() {
-    //comic.ts
-    //comic.addPanel("Add your custom text here...","http://33.media.tumblr.com/tumblr_luknndtrik1qkq0wr.gif")
-    //saveComic(this.comic);
-    //renderPanels("pictureContainer");
-
     var i = document.getElementsByClassName("panel").length;
+    var numStr = (i+1).toString();
     //alert(i);
     var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
     var desc = "enter text here";
@@ -310,7 +307,7 @@ function addPanel() {
     var panel = document.createElement("div");
     panel.className = "col-md-4";
     panel.className += " panel";
-    panel.id = "panel_" + (i + 1).toString();
+    panel.id = "panel_" + numStr;
     //panel.style.height = "500px";
     //panel.style.width = "500px";
 
@@ -321,7 +318,7 @@ function addPanel() {
     var img = document.createElement("img");
     img.alt = "Bootstrap Thumbnail First";
     img.src = url;
-    img.id = "panelImg_" + (i + 1).toString();
+    img.id = "panelImg_" + numStr;
     img.style.height = "300px";
     img.style.width = "300px";
     thumbnail.appendChild(img);
@@ -332,11 +329,11 @@ function addPanel() {
 
     var par = document.createElement("p");
     par.innerHTML = desc;
-    par.id = "desc_" + (i + 1).toString();
+    par.id = "desc_" + numStr;
     caption.appendChild(par);
 
     var button = document.createElement("button");
-    button.id = "button_" + (i + 1).toString();
+    button.id = "button_" + numStr;
     button.className = "btn btn-primary";
     button.innerHTML = "Edit Panel";
     button.setAttribute("data-toggle", "modal");
@@ -351,6 +348,44 @@ function addPanel() {
     par1.appendChild(button);
 
     el.appendChild(panel);
+
+    // update comicJSONObj and save
+    var url = (<HTMLInputElement>  document.getElementById("panelImg_"+numStr)).src;
+    var desc = (<HTMLInputElement>  document.getElementById("desc_"+numStr)).innerHTML;
+    comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
+    comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
+    saveComic();
+}
+
+// para: none
+// removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
+// return: none
+function removePanel() {
+    var i=countPanels();
+    var id = "panel_"+i;
+    (<HTMLInputElement> document.getElementById(id)).remove();
+    comicJSONObj['Panels']["Panel_"+i].Image_URL = "";
+    comicJSONObj['Panels']["Panel_"+i].Text = "";
+    saveComic();
+}
+
+// para: none
+// iterates through panels in comicJSONObj and counts panels in use
+// return: number of panels in use in comicJSONObj
+function countPanels() {
+    var panels = comicJSONObj.Panels;
+    var count = 0;
+    console.log(comicJSONObj);
+    for(var i=1; i<=9; i++) {
+        var url = panels['Panel_'+i].Image_URL;
+        var desc = panels['Panel_'+i].Text;
+        if(url != "" || desc != "") { // if panel is in use
+            //alert(url + " " + desc);
+            count++;
+        } // don't add else since order of traversal is unknown/not reliable
+        // ie you MUST iterate through all of panels to get true count
+    }
+    return count;
 }
 
 function updatePanel(elId) {
@@ -363,12 +398,8 @@ function updatePanel(elId) {
     panelImg.src = url;
 
     (<HTMLInputElement>  document.getElementById("desc_" + numStr)).innerHTML = desc;
-
-    //\var num = Number(numStr);
-
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
-
     saveComic();
 
 }
@@ -380,4 +411,17 @@ function gotoComic(){
     $.get('/comic', function (data) {
         window.location.replace("/edit?id=" + data);
     });
+}
+
+// javascript remove element
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
 }

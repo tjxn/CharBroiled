@@ -168,6 +168,15 @@ router.delete('/comic/:id', function (req, res, next) {
 
 function jsonToComic(data:Object):Comic{
 
+/* CODE IS FOR DYNAMIC PANEL SUPPORT
+    var panels = [];
+    var i = 1;
+    for(var p in data['Panels']) {
+        panels[i] = new Panel(data['Panels']['Panel_'+i].Text, data['Panels']['Panel_'+i].Image_URL);
+    }
+    // !!! check that panels does not exceed panel number limit?
+*/
+
     var panel1 = new Panel(data['Panels']['Panel_1'].Text, data['Panels']['Panel_1'].Image_URL);
     var panel2 = new Panel(data['Panels']['Panel_2'].Text, data['Panels']['Panel_2'].Image_URL);
     var panel3 = new Panel(data['Panels']['Panel_3'].Text, data['Panels']['Panel_3'].Image_URL);
