@@ -110,6 +110,9 @@ function getURLParameterByName(name) {
         return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+// para: none
+// PUT request to save the comicJSONObj to the server
+// return: none
 function saveComic() {
     var comicID = document.getElementById("comicID");
     var newTitle = document.getElementById("comicTitle");
@@ -143,6 +146,9 @@ function saveComic() {
         }
     });
 }
+// para: none
+// POST request to create new comic
+// return: none
 function newComic() {
     var el = document.getElementById("NewComicbtn");
     $.ajax({
@@ -163,6 +169,9 @@ function newComic() {
         }
     });
 }
+// para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
+//
+// return: none
 function renderPanels(elId, jsonPanels, edit) {
     var el = document.getElementById(elId);
     /*
@@ -228,6 +237,9 @@ function renderPanels(elId, jsonPanels, edit) {
         }
     }
 }
+// para: JSON object to evaluate
+// counts the number of properties/fields in the given object
+// return: number of fields in given JSON object
 function lengthJSON(json) {
     var count = 0;
     var i;
@@ -238,6 +250,9 @@ function lengthJSON(json) {
     }
     return count;
 }
+// para: button element
+// extracts number from button element and updates the Modal with the appropriate info
+// return: none
 function updateModal(ele) {
     var button = document.getElementById(ele.id);
     var num = button.id.substring(7); // gets panel number = button number
@@ -251,6 +266,9 @@ function updateModal(ele) {
     urlEle.value = img.getAttribute("src");
     descEle.value = desc;
 }
+// para: none
+// creates default panal and adds to
+// return: none
 function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i + 1).toString();

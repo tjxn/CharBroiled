@@ -132,6 +132,9 @@ function getURLParameterByName(name: string) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+// para: none
+// PUT request to save the comicJSONObj to the server
+// return: none
 function saveComic(){
 
     var comicID = (<HTMLInputElement> document.getElementById("comicID"));
@@ -169,6 +172,9 @@ function saveComic(){
     });
 }
 
+// para: none
+// POST request to create new comic
+// return: none
 function newComic() {
     var el = (<HTMLInputElement> document.getElementById("NewComicbtn"));
 
@@ -191,6 +197,9 @@ function newComic() {
     });
 }
 
+// para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
+//
+// return: none
 function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     var el = document.getElementById(elId);
 
@@ -269,6 +278,9 @@ function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     }
 }
 
+// para: JSON object to evaluate
+// counts the number of properties/fields in the given object
+// return: number of fields in given JSON object
 function lengthJSON(json: JSON) {
     var count = 0;
     var i;
@@ -281,6 +293,9 @@ function lengthJSON(json: JSON) {
     return count;
 }
 
+// para: button element
+// extracts number from button element and updates the Modal with the appropriate info
+// return: none
 function updateModal(ele) {
     var button = (<HTMLInputElement>  document.getElementById(ele.id));
     var num = button.id.substring(7);  // gets panel number = button number
@@ -296,6 +311,9 @@ function updateModal(ele) {
     descEle.value = desc;
 }
 
+// para: none
+// creates default panal and adds to
+// return: none
 function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i+1).toString();
