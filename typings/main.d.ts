@@ -1,3 +1,4 @@
+/// <reference path="main\ambient\bootstrap-notify\bootstrap-notify.d.ts" />
 /// <reference path="main\ambient\cookie-parser\cookie-parser.d.ts" />
 /// <reference path="main\ambient\express\express.d.ts" />
 /// <reference path="main\ambient\form-data\form-data.d.ts" />

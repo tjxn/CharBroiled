@@ -1,13 +1,13 @@
 /// <reference path="comic" />
 /// <reference path="panel" />
-/// <reference path="../../ComicManager" />
 /// <reference path="../../typings/browser/ambient/jquery/jquery.d.ts"/>
 /// <reference path="../../typings/main/ambient/request/request.d.ts" />
+/// <reference path="../../typings/main/ambient/bootstrap-notify/bootstrap-notify.d.ts" />
 
 import Comic = require("./comic");
 import Panel = require("./panel");
 import ComicManager = require("../../ComicManager");
-import $ = require('jquery');
+
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
  */
@@ -33,7 +33,53 @@ function testingCall() {
     var el = (<HTMLInputElement> document.getElementById("TestCall"));
 
     $.post('/testingCall', {Title: "Hello World"}, function (data) {
-        el.innerText = data.toString();
+
+        var note = $.notify({
+            // options
+            icon: 'glyphicon glyphicon-ok',
+            title: '',
+            message: data.toString(),
+            url: '',
+            target: '_blank'
+        },{
+            // settings
+            element: 'body',
+            position: null,
+            type: "success",
+            allow_dismiss: true,
+            newest_on_top: false,
+            showProgressbar: false,
+            placement: {
+                from: "top",
+                align: "right"
+            },
+            offset: 20,
+            spacing: 10,
+            z_index: 1031,
+            delay: 5000,
+            timer: 1000,
+            url_target: '_blank',
+            mouse_over: null,
+            animate: {
+                enter: 'animated fadeInDown',
+                exit: 'animated fadeOutUp'
+            },
+            onShow: null,
+            onShown: null,
+            onClose: null,
+            onClosed: null,
+            icon_type: 'class',
+            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+            '<span data-notify="icon"></span> ' +
+            '<span data-notify="title">{1}</span> ' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+            '</div>'
+        });
     });
 }
 
@@ -160,7 +206,54 @@ function saveComic(){
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
-            alert(data.Status);
+
+            var note = $.notify({
+                // options
+                icon: 'glyphicon glyphicon-ok',
+                title: '',
+                message: data.Status,
+                url: '',
+                target: '_blank'
+            },{
+                // settings
+                element: 'body',
+                position: null,
+                type: "success",
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 1031,
+                delay: 5000,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: null,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+                icon_type: 'class',
+                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                '<span data-notify="icon"></span> ' +
+                '<span data-notify="title">{1}</span> ' +
+                '<span data-notify="message">{2}</span>' +
+                '<div class="progress" data-notify="progressbar">' +
+                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                '</div>' +
+                '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                '</div>'
+            });
+
         },
         error: function (xhr, status, thrownError) {
             alert('ERROR - saveComic()');
