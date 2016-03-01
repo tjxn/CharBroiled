@@ -474,7 +474,7 @@ function addPanel() {
 function removePanel() {
     var i=countPanels();
     var id = "panel_"+i;
-    (<HTMLInputElement> document.getElementById(id)).remove();
+    removeElement((<HTMLInputElement> document.getElementById(id)));
     comicJSONObj['Panels']["Panel_"+i].Image_URL = "";
     comicJSONObj['Panels']["Panel_"+i].Text = "";
     saveComic();
@@ -533,15 +533,23 @@ function gotoViewComic(){
     });
 }
 
-// javascript remove element
-
-Element.prototype.remove = function() {
-    this.parentElement.removeChild(this);
+//remove element
+function removeElement(doc:Element): void{
+    doc.parentElement.removeChild(doc);
 }
-NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
-    for(var i = this.length - 1; i >= 0; i--) {
-        if(this[i] && this[i].parentElement) {
-            this[i].parentElement.removeChild(this[i]);
+
+function removeNodeList(doc:NodeList): void{
+    for(var i = doc.length - 1; i >= 0; i--) {
+        if(doc[i] && doc[i].parentElement) {
+            doc[i].parentElement.removeChild(doc[i]);
+        }
+    }
+}
+
+function removeHTMLCollection(doc:HTMLCollection): void{
+    for(var i = doc.length - 1; i >= 0; i--) {
+        if(doc[i] && doc[i].parentElement) {
+            doc[i].parentElement.removeChild(doc[i]);
         }
     }
 }

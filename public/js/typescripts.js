@@ -414,7 +414,7 @@ function addPanel() {
 function removePanel() {
     var i = countPanels();
     var id = "panel_" + i;
-    document.getElementById(id).remove();
+    removeElement(document.getElementById(id));
     comicJSONObj['Panels']["Panel_" + i].Image_URL = "";
     comicJSONObj['Panels']["Panel_" + i].Text = "";
     saveComic();
@@ -463,15 +463,22 @@ function gotoViewComic() {
         window.location.replace("/view?id=" + data);
     });
 }
-// javascript remove element
-Element.prototype.remove = function () {
-    this.parentElement.removeChild(this);
-};
-NodeList.prototype.remove = HTMLCollection.prototype.remove = function () {
-    for (var i = this.length - 1; i >= 0; i--) {
-        if (this[i] && this[i].parentElement) {
-            this[i].parentElement.removeChild(this[i]);
+//remove element
+function removeElement(doc) {
+    doc.parentElement.removeChild(doc);
+}
+function removeNodeList(doc) {
+    for (var i = doc.length - 1; i >= 0; i--) {
+        if (doc[i] && doc[i].parentElement) {
+            doc[i].parentElement.removeChild(doc[i]);
         }
     }
-};
+}
+function removeHTMLCollection(doc) {
+    for (var i = doc.length - 1; i >= 0; i--) {
+        if (doc[i] && doc[i].parentElement) {
+            doc[i].parentElement.removeChild(doc[i]);
+        }
+    }
+}
 //# sourceMappingURL=typescripts.js.map
