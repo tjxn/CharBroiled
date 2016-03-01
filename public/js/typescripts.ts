@@ -524,6 +524,15 @@ function gotoComic(){
     });
 }
 
+// used in login.jade
+// looks up the id of the comic associated with a user
+// redirects the user to the edit page of that comic
+function gotoViewComic(){
+    $.get('/comic', function (data) {
+        window.location.replace("/view?id=" + data);
+    });
+}
+
 // javascript remove element
 
 Element.prototype.remove = function() {

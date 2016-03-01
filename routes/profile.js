@@ -43,7 +43,7 @@ module.exports = function profile() {
                 req.user.givenName = form.data.givenName;
                 req.user.email = form.data.email;
                 req.user.password = form.data.password;
-                req.user.customData.comic1 = "";
+                //req.user.customData.comic1 = "";
                 //req.user.customData.streetAddress = form.data.streetAddress;
                 //req.user.customData.save();
                 req.user.save(function (err) {

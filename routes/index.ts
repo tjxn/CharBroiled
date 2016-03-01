@@ -70,7 +70,7 @@ router.post('/image', function (req, res, next) {
     cloudinary.uploader.upload("http://www.motherwebbs.com/wp-content/uploads/2014/04/steak300x200.jpg", function(result) {
         console.log(result);
         res.send(result);
-    });
+});
 });
 
 /* GET home page. */
