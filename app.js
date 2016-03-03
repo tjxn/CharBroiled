@@ -144,5 +144,5 @@ app.use(function (err, req, res, next) {
 setTimeout(function () {
     console.log('Stormpath Ready');
     var server = app.listen(process.env.PORT || 3000);
-}, 5000);
+}, 7000);
 //# sourceMappingURL=app.js.map

@@ -16,7 +16,7 @@ import ImageWebService = require("../ImageWebService");
 var fs = require("fs");
 
 import multer = require('multer');
-var upload = multer({ dest: 'uploads' });
+var upload = multer({dest: 'uploads'});
 
 var cloudinary = require('cloudinary');
 
@@ -45,7 +45,7 @@ router.get('/comicJSON/:id', function (req, res, next) {
     var id = req.params.id;
     var api = new ComicWebService();
 
-    api.getAComic(id, function(err:string, response:string, body:string){
+    api.getAComic(id, function (err:string, response:string, body:string) {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(body));
         //res.json(body);
@@ -91,7 +91,7 @@ router.post('/newComic', function (req, res, next) {
     var defcontribs:string[] = ["", "", "", "", ""];
     var currComic = new Comic(defaultTitle, defaultPublicView, defpanels, defcontribs);
 
-    api.newComic(currComic, function(err:string, response:string, body:string){
+    api.newComic(currComic, function (err:string, response:string, body:string) {
         console.log('here');
         currComic.dbID = body['_id'];
         console.log(currComic.dbID);
@@ -111,11 +111,10 @@ router.put('/saveComic/:id', function (req, res, next) {
     comic.dbID = req.params.id;
 
     api.updateComic(comic, function (err:string, response:string, body:string) {
-        res.send(JSON.stringify({Status : "Comic Saved"}));
+        res.send(JSON.stringify({Status: "Comic Saved"}));
     });
 
 });
-
 
 
 /* GET home page. */
@@ -146,7 +145,7 @@ router.get('/comic', function (req, res, next) {
 router.get('/comic/:id', function (req, res, next) {
     var api = new ComicWebService();
 
-    api.getAComic(req.params.id, function(request, response, body){
+    api.getAComic(req.params.id, function (request, response, body) {
         res.send(body);
     });
 });
@@ -158,7 +157,7 @@ router.put('/comic/:id', function (req, res, next) {
     var comic = jsonToComic(req.body);
     comic.dbID = req.params.id;
 
-    api.updateComic(comic, function(request, response, body){
+    api.updateComic(comic, function (request, response, body) {
         res.send(body);
     });
 });
@@ -166,40 +165,40 @@ router.put('/comic/:id', function (req, res, next) {
 // Remove a comic from the database
 router.delete('/comic/:id', function (req, res, next) {
     var api = new ComicWebService();
-    api.deleteAComic(req.params.id, function(request, response, body){
-        res.send(JSON.stringify({Status : "Comic Deleted"}));
+    api.deleteAComic(req.params.id, function (request, response, body) {
+        res.send(JSON.stringify({Status: "Comic Deleted"}));
     });
 });
 
 // Add/Remove a Favourite Comic
 router.put('/user/fav', function (req, res, next) {
-    var fav: Array<string> = req.user.customData.favourites;
+    var fav:Array<string> = req.user.customData.favourites;
     var givenFav:string = req.body['favourite'];
 
-    for (var i = 0; i < fav.length; i++){
-        if (fav[i] == givenFav){
+    for (var i = 0; i < fav.length; i++) {
+        if (fav[i] == givenFav) {
             fav = removeFavourite(fav, givenFav);
             req.user.customData.favourites = fav;
             req.user.save();
-            res.send(JSON.stringify({Status : 'Update Successful - Removed Favourite'}));
+            res.send(JSON.stringify({Status: 'Update Successful - Removed Favourite'}));
             return
         }
     }
 
     fav.push(givenFav);
-    req.user.customData.favourites =  fav;
+    req.user.customData.favourites = fav;
     req.user.save();
-    res.send(JSON.stringify({Status : "Update Successful - Added Favourite"}));
+    res.send(JSON.stringify({Status: "Update Successful - Added Favourite"}));
 
 });
 
 // Remove a string from an array of strings
 // Used for removing a comic ID from a list of comic IDs
 // See router.put('/user/fav'
-function removeFavourite(fav:Array<string>, givenFav:string):Array<string>{
+function removeFavourite(fav:Array<string>, givenFav:string):Array<string> {
 
-    for (var i = 0; i < fav.length; i++){
-        if(fav[i] == givenFav){
+    for (var i = 0; i < fav.length; i++) {
+        if (fav[i] == givenFav) {
             fav.splice(i, 1);
         }
     }
@@ -211,27 +210,32 @@ function removeFavourite(fav:Array<string>, givenFav:string):Array<string>{
 router.post('/image', upload.any(), function (req, res, next) {
     var api = new ImageWebService();
 
-    api.addImage("/" + req.files[0].path, function(result){
+    api.addImage("/" + req.files[0].path, function (result) {
 
         //delete file after it's on cloudinary
-        fs.unlink(__dirname.substring(0, __dirname.indexOf("\\routes")) + "\\" + req.files[0].path, function(err){});
+        fs.unlink(__dirname.substring(0, __dirname.indexOf("\\routes")) + "\\" + req.files[0].path, function (err) {
+        });
 
-        // send the permanent url of the image back
-        res.send(result.secure_url);
+        if (result.secure_url == undefined) {
+            res.send("Error Uploading Image");
+        } else {
+            // send the permanent url of the image back
+            res.send(result.secure_url);
+        }
     });
 });
 
 
-function jsonToComic(data:Object):Comic{
+function jsonToComic(data:Object):Comic {
 
-/* CODE IS FOR DYNAMIC PANEL SUPPORT
-    var panels = [];
-    var i = 1;
-    for(var p in data['Panels']) {
-        panels[i] = new Panel(data['Panels']['Panel_'+i].Text, data['Panels']['Panel_'+i].Image_URL);
-    }
-    // !!! check that panels does not exceed panel number limit?
-*/
+    /* CODE IS FOR DYNAMIC PANEL SUPPORT
+     var panels = [];
+     var i = 1;
+     for(var p in data['Panels']) {
+     panels[i] = new Panel(data['Panels']['Panel_'+i].Text, data['Panels']['Panel_'+i].Image_URL);
+     }
+     // !!! check that panels does not exceed panel number limit?
+     */
 
     var panel1 = new Panel(data['Panels']['Panel_1'].Text, data['Panels']['Panel_1'].Image_URL);
     var panel2 = new Panel(data['Panels']['Panel_2'].Text, data['Panels']['Panel_2'].Image_URL);

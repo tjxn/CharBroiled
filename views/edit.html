@@ -15,9 +15,20 @@
     <input type="hidden" id="userEmail" value="" />
     <input type="hidden" id="comicID" value="" />
 
-    <script>
-        window.onload = function (event) {
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-notify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/typescripts.js"></script>
+    <script src="js/comic.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/ComicWebService.js"></script>
+    <script src="js/dropzone.js"></script>
 
+
+    <script>
+        Dropzone.autoDiscover = false;
+        window.onload = function (event) {
+            test();
             var id = setComicID();
             renderEditComic(id);
             setUserEmail();
@@ -29,11 +40,10 @@
 <body>
 
 
-<div id="dropzone"><form action="/upload" class="dropzone needsclick" id="demo-upload">
+<div id="dropzone"><form method="post" action="/image" class="dropzone needsclick" enctype="multipart/form-data" id="demoUpload">
 
     <div class="dz-message needsclick">
         Drop files here or click to upload.<br />
-        <span class="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
     </div>
 
 </form></div>
@@ -184,16 +194,6 @@
     </div>
 
 </div>
-
-
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap-notify.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/typescripts.js"></script>
-<script src="js/comic.js"></script>
-<script src="js/panel.js"></script>
-<script src="js/ComicWebService.js"></script>
-<script src="js/dropzone.js"></script>
 
 </body>
 </html>

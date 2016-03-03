@@ -163,20 +163,26 @@ router.post('/image', upload.any(), function (req, res, next) {
     var api = new ImageWebService();
     api.addImage("/" + req.files[0].path, function (result) {
         //delete file after it's on cloudinary
-        fs.unlink(__dirname.substring(0, __dirname.indexOf("\\routes")) + "\\" + req.files[0].path, function (err) { });
-        // send the permanent url of the image back
-        res.send(result.secure_url);
+        fs.unlink(__dirname.substring(0, __dirname.indexOf("\\routes")) + "\\" + req.files[0].path, function (err) {
+        });
+        if (result.secure_url == undefined) {
+            res.send("Error Uploading Image");
+        }
+        else {
+            // send the permanent url of the image back
+            res.send(result.secure_url);
+        }
     });
 });
 function jsonToComic(data) {
     /* CODE IS FOR DYNAMIC PANEL SUPPORT
-        var panels = [];
-        var i = 1;
-        for(var p in data['Panels']) {
-            panels[i] = new Panel(data['Panels']['Panel_'+i].Text, data['Panels']['Panel_'+i].Image_URL);
-        }
-        // !!! check that panels does not exceed panel number limit?
-    */
+     var panels = [];
+     var i = 1;
+     for(var p in data['Panels']) {
+     panels[i] = new Panel(data['Panels']['Panel_'+i].Text, data['Panels']['Panel_'+i].Image_URL);
+     }
+     // !!! check that panels does not exceed panel number limit?
+     */
     var panel1 = new Panel(data['Panels']['Panel_1'].Text, data['Panels']['Panel_1'].Image_URL);
     var panel2 = new Panel(data['Panels']['Panel_2'].Text, data['Panels']['Panel_2'].Image_URL);
     var panel3 = new Panel(data['Panels']['Panel_3'].Text, data['Panels']['Panel_3'].Image_URL);
