@@ -7,9 +7,10 @@
     <meta name="description" content="Scott's Awesome and snuck this into a commit!">
     <meta name="author" content="LayoutIt!">
 
+    <link href="css/dropzone.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
-
+    <link href="css/basic.css" rel="stylesheet">
     <!--<input type="hidden" id="comicStr" value="" />-->
     <input type="hidden" id="userEmail" value="" />
     <input type="hidden" id="comicID" value="" />
@@ -26,6 +27,16 @@
 
 </head>
 <body>
+
+
+<div id="dropzone"><form action="/upload" class="dropzone needsclick" id="demo-upload">
+
+    <div class="dz-message needsclick">
+        Drop files here or click to upload.<br />
+        <span class="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
+    </div>
+
+</form></div>
 
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
@@ -100,7 +111,7 @@
                             &nbsp;
                             <button  href=# role="button" type="button" onclick="removePanel()" class="btn btn-primary">Remove Panel</button>
                             &nbsp;
-                            <button id="TestCall" href=# role="button" type="button" onclick="testingCall()" class="btn btn-primary">Testing Call</button>
+                            <button id="TestCall" href=# role="button" type="button" onclick="saveFavourites()" class="btn btn-primary">Mark as Favourite</button>
                             &nbsp;
                             <button id="ImageCall" href=# role="button" type="button" onclick="image()" class="btn btn-primary">Upload Image Test</button>
                         </form>
@@ -174,6 +185,7 @@
 
 </div>
 
+
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap-notify.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -181,6 +193,7 @@
 <script src="js/comic.js"></script>
 <script src="js/panel.js"></script>
 <script src="js/ComicWebService.js"></script>
+<script src="js/dropzone.js"></script>
 
 </body>
 </html>

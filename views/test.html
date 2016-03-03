@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="Scott's Awesome and snuck this into a commit!">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/dropzone.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/basic.css" rel="stylesheet">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-notify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/typescripts.js"></script>
+    <script src="js/comic.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/ComicWebService.js"></script>
+    <script src="js/dropzone.js"></script>
+
+    <script>
+        Dropzone.autoDiscover = false;
+        window.onload = function (event) {
+            test();
+        };
+    </script>
+
+</head>
+<body>
+
+
+<div id="dropzone"><form method="post" action="/image" class="dropzone needsclick" enctype="multipart/form-data" id="demoUpload">
+
+    <div class="dz-message needsclick">
+        Drop files here or click to upload.<br />
+        <span class="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
+    </div>
+
+</form></div>
+
+</body>
+</html>

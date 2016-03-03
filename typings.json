@@ -2,6 +2,7 @@
   "ambientDependencies": {
     "bootstrap-notify": "github:DefinitelyTyped/DefinitelyTyped/bootstrap-notify/bootstrap-notify.d.ts#9443438c83b59d29b768e1035e7a2d7275c36f6a",
     "cookie-parser": "github:DefinitelyTyped/DefinitelyTyped/cookie-parser/cookie-parser.d.ts#e2001653ffbd99c2fc80a272ca80d8c958136de4",
+    "dropzone": "github:DefinitelyTyped/DefinitelyTyped/dropzone/dropzone.d.ts#3930e52ab5991be869c69d9b0d1e720427e5e469",
     "form-data": "github:DefinitelyTyped/DefinitelyTyped/form-data/form-data.d.ts#bb1b99052bf1d697f0368fbff56898bc1f5a525c",
     "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#fab0b336b0414fac23963bde83f7d7077f6cf14c",
     "morgan": "github:DefinitelyTyped/DefinitelyTyped/morgan/morgan.d.ts#4566a913a3667dc627851d0f7f38ffcd0e7cf6ea",

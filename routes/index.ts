@@ -3,6 +3,8 @@
  */
 /// <reference path="../express/express.d.ts" />
 /// <reference path="../app.ts" />
+/// <reference path="../typings/main/ambient/multer/multer.d.ts" />
+
 import express = require("express");
 import Tools = require('../scripts');
 import path    = require("path");
@@ -10,6 +12,12 @@ import ComicManager = require('../ComicManager');
 import ComicWebService = require("../public/js/ComicWebService");
 import Panel = require("../public/js/panel");
 import Comic = require("../public/js/comic");
+import ImageWebService = require("../ImageWebService");
+var fs = require("fs");
+
+import multer = require('multer');
+var upload = multer({ dest: 'uploads' });
+
 var cloudinary = require('cloudinary');
 
 
@@ -50,6 +58,11 @@ router.get('/account', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
 
+/* GET account page. */
+router.get('/testPage', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'test.html'));
+});
+
 /* GET home page. */
 router.get('/test', function (req, res, next) {
     console.log("test");
@@ -63,14 +76,6 @@ router.get('/test', function (req, res, next) {
 router.post('/testingCall', function (req, res, next) {
     console.log(req.body);
     res.send("Hello From Server");
-});
-
-/* GET home page. */
-router.post('/image', function (req, res, next) {
-    cloudinary.uploader.upload("http://www.motherwebbs.com/wp-content/uploads/2014/04/steak300x200.jpg", function(result) {
-        console.log(result);
-        res.send(result);
-});
 });
 
 /* GET home page. */
@@ -165,6 +170,57 @@ router.delete('/comic/:id', function (req, res, next) {
         res.send(JSON.stringify({Status : "Comic Deleted"}));
     });
 });
+
+// Add/Remove a Favourite Comic
+router.put('/user/fav', function (req, res, next) {
+    var fav: Array<string> = req.user.customData.favourites;
+    var givenFav:string = req.body['favourite'];
+
+    for (var i = 0; i < fav.length; i++){
+        if (fav[i] == givenFav){
+            fav = removeFavourite(fav, givenFav);
+            req.user.customData.favourites = fav;
+            req.user.save();
+            res.send(JSON.stringify({Status : 'Update Successful - Removed Favourite'}));
+            return
+        }
+    }
+
+    fav.push(givenFav);
+    req.user.customData.favourites =  fav;
+    req.user.save();
+    res.send(JSON.stringify({Status : "Update Successful - Added Favourite"}));
+
+});
+
+// Remove a string from an array of strings
+// Used for removing a comic ID from a list of comic IDs
+// See router.put('/user/fav'
+function removeFavourite(fav:Array<string>, givenFav:string):Array<string>{
+
+    for (var i = 0; i < fav.length; i++){
+        if(fav[i] == givenFav){
+            fav.splice(i, 1);
+        }
+    }
+
+    return fav;
+}
+
+// Retrieve IDs of comic(s) the user has contributed to
+router.post('/image', upload.any(), function (req, res, next) {
+    var api = new ImageWebService();
+
+    api.addImage("/" + req.files[0].path, function(result){
+
+        //delete file after it's on cloudinary
+        fs.unlink(__dirname.substring(0, __dirname.indexOf("\\routes")) + "\\" + req.files[0].path, function(err){});
+
+        // send the permanent url of the image back
+        res.send(result.secure_url);
+    });
+});
+
 
 function jsonToComic(data:Object):Comic{
 
