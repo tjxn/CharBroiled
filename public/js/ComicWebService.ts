@@ -16,6 +16,13 @@ class ComicWebService {
 
     result:string;
 
+    getAllComics(callback:(error:string, response:string, body:string) => void) {
+
+        var request = require('request');
+        request.get('http://glacial-retreat-45891.herokuapp.com/comic/', callback);
+        return;
+    }
+
     getAComic(comicId:string, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');

@@ -11,6 +11,11 @@ var ComicWebService = (function () {
     function ComicWebService() {
     }
     ;
+    ComicWebService.prototype.getAllComics = function (callback) {
+        var request = require('request');
+        request.get('http://glacial-retreat-45891.herokuapp.com/comic/', callback);
+        return;
+    };
     ComicWebService.prototype.getAComic = function (comicId, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);
