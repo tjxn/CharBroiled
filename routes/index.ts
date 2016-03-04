@@ -58,6 +58,12 @@ router.get('/account', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
 
+/* GET accountViewer page. */
+router.get('/accountviewer', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'AccountViewer.html'));
+});
+
+
 /* GET account page. */
 router.get('/testPage', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'initDropzone.html'));
