@@ -2,9 +2,25 @@
  * Created by Trevor Jackson on 16-Feb-2016.
  */
 var comicJSONObj;
-function test() {
+var myDrop;
+// Removes all files from Dropzone
+// Called when modal is closed
+function clearDropzone() {
+    myDrop.removeAllFiles();
+}
+// Checks every click, if it is a click on a thumbnail in dropzone
+// then change the modal url to the thumbnail's url
+$(document).on("click", ".dz-details", function () {
+    var cloudinary_URL = document.getElementById("cloudinary_URL");
+    var panelURL = document.getElementById("modalURL");
+    panelURL.value = cloudinary_URL.value;
+});
+// setup dropzone
+function initDropzone() {
     Dropzone.autoDiscover = false;
-    var myDrop = new Dropzone('#demoUpload', {
+    myDrop = new Dropzone('#demoUpload', {
+        acceptedFiles: ".jpg,.JPG,.jpeg,.JPEG",
+        maxFiles: 1,
         method: "post",
         url: "/image"
     });
@@ -61,6 +77,10 @@ function test() {
         else {
             // Do something with url
             var url = data.toString();
+            var cloudinary_URL = document.getElementById("cloudinary_URL");
+            var panelURL = document.getElementById("modalURL");
+            panelURL.value = url;
+            cloudinary_URL.value = url;
             var note = $.notify({
                 // options
                 icon: 'glyphicon glyphicon-ok',
@@ -219,6 +239,11 @@ function renderEditComic(id) {
             var publicPrivate = document.getElementById("privateBtn");
             publicPrivate.checked = true;
         }
+        //if comic is favourited by the user, needs to also be updated in savefourite
+        //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+        //favoriteButton.setAttribute("class","btn btn-primary");
+        //favoriteButton.setAttribute("class","btn btn-primary active");
+        //button.setAttribute("data-toggle", "modal");
         //console.log(comicJSONObj.Panels);
         renderPanels("pictureContainer", comicJSONObj.Panels, true);
     });
@@ -464,6 +489,11 @@ function updateModal(ele) {
 function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i + 1).toString();
+    //if (numStr > 9){
+    //    alert("Only 9 panels are allowed in this comic");
+    //}
+    //
+    //else {
     //alert(i);
     var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
     var desc = "enter text here";
@@ -510,17 +540,20 @@ function addPanel() {
     comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
     saveComic();
+    //}
 }
 // para: none
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
 // return: none
 function removePanel() {
     var i = countPanels();
+    //if (i > 0) {
     var id = "panel_" + i;
     removeElement(document.getElementById(id));
     comicJSONObj['Panels']["Panel_" + i].Image_URL = "";
     comicJSONObj['Panels']["Panel_" + i].Text = "";
     saveComic();
+    // }
 }
 // para: none
 // iterates through panels in comicJSONObj and counts panels in use
@@ -554,9 +587,14 @@ function updatePanel(elId) {
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoComic() {
+    //Check to see if the user is a viewer, if they are don't let them go here.
     $.get('/comic', function (data) {
         window.location.replace("/edit?id=" + data);
     });
+}
+function gotoAccount() {
+    //If Contributor, send to account.HTMl else accountviewer.html
+    window.location.replace("/account");
 }
 // used in login.jade
 // looks up the id of the comic associated with a user
@@ -586,6 +624,10 @@ function removeHTMLCollection(doc) {
 }
 function saveFavourites() {
     var id = document.getElementById("comicID").value;
+    //check the button
+    //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+    //favoriteButton.setAttribute("class","btn btn-primary active");
+    //favoriteButton.setAttribute("class","btn btn-primary");
     var favouriteComic = {
         "favourite": id
     };
