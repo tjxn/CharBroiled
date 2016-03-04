@@ -1029,7 +1029,7 @@ interface JQueryStatic {
     /**
      * Determine whether the argument is an array.
      *
-     * @param obj Object to test whether or not it is an array.
+     * @param obj Object to initDropzone whether or not it is an array.
      */
     isArray(obj: any): boolean;
     /**
@@ -1041,7 +1041,7 @@ interface JQueryStatic {
     /**
      * Determine if the argument passed is a Javascript function object.
      *
-     * @param obj Object to test whether or not it is a function.
+     * @param obj Object to initDropzone whether or not it is a function.
      */
     isFunction(obj: any): boolean;
     /**
@@ -1059,7 +1059,7 @@ interface JQueryStatic {
     /**
      * Determine whether the argument is a window.
      *
-     * @param obj Object to test whether or not it is a window.
+     * @param obj Object to initDropzone whether or not it is a window.
      */
     isWindow(obj: any): boolean;
     /**
@@ -2921,25 +2921,25 @@ interface JQuery {
     eq(index: number): JQuery;
 
     /**
-     * Reduce the set of matched elements to those that match the selector or pass the function's test.
+     * Reduce the set of matched elements to those that match the selector or pass the function's initDropzone.
      * 
      * @param selector A string containing a selector expression to match the current set of elements against.
      */
     filter(selector: string): JQuery;
     /**
-     * Reduce the set of matched elements to those that match the selector or pass the function's test.
+     * Reduce the set of matched elements to those that match the selector or pass the function's initDropzone.
      * 
-     * @param func A function used as a test for each element in the set. this is the current DOM element.
+     * @param func A function used as a initDropzone for each element in the set. this is the current DOM element.
      */
     filter(func: (index: number, element: Element) => any): JQuery;
     /**
-     * Reduce the set of matched elements to those that match the selector or pass the function's test.
+     * Reduce the set of matched elements to those that match the selector or pass the function's initDropzone.
      * 
      * @param element An element to match the current set of elements against.
      */
     filter(element: Element): JQuery;
     /**
-     * Reduce the set of matched elements to those that match the selector or pass the function's test.
+     * Reduce the set of matched elements to those that match the selector or pass the function's initDropzone.
      * 
      * @param obj An existing jQuery object to match the current set of elements against.
      */
@@ -2991,7 +2991,7 @@ interface JQuery {
     /**
      * Check the current matched set of elements against a selector, element, or jQuery object and return true if at least one of these elements matches the given arguments.
      * 
-     * @param func A function used as a test for the set of elements. It accepts one argument, index, which is the element's index in the jQuery collection.Within the function, this refers to the current DOM element.
+     * @param func A function used as a initDropzone for the set of elements. It accepts one argument, index, which is the element's index in the jQuery collection.Within the function, this refers to the current DOM element.
      */
     is(func: (index: number, element: Element) => boolean): boolean;
     /**
@@ -3064,7 +3064,7 @@ interface JQuery {
     /**
      * Remove elements from the set of matched elements.
      * 
-     * @param func A function used as a test for each element in the set. this is the current DOM element.
+     * @param func A function used as a initDropzone for each element in the set. this is the current DOM element.
      */
     not(func: (index: number, element: Element) => boolean): JQuery;
     /**

@@ -94,9 +94,9 @@ app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 //comic.dbID = "56c8dcbaa759dc110004e6c5";
 //
 //var api = new ComicWebService();
-//api.getAComic(comic.dbID, test);
+//api.getAComic(comic.dbID, initDropzone);
 //
-//function test(error:string, response:string, body:string) {
+//function initDropzone(error:string, response:string, body:string) {
 //    var data = JSON.parse(body);
 //
 //    var title = data['Title'];

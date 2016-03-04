@@ -45,11 +45,11 @@ router.get('/account', function (req, res, next) {
 });
 /* GET account page. */
 router.get('/testPage', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../views', 'test.html'));
+    res.sendFile(path.join(__dirname, '../views', 'initDropzone.html'));
 });
 /* GET home page. */
-router.get('/test', function (req, res, next) {
-    console.log("test");
+router.get('/initDropzone', function (req, res, next) {
+    console.log("initDropzone");
     var tools = new Tools();
     tools.WelcomeMessage();
     res.render('index', { title: 'Express' });
@@ -133,6 +133,9 @@ router.delete('/comic/:id', function (req, res, next) {
 router.put('/user/fav', function (req, res, next) {
     var fav = req.user.customData.favourites;
     var givenFav = req.body['favourite'];
+    if (fav == undefined) {
+        fav = new Array();
+    }
     for (var i = 0; i < fav.length; i++) {
         if (fav[i] == givenFav) {
             fav = removeFavourite(fav, givenFav);

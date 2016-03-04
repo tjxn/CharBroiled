@@ -13,11 +13,29 @@ import ComicManager = require("../../ComicManager");
  */
 
 var comicJSONObj;
+var myDrop;
 
 
-function test(){
+// Removes all files from Dropzone
+// Called when modal is closed
+function clearDropzone(){
+    myDrop.removeAllFiles();
+}
+
+// Checks every click, if it is a click on a thumbnail in dropzone
+// then change the modal url to the thumbnail's url
+$(document).on("click",".dz-details", function(){
+    var cloudinary_URL = (<HTMLInputElement> document.getElementById("cloudinary_URL"));
+    var panelURL = (<HTMLInputElement> document.getElementById("modalURL"));
+    panelURL.value = cloudinary_URL.value;
+});
+
+// setup dropzone
+function initDropzone(){
     Dropzone.autoDiscover = false;
-    var myDrop = new Dropzone('#demoUpload', {
+    myDrop = new Dropzone('#demoUpload', {
+        acceptedFiles: ".jpg,.JPG,.jpeg,.JPEG",
+        maxFiles: 1,
         method: "post",
         url: "/image"
     })
@@ -74,6 +92,11 @@ function test(){
         }else{
             // Do something with url
             var url = data.toString();
+
+            var cloudinary_URL = (<HTMLInputElement> document.getElementById("cloudinary_URL"));
+            var panelURL = (<HTMLInputElement> document.getElementById("modalURL"));
+            panelURL.value = url;
+            cloudinary_URL.value = url;
 
             var note = $.notify({
                 // options
@@ -503,6 +526,7 @@ function lengthJSON(json: JSON) {
 // extracts number from button element and updates the Modal with the appropriate info
 // return: none
 function updateModal(ele) {
+
     var button = (<HTMLInputElement>  document.getElementById(ele.id));
     var num = button.id.substring(7);  // gets panel number = button number
     var img = (<HTMLInputElement>  document.getElementById("panelImg_" + num));
