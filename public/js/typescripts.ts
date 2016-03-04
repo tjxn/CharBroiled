@@ -654,6 +654,11 @@ function gotoComic(){
     });
 }
 
+function gotoAccount(){
+    //If Contributor, send to account.HTMl else accountviewer.html
+    window.location.replace("/account");
+}
+
 // used in login.jade
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic

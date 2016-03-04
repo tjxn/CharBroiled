@@ -28,7 +28,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li>
-                <a href="/Account">Account</a>
+                <a href="#" onclick="return gotoAccount();">Account</a>
             </li>
             <li>
                 <a id="NewComicbtn" onclick="newComic()" href="#">New Comic</a>
@@ -43,11 +43,11 @@
             </button>
         </form>
         <ul class="nav navbar-nav">
-            <li class="">
-                <a href="/edit">Edit</a>
+            <li>
+                <a href="#" onclick="return gotoComic();">Edit</a>
             </li>
             <li>
-                <a href="/view">View</a>
+                <a href="#" onclick="return gotoViewComic();">View</a>
             </li>
         </ul>
 
@@ -69,7 +69,7 @@
                 <p>
                     We hope you have a lovely time expressing yourself while building fun, innovative and imaginative comics! Get started now,
                     build the collection of GIFS that you've always dreamed about
-                    <a class="btn btn-primary btn-large" href="/edit">New Comic</a> or if you want to edit your account information, you can also do that
+                    <a class="btn btn-primary btn-large" onclick="return gotoComic();" href=#>New Comic</a> or if you want to edit your account information, you can also do that
                     <a class="btn btn-primary btn-large" href="/profile">Edit my Profile</a>.
                 </p>
                 <p>
