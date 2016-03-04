@@ -648,6 +648,7 @@ function updatePanel(elId) {
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoComic(){
+    //Check to see if the user is a viewer, if they are don't let them go here.
     $.get('/comic', function (data) {
         window.location.replace("/edit?id=" + data);
     });
