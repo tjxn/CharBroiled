@@ -279,7 +279,7 @@ function renderEditComic(id: string) {
         //favoriteButton.setAttribute("class","btn btn-primary");
         //favoriteButton.setAttribute("class","btn btn-primary active");
 
-        button.setAttribute("data-toggle", "modal");
+        //button.setAttribute("data-toggle", "modal");
         //console.log(comicJSONObj.Panels);
         renderPanels("pictureContainer", comicJSONObj.Panels, true);
     });
@@ -555,11 +555,11 @@ function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i+1).toString();
     
-    if (numStr > 9){
-        alert("Only 9 panels are allowed in this comic");
-    }
-    
-    else {
+    //if (numStr > 9){
+    //    alert("Only 9 panels are allowed in this comic");
+    //}
+    //
+    //else {
     //alert(i);
     var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
     var desc = "enter text here";
@@ -616,7 +616,7 @@ function addPanel() {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
-    }
+    //}
 }
 
 // para: none
@@ -624,13 +624,13 @@ function addPanel() {
 // return: none
 function removePanel() {
     var i=countPanels();
-    if (i > 0) {
+    //if (i > 0) {
     var id = "panel_"+i;
     removeElement((<HTMLInputElement> document.getElementById(id)));
     comicJSONObj['Panels']["Panel_"+i].Image_URL = "";
     comicJSONObj['Panels']["Panel_"+i].Text = "";
     saveComic();
-    }
+   // }
 }
 
 // para: none
@@ -665,7 +665,6 @@ function updatePanel(elId) {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
-
 }
 
 // used in login.jade

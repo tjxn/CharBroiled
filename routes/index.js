@@ -68,7 +68,8 @@ router.post('/newComic', function (req, res, next) {
     var defaultPublicView = true;
     var defaultPanel = new Panel(defaultText, defaultImage);
     var defpanels = [defaultPanel, defaultPanel, defaultPanel];
-    var defcontribs = ["", "", "", "", ""];
+    var firstcontrib = req.user.email;
+    var defcontribs = [firstcontrib, "", "", "", ""];
     var currComic = new Comic(defaultTitle, defaultPublicView, defpanels, defcontribs);
     api.newComic(currComic, function (err, response, body) {
         console.log('here');
