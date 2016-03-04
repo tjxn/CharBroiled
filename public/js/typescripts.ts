@@ -250,6 +250,13 @@ function renderEditComic(id: string) {
             var publicPrivate = (<HTMLInputElement>  document.getElementById("privateBtn"));
             publicPrivate.checked = true;
         }
+
+        //if comic is favourited by the user, needs to also be updated in savefourite
+        //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+        //favoriteButton.setAttribute("class","btn btn-primary");
+        //favoriteButton.setAttribute("class","btn btn-primary active");
+
+        button.setAttribute("data-toggle", "modal");
         //console.log(comicJSONObj.Panels);
         renderPanels("pictureContainer", comicJSONObj.Panels, true);
     });
@@ -669,6 +676,12 @@ function removeHTMLCollection(doc:HTMLCollection): void{
 
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
+
+    //check the button
+    //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+    //favoriteButton.setAttribute("class","btn btn-primary active");
+    //favoriteButton.setAttribute("class","btn btn-primary");
+
 
     var favouriteComic = {
         "favourite": id,
