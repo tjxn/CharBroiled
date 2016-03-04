@@ -36,10 +36,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li>
-                <a href="#">Account</a>
-            </li>
-            <li>
-                <a href="#">New Comic</a>
+                <a href="#" onclick="return gotoAccount();">Account</a>
             </li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
@@ -55,7 +52,7 @@
                 <a href="#" onclick="return gotoComic();">Edit</a>
             </li>
             <li class="active">
-                <a href="/view">View</a>
+                <a href="#" onclick="return gotoViewComic();">View</a>
             </li>
         </ul>
 
@@ -77,8 +74,9 @@
             <div class="jumbotron">
                 <h1 align = "center" id="titleID" value="Default">
                     <input disabled id="comicTitle" type="text" value="" class="form-control" style="text-align:center;"/>
+                    &nbsp;
+                    <a href="#" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span class="glyphicon glyphicon-star"></span> </a>
                 </h1>
-
             </div>
         </div>
     </div>
