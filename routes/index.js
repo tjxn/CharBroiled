@@ -43,6 +43,10 @@ router.get('/comicJSON/:id', function (req, res, next) {
 router.get('/account', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
+/* GET accountViewer page. */
+router.get('/accountviewer', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'AccountViewer.html'));
+});
 /* GET account page. */
 router.get('/testPage', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'initDropzone.html'));
@@ -177,6 +181,11 @@ router.post('/image', upload.any(), function (req, res, next) {
             res.send(result.secure_url);
         }
     });
+});
+// Retrieve IDs of comic(s) the user has contributed to
+router.delete('/image/:id', function (req, res, next) {
+    var api = new ImageWebService();
+    api.deleteImage(req.params.id, function (result) { });
 });
 function jsonToComic(data) {
     /* CODE IS FOR DYNAMIC PANEL SUPPORT
