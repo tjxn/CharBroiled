@@ -58,12 +58,12 @@ router.get('/account', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
 
-/* GET account page. */
+/* GET test page. */
 router.get('/testPage', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'test.html'));
 });
 
-/* GET home page. */
+/* GET test page. */
 router.get('/test', function (req, res, next) {
     console.log("test");
     var tools = new Tools();
@@ -78,7 +78,7 @@ router.post('/testingCall', function (req, res, next) {
     res.send("Hello From Server");
 });
 
-/* GET home page. */
+/* POST newComic. */
 router.post('/newComic', function (req, res, next) {
     var api = new ComicWebService();
 
@@ -190,6 +190,20 @@ router.put('/user/fav', function (req, res, next) {
     req.user.save();
     res.send(JSON.stringify({Status: "Update Successful - Added Favourite"}));
 
+});
+
+// Send JSON array of fav comic ids
+router.get( '/user/fav', function (req, res, next) {
+    console.log(req.user.customData.favourites);
+    res.send(req.user.customData.favourites.toString());
+});
+
+// Send JSON array of comic objects
+router.get( '/user/favComics', function (req, res, next) {
+    var api = new ComicWebService();
+    api.getComics(req.user.customData.favourites, function (request, response, body) {
+        res.send(body);
+    });
 });
 
 // Remove a string from an array of strings

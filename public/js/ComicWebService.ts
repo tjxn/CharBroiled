@@ -23,6 +23,33 @@ class ComicWebService {
         return;
     }
 
+    getComics(favIds: string[], callback:(error:string, response:string, body:string) => void) {
+
+        var request = require('request');
+        request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err:string, res:string, bod:string) {
+            //var ans: string[] = [];
+            var ans = {};
+            var favs = favIds;
+            var temp = JSON.parse(bod);
+            //console.log(temp);
+            if(typeof favs === 'undefined') {
+                //console.log("user has no favs");
+            } else {
+                var k=0;
+                for (var i = 0; i < temp.length; i++) {
+                    for (var j = 0; j < favs.length; j++) {
+                        if (temp[i]._id == favs[j]) { // if this comic is a fav
+                            ans[k] = temp[i];
+                            k++;
+                        }
+                    }
+                }
+            }
+            callback(err, res, JSON.stringify(ans));
+        });
+        return;
+    }
+
     getAComic(comicId:string, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');

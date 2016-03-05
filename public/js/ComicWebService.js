@@ -16,6 +16,31 @@ var ComicWebService = (function () {
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', callback);
         return;
     };
+    ComicWebService.prototype.getComics = function (favIds, callback) {
+        var request = require('request');
+        request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err, res, bod) {
+            //var ans: string[] = [];
+            var ans = {};
+            var favs = favIds;
+            var temp = JSON.parse(bod);
+            //console.log(temp);
+            if (typeof favs === 'undefined') {
+            }
+            else {
+                var k = 0;
+                for (var i = 0; i < temp.length; i++) {
+                    for (var j = 0; j < favs.length; j++) {
+                        if (temp[i]._id == favs[j]) {
+                            ans[k] = temp[i];
+                            k++;
+                        }
+                    }
+                }
+            }
+            callback(err, res, JSON.stringify(ans));
+        });
+        return;
+    };
     ComicWebService.prototype.getAComic = function (comicId, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);

@@ -15,6 +15,22 @@
 
     <input type="hidden" id="userEmail" value="" />
     <input type="hidden" id="comicID" value="" />
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-notify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/typescripts.js"></script>
+    <script src="js/comic.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/ComicWebService.js"></script>
+
+
+    <script>
+        window.onload = function (event) {
+            renderFavourites("favContainer");
+            //setUserEmail();
+        };
+    </script>
 </head>
 <body>
 
@@ -80,7 +96,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="favContainer">
                 <div class="panel-heading">
                     <h3 class="panel-title">
                         Favourites
@@ -182,12 +198,7 @@
 
 
 
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/typescripts.js"></script>
-<script src="js/comic.js"></script>
-<script src="js/panel.js"></script>
-<script src="js/ComicWebService.js"></script>
+
 
 </body>
 </html>

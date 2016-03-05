@@ -2,6 +2,7 @@
  * Created by Trevor Jackson on 16-Feb-2016.
  */
 var comicJSONObj;
+var favsJSONObj;
 function test() {
     Dropzone.autoDiscover = false;
     var myDrop = new Dropzone('#demoUpload', {
@@ -566,10 +567,15 @@ function gotoViewComic() {
         window.location.replace("/view?id=" + data);
     });
 }
-//remove element
+// para: element to be removed
+// removes given element
+// return: none
 function removeElement(doc) {
     doc.parentElement.removeChild(doc);
 }
+// para: NodeList of items to be removed
+// loops through given list and removes each element
+// return: none
 function removeNodeList(doc) {
     for (var i = doc.length - 1; i >= 0; i--) {
         if (doc[i] && doc[i].parentElement) {
@@ -654,6 +660,46 @@ function saveFavourites() {
             alert(status);
             alert(thrownError);
         }
+    });
+}
+// para: none
+// creates favourite thumbnails on the account page in the given container corresponding to the given id
+// return: none
+function renderFavourites(id) {
+    var container = document.getElementById(id);
+    // returns list of comic JSON objects
+    $.get('/user/favComics', function (data) {
+        favsJSONObj = JSON.parse(data);
+        console.log(favsJSONObj);
+        var length = lengthJSON(favsJSONObj);
+        for (var i = 0; i < length; i++) {
+            var title = favsJSONObj[i].Title;
+            var url = favsJSONObj[i].Panels.Panel_1.Image_URL;
+            var desc = favsJSONObj[i].Panels.Panel_1.Text;
+            if (url != "" || desc != "") {
+                var fav = document.createElement("div");
+                fav.className = "col-md-4";
+                fav.className += " fav";
+                fav.id = "fav_" + (i + 1).toString();
+                var titleEle = document.createElement("h3");
+                titleEle.className = "caption";
+                titleEle.innerHTML = title;
+                fav.appendChild(titleEle);
+            }
+            container.appendChild(fav);
+        }
+        //=======================
+        /*
+        if (comicJSONObj.Public == true) {
+            comicTitle.value = comicJSONObj.Title;
+
+            //console.log(comicJSONObj.Panels);
+            renderPanels("pictureContainer", comicJSONObj.Panels, false);
+        } else {
+            comicTitle.value = "This comic is private.";
+        }
+        */
+        //==========================
     });
 }
 //# sourceMappingURL=typescripts.js.map
