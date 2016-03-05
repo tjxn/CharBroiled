@@ -29,6 +29,7 @@
         Dropzone.autoDiscover = false;
         window.onload = function (event) {
             initDropzone();
+            amIFavourite();
             var id = setComicID();
             renderEditComic(id);
             setUserEmail();
@@ -108,12 +109,12 @@
                                 Save
                             </button>
                             &nbsp;
-                            <a href="#" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span class="glyphicon glyphicon-star"></span> </a>
+                            <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
                             &nbsp;
                             <!--<button id="ImageCall" href=# role="button" type="button" onclick="image()" class="btn btn-primary">Upload Image Test</button>-->
-                            <button  href=# role="button" type="button" onclick="addPanel()" class="btn btn-default">Add Panel</button>
+                            <button type="button" onclick="addPanel()" class="btn btn-default">Add Panel</button>
                             &nbsp;
-                            <button  href=# role="button" type="button" onclick="removePanel()" class="btn btn-default">Remove Panel</button>
+                            <button type="button" onclick="removePanel()" class="btn btn-default">Remove Panel</button>
                         </form>
                     &nbsp;
                     &nbsp;

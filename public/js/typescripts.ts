@@ -30,6 +30,43 @@ $(document).on("click",".dz-details", function(){
     panelURL.value = cloudinary_URL.value;
 });
 
+function changeFavIcon(){
+    var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
+
+    if(Icon.style.color == "white"){
+        Icon.className = "glyphicon glyphicon-star yellow";
+        Icon.style.color = "yellow";
+    }else{
+        Icon.className = "glyphicon glyphicon-star white";
+        Icon.style.color = 'white';
+    }
+}
+
+function amIFavourite() {
+    var comicID = (<HTMLInputElement> document.getElementById("comicID"));
+    var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
+
+    $.get('/user/fav', function (data) {
+        var favs:Array<string>;
+        favs = JSON.parse(data);
+        console.log('favs');
+        console.log(data);
+        for(var i = 0; i < favs.length; i++){
+            console.log(favs[i]);
+            console.log(comicID.value);
+            if (favs[i] == comicID.value){
+                Icon.className = "glyphicon glyphicon-star yellow";
+                Icon.style.color = "yellow";
+                return
+            }
+        }
+        Icon.className = "glyphicon glyphicon-star white";
+        Icon.style.color = 'white';
+    });
+
+}
+
+
 // setup dropzone
 function initDropzone(){
     Dropzone.autoDiscover = false;
@@ -41,7 +78,7 @@ function initDropzone(){
     })
 
     myDrop.on('success', function(file, data){
-        console.log(data);
+
         if (data == "Error Uploading Image"){
             var note = $.notify({
                 // options
@@ -260,7 +297,6 @@ function renderEditComic(id: string) {
     $.get('/comicJSON/' + id, function (data) {
 
         comicJSONObj = JSON.parse(data);
-        console.log(data);
         var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
         comicTitle.value = comicJSONObj.Title;
 
@@ -295,7 +331,6 @@ function renderViewComic(id: string) {
 
     $.get('/comicJSON/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
-        console.log(data);
         var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
         if (comicJSONObj.Public == true) {
             comicTitle.value = comicJSONObj.Title;
@@ -339,7 +374,6 @@ function saveComic(){
 
 
     var comic = JSON.stringify(comicJSONObj);
-    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -554,12 +588,13 @@ function updateModal(ele) {
 function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i+1).toString();
-    
-    if (numStr > 9){
-        alert("Only 9 panels are allowed in this comic");
-    }
+
+    // can't compare a string to a int
+    //if (numStr > 9){
+    //    alert("Only 9 panels are allowed in this comic");
+    //}
     //
-    else {
+    //else {
     //alert(i);
     var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
     var desc = "enter text here";
@@ -616,7 +651,7 @@ function addPanel() {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
-    }
+    //}
 }
 
 // para: none
@@ -639,7 +674,6 @@ function removePanel() {
 function countPanels() {
     var panels = comicJSONObj.Panels;
     var count = 0;
-    console.log(comicJSONObj);
     for(var i=1; i<=9; i++) {
         var url = panels['Panel_'+i].Image_URL;
         var desc = panels['Panel_'+i].Text;
@@ -714,7 +748,7 @@ function removeHTMLCollection(doc:HTMLCollection): void{
 
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
-
+    changeFavIcon();
     //check the button
     //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
     //favoriteButton.setAttribute("class","btn btn-primary active");
@@ -726,7 +760,6 @@ function saveFavourites() {
     };
 
     var fav = JSON.stringify(favouriteComic);
-    console.log(fav);
 
     $.ajax({
         type: "PUT",
@@ -737,6 +770,7 @@ function saveFavourites() {
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
+            amIFavourite();
 
             var note = $.notify({
                 // options
@@ -760,7 +794,7 @@ function saveFavourites() {
                 offset: 20,
                 spacing: 10,
                 z_index: 1031,
-                delay: 20000,
+                delay: 5000,
                 timer: 1000,
                 url_target: '_blank',
                 mouse_over: null,
@@ -787,6 +821,7 @@ function saveFavourites() {
 
         },
         error: function (xhr, status, thrownError) {
+            amIFavourite();
             alert('ERROR - saveFavourites()');
             alert(xhr.responseText);
             alert(xhr.statusText);

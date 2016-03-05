@@ -15,6 +15,38 @@ $(document).on("click", ".dz-details", function () {
     var panelURL = document.getElementById("modalURL");
     panelURL.value = cloudinary_URL.value;
 });
+function changeFavIcon() {
+    var Icon = document.getElementById("FavIcon");
+    if (Icon.style.color == "white") {
+        Icon.className = "glyphicon glyphicon-star yellow";
+        Icon.style.color = "yellow";
+    }
+    else {
+        Icon.className = "glyphicon glyphicon-star white";
+        Icon.style.color = 'white';
+    }
+}
+function amIFavourite() {
+    var comicID = document.getElementById("comicID");
+    var Icon = document.getElementById("FavIcon");
+    $.get('/user/fav', function (data) {
+        var favs;
+        favs = JSON.parse(data);
+        console.log('favs');
+        console.log(data);
+        for (var i = 0; i < favs.length; i++) {
+            console.log(favs[i]);
+            console.log(comicID.value);
+            if (favs[i] == comicID.value) {
+                Icon.className = "glyphicon glyphicon-star yellow";
+                Icon.style.color = "yellow";
+                return;
+            }
+        }
+        Icon.className = "glyphicon glyphicon-star white";
+        Icon.style.color = 'white';
+    });
+}
 // setup dropzone
 function initDropzone() {
     Dropzone.autoDiscover = false;
@@ -25,7 +57,6 @@ function initDropzone() {
         url: "/image"
     });
     myDrop.on('success', function (file, data) {
-        console.log(data);
         if (data == "Error Uploading Image") {
             var note = $.notify({
                 // options
@@ -227,7 +258,6 @@ function renderEditComic(id) {
     var comicStr;
     $.get('/comicJSON/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
-        console.log(data);
         var comicTitle = document.getElementById("comicTitle");
         comicTitle.value = comicJSONObj.Title;
         var publicPrivate = document.getElementById("optradio");
@@ -257,7 +287,6 @@ function renderViewComic(id) {
     var comicStr;
     $.get('/comicJSON/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
-        console.log(data);
         var comicTitle = document.getElementById("comicTitle");
         if (comicJSONObj.Public == true) {
             comicTitle.value = comicJSONObj.Title;
@@ -297,7 +326,6 @@ function saveComic() {
         comicJSONObj.Public = false;
     }
     var comic = JSON.stringify(comicJSONObj);
-    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -489,57 +517,59 @@ function updateModal(ele) {
 function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i + 1).toString();
-    if (numStr > 9) {
-        alert("Only 9 panels are allowed in this comic");
-    }
-    else {
-        //alert(i);
-        var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
-        var desc = "enter text here";
-        var el = document.getElementById("pictureContainer");
-        var panel = document.createElement("div");
-        panel.className = "col-md-4";
-        panel.className += " panel";
-        panel.id = "panel_" + numStr;
-        //panel.style.height = "500px";
-        //panel.style.width = "500px";
-        var thumbnail = document.createElement("div");
-        thumbnail.className = "thumbnail";
-        panel.appendChild(thumbnail);
-        var img = document.createElement("img");
-        img.alt = "Bootstrap Thumbnail First";
-        img.src = url;
-        img.id = "panelImg_" + numStr;
-        img.style.height = "300px";
-        img.style.width = "300px";
-        thumbnail.appendChild(img);
-        var caption = document.createElement("div");
-        caption.className = "caption";
-        thumbnail.appendChild(caption);
-        var par = document.createElement("p");
-        par.innerHTML = desc;
-        par.id = "desc_" + numStr;
-        caption.appendChild(par);
-        var button = document.createElement("button");
-        button.id = "button_" + numStr;
-        button.className = "btn btn-primary";
-        button.innerHTML = "Edit Panel";
-        button.setAttribute("data-toggle", "modal");
-        button.setAttribute("role", "button");
-        button.setAttribute("href", "#modal-container-94539");
-        button.setAttribute("onclick", "updateModal(this)");
-        var par1 = document.createElement("p");
-        caption.appendChild(par);
-        caption.appendChild(par1);
-        par1.appendChild(button);
-        el.appendChild(panel);
-        // update comicJSONObj and save
-        var url = document.getElementById("panelImg_" + numStr).src;
-        var desc = document.getElementById("desc_" + numStr).innerHTML;
-        comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
-        comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
-        saveComic();
-    }
+    // can't compare a string to a int
+    //if (numStr > 9){
+    //    alert("Only 9 panels are allowed in this comic");
+    //}
+    //
+    //else {
+    //alert(i);
+    var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
+    var desc = "enter text here";
+    var el = document.getElementById("pictureContainer");
+    var panel = document.createElement("div");
+    panel.className = "col-md-4";
+    panel.className += " panel";
+    panel.id = "panel_" + numStr;
+    //panel.style.height = "500px";
+    //panel.style.width = "500px";
+    var thumbnail = document.createElement("div");
+    thumbnail.className = "thumbnail";
+    panel.appendChild(thumbnail);
+    var img = document.createElement("img");
+    img.alt = "Bootstrap Thumbnail First";
+    img.src = url;
+    img.id = "panelImg_" + numStr;
+    img.style.height = "300px";
+    img.style.width = "300px";
+    thumbnail.appendChild(img);
+    var caption = document.createElement("div");
+    caption.className = "caption";
+    thumbnail.appendChild(caption);
+    var par = document.createElement("p");
+    par.innerHTML = desc;
+    par.id = "desc_" + numStr;
+    caption.appendChild(par);
+    var button = document.createElement("button");
+    button.id = "button_" + numStr;
+    button.className = "btn btn-primary";
+    button.innerHTML = "Edit Panel";
+    button.setAttribute("data-toggle", "modal");
+    button.setAttribute("role", "button");
+    button.setAttribute("href", "#modal-container-94539");
+    button.setAttribute("onclick", "updateModal(this)");
+    var par1 = document.createElement("p");
+    caption.appendChild(par);
+    caption.appendChild(par1);
+    par1.appendChild(button);
+    el.appendChild(panel);
+    // update comicJSONObj and save
+    var url = document.getElementById("panelImg_" + numStr).src;
+    var desc = document.getElementById("desc_" + numStr).innerHTML;
+    comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
+    comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
+    saveComic();
+    //}
 }
 // para: none
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
@@ -560,7 +590,6 @@ function removePanel() {
 function countPanels() {
     var panels = comicJSONObj.Panels;
     var count = 0;
-    console.log(comicJSONObj);
     for (var i = 1; i <= 9; i++) {
         var url = panels['Panel_' + i].Image_URL;
         var desc = panels['Panel_' + i].Text;
@@ -623,6 +652,7 @@ function removeHTMLCollection(doc) {
 }
 function saveFavourites() {
     var id = document.getElementById("comicID").value;
+    changeFavIcon();
     //check the button
     //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
     //favoriteButton.setAttribute("class","btn btn-primary active");
@@ -631,7 +661,6 @@ function saveFavourites() {
         "favourite": id
     };
     var fav = JSON.stringify(favouriteComic);
-    console.log(fav);
     $.ajax({
         type: "PUT",
         url: "/user/fav",
@@ -641,6 +670,7 @@ function saveFavourites() {
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
+            amIFavourite();
             var note = $.notify({
                 // options
                 icon: 'glyphicon glyphicon-ok',
@@ -663,7 +693,7 @@ function saveFavourites() {
                 offset: 20,
                 spacing: 10,
                 z_index: 1031,
-                delay: 20000,
+                delay: 5000,
                 timer: 1000,
                 url_target: '_blank',
                 mouse_over: null,
@@ -689,6 +719,7 @@ function saveFavourites() {
             });
         },
         error: function (xhr, status, thrownError) {
+            amIFavourite();
             alert('ERROR - saveFavourites()');
             alert(xhr.responseText);
             alert(xhr.statusText);

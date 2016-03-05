@@ -177,6 +177,11 @@ router.delete('/comic/:id', function (req, res, next) {
     });
 });
 
+router.get('/user/fav', function (req, res, next){
+    var fav:Array<string> = req.user.customData.favourites;
+    res.send(JSON.stringify(fav));
+});
+
 // Add/Remove a Favourite Comic
 router.put('/user/fav', function (req, res, next) {
     var fav:Array<string> = req.user.customData.favourites;

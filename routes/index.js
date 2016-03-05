@@ -134,6 +134,10 @@ router.delete('/comic/:id', function (req, res, next) {
         res.send(JSON.stringify({ Status: "Comic Deleted" }));
     });
 });
+router.get('/user/fav', function (req, res, next) {
+    var fav = req.user.customData.favourites;
+    res.send(JSON.stringify(fav));
+});
 // Add/Remove a Favourite Comic
 router.put('/user/fav', function (req, res, next) {
     var fav = req.user.customData.favourites;
