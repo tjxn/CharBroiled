@@ -66,9 +66,9 @@ router.post('/testingCall', function (req, res, next) {
 /* GET home page. */
 router.post('/newComic', function (req, res, next) {
     var api = new ComicWebService();
-    var defaultImage = "http://i.imgur.com/An1bi8f.jpg";
-    var defaultText = "Trevor's Test.";
-    var defaultTitle = "Trevor's Test.";
+    var defaultImage = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
+    var defaultText = "Enter Text Here";
+    var defaultTitle = "Comic Title";
     var defaultPublicView = true;
     var defaultPanel = new Panel(defaultText, defaultImage);
     var defpanels = [defaultPanel, defaultPanel, defaultPanel];
@@ -76,13 +76,22 @@ router.post('/newComic', function (req, res, next) {
     var defcontribs = [firstcontrib, "", "", "", ""];
     var currComic = new Comic(defaultTitle, defaultPublicView, defpanels, defcontribs);
     api.newComic(currComic, function (err, response, body) {
-        console.log('here');
-        currComic.dbID = body['_id'];
-        console.log(currComic.dbID);
-        console.log(req.user.email);
-        req.user.customData.comic1 = currComic.dbID;
+        var id = body['_id'];
+        var comics = req.user.customData.comic;
+        if (comics == undefined) {
+            comics = Array();
+        }
+        // Check if the comic is already in the array of comics
+        for (var i = 0; i < comics.length; i++) {
+            if (comics[i] == id) {
+                res.send(JSON.stringify({ ComicID: id }));
+                return;
+            }
+        }
+        comics.push(id);
+        req.user.customData.comic = comics;
         req.user.save();
-        res.send(currComic.dbID);
+        res.send(JSON.stringify({ ComicID: id }));
     });
 });
 router.put('/saveComic/:id', function (req, res, next) {
@@ -98,18 +107,40 @@ router.get('/findUserEmail', function (req, res, next) {
     console.log(req.user.email);
     res.send(req.user.email.toString());
 });
-/* GET home page. */
+// returns first comic in the comic array
 router.get('/comicID', function (req, res, next) {
-    console.log(req.user.customData.comic1);
-    res.send(req.user.customData.comic1.toString());
+    var comics = req.user.customData.comic;
+    res.send(comics[0]);
 });
 // --------------------------------------------------
 //                 RESTFUL API
 // --------------------------------------------------
 // Retrieve IDs of comic(s) the user has contributed to
-router.get('/comic', function (req, res, next) {
-    console.log(req.user.customData.comic1);
-    res.send(req.user.customData.comic1.toString());
+router.get('/user/comic', function (req, res, next) {
+    if (req.user.customData.comic == undefined) {
+        req.user.customData.comic = Array();
+    }
+    console.log(req.user.customData.comic);
+    res.send(req.user.customData.comic);
+});
+// Retrieve IDs of comic(s) the user has contributed to
+router.put('/user/comic', function (req, res, next) {
+    var id = req.body;
+    var comics = req.user.customData.comic;
+    if (comics == undefined) {
+        comics = Array();
+    }
+    // Check if the comic is already in the array of comics
+    for (var i = 0; i < comics.length; i++) {
+        if (comics[i] == id) {
+            res.send(JSON.stringify({ Status: "Success" }));
+            return;
+        }
+    }
+    comics.push(id);
+    req.user.customData.comic = comics;
+    req.user.save();
+    res.send(JSON.stringify({ Status: "Success" }));
 });
 // Retrieve JSON representation of a comic
 router.get('/comic/:id', function (req, res, next) {

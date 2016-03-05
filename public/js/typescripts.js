@@ -401,12 +401,9 @@ function newComic() {
         url: "/newComic",
         async: true,
         timeout: 4000,
+        dataType: 'json',
         success: function (data) {
-            if (data == "false") {
-                alert("Email address already in use. Try logging in?");
-                return false;
-            }
-            el.innerText = data.toString();
+            window.location.replace("/edit?id=" + data.ComicID);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.responseText);
@@ -616,7 +613,7 @@ function updatePanel(elId) {
 // redirects the user to the edit page of that comic
 function gotoComic() {
     //Check to see if the user is a viewer, if they are don't let them go here.
-    $.get('/comic', function (data) {
+    $.get('/comicID', function (data) {
         window.location.replace("/edit?id=" + data);
     });
 }
@@ -628,7 +625,7 @@ function gotoAccount() {
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoViewComic() {
-    $.get('/comic', function (data) {
+    $.get('/comicID', function (data) {
         window.location.replace("/view?id=" + data);
     });
 }
