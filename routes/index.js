@@ -43,13 +43,17 @@ router.get('/comicJSON/:id', function (req, res, next) {
 router.get('/account', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../views', 'Account.html'));
 });
-/* GET test page. */
-router.get('/testPage', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../views', 'test.html'));
+/* GET accountViewer page. */
+router.get('/accountviewer', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'AccountViewer.html'));
 });
-/* GET test page. */
-router.get('/test', function (req, res, next) {
-    console.log("test");
+/* GET account page. */
+router.get('/testPage', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../views', 'initDropzone.html'));
+});
+/* GET home page. */
+router.get('/initDropzone', function (req, res, next) {
+    console.log("initDropzone");
     var tools = new Tools();
     tools.WelcomeMessage();
     res.render('index', { title: 'Express' });
@@ -59,25 +63,35 @@ router.post('/testingCall', function (req, res, next) {
     console.log(req.body);
     res.send("Hello From Server");
 });
-/* POST newComic. */
+/* GET home page. */
 router.post('/newComic', function (req, res, next) {
     var api = new ComicWebService();
-    var defaultImage = "http://i.imgur.com/An1bi8f.jpg";
-    var defaultText = "Trevor's Test.";
-    var defaultTitle = "Trevor's Test.";
+    var defaultImage = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
+    var defaultText = "Enter Text Here";
+    var defaultTitle = "Comic Title";
     var defaultPublicView = true;
     var defaultPanel = new Panel(defaultText, defaultImage);
     var defpanels = [defaultPanel, defaultPanel, defaultPanel];
-    var defcontribs = ["", "", "", "", ""];
+    var firstcontrib = req.user.email;
+    var defcontribs = [firstcontrib, "", "", "", ""];
     var currComic = new Comic(defaultTitle, defaultPublicView, defpanels, defcontribs);
     api.newComic(currComic, function (err, response, body) {
-        console.log('here');
-        currComic.dbID = body['_id'];
-        console.log(currComic.dbID);
-        console.log(req.user.email);
-        req.user.customData.comic1 = currComic.dbID;
+        var id = body['_id'];
+        var comics = req.user.customData.comic;
+        if (comics == undefined) {
+            comics = Array();
+        }
+        // Check if the comic is already in the array of comics
+        for (var i = 0; i < comics.length; i++) {
+            if (comics[i] == id) {
+                res.send(JSON.stringify({ ComicID: id }));
+                return;
+            }
+        }
+        comics.push(id);
+        req.user.customData.comic = comics;
         req.user.save();
-        res.send(currComic.dbID);
+        res.send(JSON.stringify({ ComicID: id }));
     });
 });
 router.put('/saveComic/:id', function (req, res, next) {
@@ -93,18 +107,40 @@ router.get('/findUserEmail', function (req, res, next) {
     console.log(req.user.email);
     res.send(req.user.email.toString());
 });
-/* GET home page. */
+// returns first comic in the comic array
 router.get('/comicID', function (req, res, next) {
-    console.log(req.user.customData.comic1);
-    res.send(req.user.customData.comic1.toString());
+    var comics = req.user.customData.comic;
+    res.send(comics[0]);
 });
 // --------------------------------------------------
 //                 RESTFUL API
 // --------------------------------------------------
 // Retrieve IDs of comic(s) the user has contributed to
-router.get('/comic', function (req, res, next) {
-    console.log(req.user.customData.comic1);
-    res.send(req.user.customData.comic1.toString());
+router.get('/user/comic', function (req, res, next) {
+    if (req.user.customData.comic == undefined) {
+        req.user.customData.comic = Array();
+    }
+    console.log(req.user.customData.comic);
+    res.send(req.user.customData.comic);
+});
+// Retrieve IDs of comic(s) the user has contributed to
+router.put('/user/comic', function (req, res, next) {
+    var id = req.body;
+    var comics = req.user.customData.comic;
+    if (comics == undefined) {
+        comics = Array();
+    }
+    // Check if the comic is already in the array of comics
+    for (var i = 0; i < comics.length; i++) {
+        if (comics[i] == id) {
+            res.send(JSON.stringify({ Status: "Success" }));
+            return;
+        }
+    }
+    comics.push(id);
+    req.user.customData.comic = comics;
+    req.user.save();
+    res.send(JSON.stringify({ Status: "Success" }));
 });
 // Retrieve JSON representation of a comic
 router.get('/comic/:id', function (req, res, next) {
@@ -129,10 +165,17 @@ router.delete('/comic/:id', function (req, res, next) {
         res.send(JSON.stringify({ Status: "Comic Deleted" }));
     });
 });
+router.get('/user/fav', function (req, res, next) {
+    var fav = req.user.customData.favourites;
+    res.send(JSON.stringify(fav));
+});
 // Add/Remove a Favourite Comic
 router.put('/user/fav', function (req, res, next) {
     var fav = req.user.customData.favourites;
     var givenFav = req.body['favourite'];
+    if (fav == undefined) {
+        fav = new Array();
+    }
     for (var i = 0; i < fav.length; i++) {
         if (fav[i] == givenFav) {
             fav = removeFavourite(fav, givenFav);
@@ -146,18 +189,6 @@ router.put('/user/fav', function (req, res, next) {
     req.user.customData.favourites = fav;
     req.user.save();
     res.send(JSON.stringify({ Status: "Update Successful - Added Favourite" }));
-});
-// Send JSON array of fav comic ids
-router.get('/user/fav', function (req, res, next) {
-    console.log(req.user.customData.favourites);
-    res.send(req.user.customData.favourites.toString());
-});
-// Send JSON array of comic objects
-router.get('/user/favComics', function (req, res, next) {
-    var api = new ComicWebService();
-    api.getComics(req.user.customData.favourites, function (request, response, body) {
-        res.send(body);
-    });
 });
 // Remove a string from an array of strings
 // Used for removing a comic ID from a list of comic IDs
@@ -184,6 +215,12 @@ router.post('/image', upload.any(), function (req, res, next) {
             // send the permanent url of the image back
             res.send(result.secure_url);
         }
+    });
+});
+// Retrieve IDs of comic(s) the user has contributed to
+router.delete('/image/:id', function (req, res, next) {
+    var api = new ImageWebService();
+    api.deleteImage(req.params.id, function (result) {
     });
 });
 function jsonToComic(data) {

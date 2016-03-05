@@ -13,18 +13,73 @@ import ComicManager = require("../../ComicManager");
  */
 
 var comicJSONObj;
+var myDrop;
 var favsJSONObj;
 
 
-function test(){
+// Removes all files from Dropzone
+// Called when modal is closed
+function clearDropzone(){
+    myDrop.removeAllFiles();
+}
+
+// Checks every click, if it is a click on a thumbnail in dropzone
+// then change the modal url to the thumbnail's url
+$(document).on("click",".dz-details", function(){
+    var cloudinary_URL = (<HTMLInputElement> document.getElementById("cloudinary_URL"));
+    var panelURL = (<HTMLInputElement> document.getElementById("modalURL"));
+    panelURL.value = cloudinary_URL.value;
+});
+
+function changeFavIcon(){
+    var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
+
+    if(Icon.style.color == "white"){
+        Icon.className = "glyphicon glyphicon-star yellow";
+        Icon.style.color = "yellow";
+    }else{
+        Icon.className = "glyphicon glyphicon-star white";
+        Icon.style.color = 'white';
+    }
+}
+
+function amIFavourite() {
+    var comicID = (<HTMLInputElement> document.getElementById("comicID"));
+    var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
+
+    $.get('/user/fav', function (data) {
+        var favs:Array<string>;
+        favs = JSON.parse(data);
+        console.log('favs');
+        console.log(data);
+        for(var i = 0; i < favs.length; i++){
+            console.log(favs[i]);
+            console.log(comicID.value);
+            if (favs[i] == comicID.value){
+                Icon.className = "glyphicon glyphicon-star yellow";
+                Icon.style.color = "yellow";
+                return
+            }
+        }
+        Icon.className = "glyphicon glyphicon-star white";
+        Icon.style.color = 'white';
+    });
+
+}
+
+
+// setup dropzone
+function initDropzone(){
     Dropzone.autoDiscover = false;
-    var myDrop = new Dropzone('#demoUpload', {
+    myDrop = new Dropzone('#demoUpload', {
+        acceptedFiles: ".jpg,.JPG,.jpeg,.JPEG",
+        maxFiles: 1,
         method: "post",
         url: "/image"
     })
 
     myDrop.on('success', function(file, data){
-        console.log(data);
+
         if (data == "Error Uploading Image"){
             var note = $.notify({
                 // options
@@ -75,6 +130,11 @@ function test(){
         }else{
             // Do something with url
             var url = data.toString();
+
+            var cloudinary_URL = (<HTMLInputElement> document.getElementById("cloudinary_URL"));
+            var panelURL = (<HTMLInputElement> document.getElementById("modalURL"));
+            panelURL.value = url;
+            cloudinary_URL.value = url;
 
             var note = $.notify({
                 // options
@@ -238,7 +298,6 @@ function renderEditComic(id: string) {
     $.get('/comicJSON/' + id, function (data) {
 
         comicJSONObj = JSON.parse(data);
-        console.log(data);
         var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
         comicTitle.value = comicJSONObj.Title;
 
@@ -251,6 +310,13 @@ function renderEditComic(id: string) {
             var publicPrivate = (<HTMLInputElement>  document.getElementById("privateBtn"));
             publicPrivate.checked = true;
         }
+
+        //if comic is favourited by the user, needs to also be updated in savefourite
+        //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+        //favoriteButton.setAttribute("class","btn btn-primary");
+        //favoriteButton.setAttribute("class","btn btn-primary active");
+
+        //button.setAttribute("data-toggle", "modal");
         //console.log(comicJSONObj.Panels);
         renderPanels("pictureContainer", comicJSONObj.Panels, true);
     });
@@ -266,7 +332,6 @@ function renderViewComic(id: string) {
 
     $.get('/comicJSON/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
-        console.log(data);
         var comicTitle = (<HTMLInputElement>  document.getElementById("comicTitle"));
         if (comicJSONObj.Public == true) {
             comicTitle.value = comicJSONObj.Title;
@@ -310,7 +375,6 @@ function saveComic(){
 
 
     var comic = JSON.stringify(comicJSONObj);
-    console.log(comic);
     $.ajax({
         type: "PUT",
         url: "/saveComic/" + comicID.value,
@@ -390,12 +454,9 @@ function newComic() {
         url: "/newComic",
         async: true,
         timeout: 4000,
+        dataType: 'json',
         success: function (data) {
-            if (data == "false") {
-                alert("Email address already in use. Try logging in?");
-                return false;
-            }
-            el.innerText = data.toString();
+            window.location.replace("/edit?id=" + data.ComicID);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.responseText);
@@ -504,6 +565,7 @@ function lengthJSON(json: JSON) {
 // extracts number from button element and updates the Modal with the appropriate info
 // return: none
 function updateModal(ele) {
+
     var button = (<HTMLInputElement>  document.getElementById(ele.id));
     var num = button.id.substring(7);  // gets panel number = button number
     var img = (<HTMLInputElement>  document.getElementById("panelImg_" + num));
@@ -524,6 +586,13 @@ function updateModal(ele) {
 function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i+1).toString();
+
+    // can't compare a string to a int
+    //if (numStr > 9){
+    //    alert("Only 9 panels are allowed in this comic");
+    //}
+    //
+    //else {
     //alert(i);
     var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
     var desc = "enter text here";
@@ -580,6 +649,7 @@ function addPanel() {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
+    //}
 }
 
 // para: none
@@ -587,11 +657,13 @@ function addPanel() {
 // return: none
 function removePanel() {
     var i=countPanels();
+    if (i > 0) {
     var id = "panel_"+i;
     removeElement((<HTMLInputElement> document.getElementById(id)));
     comicJSONObj['Panels']["Panel_"+i].Image_URL = "";
     comicJSONObj['Panels']["Panel_"+i].Text = "";
     saveComic();
+    }
 }
 
 // para: none
@@ -600,7 +672,6 @@ function removePanel() {
 function countPanels() {
     var panels = comicJSONObj.Panels;
     var count = 0;
-    console.log(comicJSONObj);
     for(var i=1; i<=9; i++) {
         var url = panels['Panel_'+i].Image_URL;
         var desc = panels['Panel_'+i].Text;
@@ -626,23 +697,46 @@ function updatePanel(elId) {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
-
 }
 
 // used in login.jade
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoComic(){
-    $.get('/comic', function (data) {
+    //Check to see if the user is a viewer, if they are don't let them go here.
+    $.get('/comicID', function (data) {
         window.location.replace("/edit?id=" + data);
     });
+}
+
+// para: none
+// Uses the id parameter in the url to redirect the user to the edit page of the comic
+// with that id
+// return: none
+function paramToEditComic(){
+    var id = getURLParameterByName("id");
+    window.location.replace("/edit?id=" + id);
+}
+
+// para: none
+// Uses the id parameter in the url to redirect the user to the view page of the comic
+// with that id
+// return: none
+function paramToViewComic(){
+    var id = getURLParameterByName("id");
+    window.location.replace("/view?id=" + id);
+}
+
+function gotoAccount(){
+    //If Contributor, send to account.HTMl else accountviewer.html
+    window.location.replace("/account");
 }
 
 // used in login.jade
 // looks up the id of the comic associated with a user
 // redirects the user to the edit page of that comic
 function gotoViewComic(){
-    $.get('/comic', function (data) {
+    $.get('/comicID', function (data) {
         window.location.replace("/view?id=" + data);
     });
 }
@@ -675,13 +769,18 @@ function removeHTMLCollection(doc:HTMLCollection): void{
 
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
+    changeFavIcon();
+    //check the button
+    //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+    //favoriteButton.setAttribute("class","btn btn-primary active");
+    //favoriteButton.setAttribute("class","btn btn-primary");
+
 
     var favouriteComic = {
         "favourite": id,
     };
 
     var fav = JSON.stringify(favouriteComic);
-    console.log(fav);
 
     $.ajax({
         type: "PUT",
@@ -692,6 +791,7 @@ function saveFavourites() {
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
+            amIFavourite();
 
             var note = $.notify({
                 // options
@@ -715,7 +815,7 @@ function saveFavourites() {
                 offset: 20,
                 spacing: 10,
                 z_index: 1031,
-                delay: 20000,
+                delay: 5000,
                 timer: 1000,
                 url_target: '_blank',
                 mouse_over: null,
@@ -742,6 +842,7 @@ function saveFavourites() {
 
         },
         error: function (xhr, status, thrownError) {
+            amIFavourite();
             alert('ERROR - saveFavourites()');
             alert(xhr.responseText);
             alert(xhr.statusText);

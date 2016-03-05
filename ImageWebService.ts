@@ -17,4 +17,12 @@ class ImageWebService {
     addImage(path:string ,callback:(body:any) => void) {
         this.cloudinary.uploader.upload(__dirname + path, callback);
     };
+
+    deleteAllImages(callback:(body:any) => void) {
+        this.cloudinary.api.delete_all_resources(callback);
+    };
+
+    deleteImage(id:string ,callback:(body:any) => void) {
+        this.cloudinary.uploader.destroy(id, callback);
+    };
 }export = ImageWebService;

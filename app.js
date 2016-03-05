@@ -18,7 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,6 +36,10 @@ app.use(stormpath.init(app, {
     },
     website: true,
     web: {
+        login: {
+            enabled: true,
+            nextUri: "/account"
+        },
         register: {
             enabled: true,
             fields: {
@@ -78,9 +82,7 @@ app.get('/image', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
 });
 app.get('/', function (req, res) {
-    res.render('login', {
-        title: 'Welcome'
-    });
+    res.sendFile(path.join(__dirname, 'views', 'Account.html'));
 });
 app.use('/', stormpath.loginRequired, routes);
 app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
@@ -94,9 +96,9 @@ app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 //comic.dbID = "56c8dcbaa759dc110004e6c5";
 //
 //var api = new ComicWebService();
-//api.getAComic(comic.dbID, test);
+//api.getAComic(comic.dbID, initDropzone);
 //
-//function test(error:string, response:string, body:string) {
+//function initDropzone(error:string, response:string, body:string) {
 //    var data = JSON.parse(body);
 //
 //    var title = data['Title'];
