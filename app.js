@@ -36,6 +36,10 @@ app.use(stormpath.init(app, {
     },
     website: true,
     web: {
+        login: {
+            enabled: true,
+            nextUri: "/account"
+        },
         register: {
             enabled: true,
             fields: {

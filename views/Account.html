@@ -13,16 +13,26 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
-    <input type="hidden" id="userEmail" value="" />
-    <input type="hidden" id="comicID" value="" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/typescripts.js"></script>
+    <script src="js/comic.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/ComicWebService.js"></script>
+
+
+    <input type="hidden" id="userEmail" value=""/>
+    <input type="hidden" id="comicID" value=""/>
 </head>
 <body>
 
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-        </button> <a class="navbar-brand" href="#">Comic</a>
+            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Comic</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -36,7 +46,7 @@
         </ul>
         <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <input type="text" class="form-control" />
+                <input type="text" class="form-control"/>
             </div>
             <button type="submit" class="btn btn-default">
                 Search
@@ -59,9 +69,11 @@
                     Welcome to our Comic Maker!
                 </h2>
                 <p>
-                    We hope you have a lovely time expressing yourself while building fun, innovative and imaginative comics! Get started now,
+                    We hope you have a lovely time expressing yourself while building fun, innovative and imaginative
+                    comics! Get started now,
                     build the collection of GIFS that you've always dreamed about
-                    <a class="btn btn-primary btn-large" onclick="return gotoComic();" href=#>New Comic</a> or if you want to edit your account information, you can also do that
+                    <a class="btn btn-primary btn-large" onclick="return gotoComic();" href=#>Edit A Comic</a> or if you
+                    want to edit your account information, you can also do that
                     <a class="btn btn-primary btn-large" href="/profile">Edit my Profile</a>.
                 </p>
                 <p>
@@ -78,17 +90,18 @@
                         Favourites
                     </h3>
                 </div>
-                    <br>
+                <br>
 
                 <div class="thumbnail">
                     <div class="caption">
-                        <img style="float:right" class = "img-responsive" width="100" src="https://upload.wikimedia.org/wikipedia/en/f/fa/Tiny-wings-icon.jpg"/>
+                        <img style="float:right" class="img-responsive" width="100"
+                             src="https://upload.wikimedia.org/wikipedia/en/f/fa/Tiny-wings-icon.jpg"/>
                         <h3>
                             Comic Title
                         </h3>
                         <p>Contributors: Scott, Lee, Dan, Trevor, Alex</p>
                         <p>
-                            <a class="btn btn-primary" href="/edit">Edit</a>
+                            <a class="btn btn-primary" href="#" onclick="return gotoComic();">Edit</a>
                         </p>
                     </div>
                 </div>
@@ -172,16 +185,8 @@
             </div>
         </div>
     </div>
-</div></div>
+</div>
 
-
-
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/typescripts.js"></script>
-<script src="js/comic.js"></script>
-<script src="js/panel.js"></script>
-<script src="js/ComicWebService.js"></script>
 
 </body>
 </html>

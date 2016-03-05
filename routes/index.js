@@ -220,7 +220,8 @@ router.post('/image', upload.any(), function (req, res, next) {
 // Retrieve IDs of comic(s) the user has contributed to
 router.delete('/image/:id', function (req, res, next) {
     var api = new ImageWebService();
-    api.deleteImage(req.params.id, function (result) { });
+    api.deleteImage(req.params.id, function (result) {
+    });
 });
 function jsonToComic(data) {
     /* CODE IS FOR DYNAMIC PANEL SUPPORT

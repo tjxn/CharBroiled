@@ -50,10 +50,10 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li>
-                <a href="#" onclick="return gotoAccount();">Account</a>
+                <a href="#" onclick="gotoAccount(); return false;">Account</a>
             </li>
             <li>
-                <a id="NewComicbtn" onclick="newComic()" href="#">New Comic</a>
+                <a id="NewComicbtn" onclick="newComic(); return false;" href="#">New Comic</a>
             </li>
         </ul>
         <form class="navbar-form navbar-left" role="search">
@@ -66,10 +66,10 @@
         </form>
         <ul class="nav navbar-nav">
             <li class="active">
-                <a href="#" onclick="return gotoComic();">Edit</a>
+                <a href="#" onclick="return gotoComic(); return false;">Edit</a>
             </li>
             <li>
-                <a href="#" onclick="return gotoViewComic();">View</a>
+                <a href="#" onclick="return gotoViewComic(); return false;">View</a>
             </li>
         </ul>
 
