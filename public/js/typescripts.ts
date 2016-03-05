@@ -708,12 +708,19 @@ function gotoComic(){
     });
 }
 
-
+// para: none
+// Uses the id parameter in the url to redirect the user to the edit page of the comic
+// with that id
+// return: none
 function paramToEditComic(){
     var id = getURLParameterByName("id");
     window.location.replace("/edit?id=" + id);
 }
 
+// para: none
+// Uses the id parameter in the url to redirect the user to the view page of the comic
+// with that id
+// return: none
 function paramToViewComic(){
     var id = getURLParameterByName("id");
     window.location.replace("/view?id=" + id);
