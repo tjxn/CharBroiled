@@ -18,7 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -82,9 +82,7 @@ app.get('/image', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
 });
 app.get('/', function (req, res) {
-    res.render('login', {
-        title: 'Welcome'
-    });
+    res.sendFile(path.join(__dirname, 'views', 'Account.html'));
 });
 app.use('/', stormpath.loginRequired, routes);
 app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
