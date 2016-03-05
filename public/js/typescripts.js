@@ -617,6 +617,14 @@ function gotoComic() {
         window.location.replace("/edit?id=" + data);
     });
 }
+function paramToEditComic() {
+    var id = getURLParameterByName("id");
+    window.location.replace("/edit?id=" + id);
+}
+function paramToViewComic() {
+    var id = getURLParameterByName("id");
+    window.location.replace("/view?id=" + id);
+}
 function gotoAccount() {
     //If Contributor, send to account.HTMl else accountviewer.html
     window.location.replace("/account");
