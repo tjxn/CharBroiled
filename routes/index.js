@@ -63,7 +63,7 @@ router.post('/testingCall', function (req, res, next) {
     console.log(req.body);
     res.send("Hello From Server");
 });
-/* GET home page. */
+/* POST newComic. */
 router.post('/newComic', function (req, res, next) {
     var api = new ComicWebService();
     var defaultImage = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
@@ -165,10 +165,6 @@ router.delete('/comic/:id', function (req, res, next) {
         res.send(JSON.stringify({ Status: "Comic Deleted" }));
     });
 });
-router.get('/user/fav', function (req, res, next) {
-    var fav = req.user.customData.favourites;
-    res.send(JSON.stringify(fav));
-});
 // Add/Remove a Favourite Comic
 router.put('/user/fav', function (req, res, next) {
     var fav = req.user.customData.favourites;
@@ -189,6 +185,18 @@ router.put('/user/fav', function (req, res, next) {
     req.user.customData.favourites = fav;
     req.user.save();
     res.send(JSON.stringify({ Status: "Update Successful - Added Favourite" }));
+});
+// Send JSON array of fav comic ids
+router.get('/user/fav', function (req, res, next) {
+    console.log(req.user.customData.favourites);
+    res.send(req.user.customData.favourites.toString());
+});
+// Send JSON array of comic objects
+router.get('/user/favComics', function (req, res, next) {
+    var api = new ComicWebService();
+    api.getComics(req.user.customData.favourites, function (request, response, body) {
+        res.send(body);
+    });
 });
 // Remove a string from an array of strings
 // Used for removing a comic ID from a list of comic IDs

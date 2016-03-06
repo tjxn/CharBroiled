@@ -861,26 +861,62 @@ function renderFavourites(id: string): void {
     // returns list of comic JSON objects
     $.get('/user/favComics', function (data) {
         favsJSONObj = JSON.parse(data);
-        console.log(favsJSONObj);
 
         var length = lengthJSON(favsJSONObj);
         for (var i = 0; i < length; i++) { // for each fav comic
+
             var title = favsJSONObj[i].Title;
             var url = favsJSONObj[i].Panels.Panel_1.Image_URL;
             var desc = favsJSONObj[i].Panels.Panel_1.Text;
 
             if (url != "" || desc != "") { // if panel is not empty
-                var fav = document.createElement("div");
-                fav.className = "col-md-4";
-                fav.className += " fav";
-                fav.id = "fav_" + (i+1).toString();
+                var thumbnail = document.createElement("div");
+                thumbnail.className = "thumbnail";
+                thumbnail.className += " fav";
+                thumbnail.id = "fav_" + (i+1).toString();
 
-                var titleEle = document.createElement("h3");
-                titleEle.className = "caption";
-                titleEle.innerHTML = title;
-                fav.appendChild(titleEle);
+                var caption = document.createElement("div");
+                caption.className = "caption";
+
+                var img = document.createElement("img");
+                img.className = "img-responsive";
+                img.src = url;
+                img.width = 100;
+                img.style.cssFloat = "right";
+                caption.appendChild(img);
+
+                var h3 = document.createElement("h3");
+                h3.innerHTML = title;
+                caption.appendChild(h3);
+
+                var p1 = document.createElement("p");
+
+                var first = true;
+                for(var j=1; j<=5; j++) {  // 5 = max number of contributors
+                    if(favsJSONObj[i].Contributors['Contributor_' + j]) { // if contributor is defined
+                        if (first) {
+                            p1.innerHTML = "Contributors: " + favsJSONObj[i].Contributors['Contributor_' + j];
+                            first = false;
+                        } else {
+                            p1.innerHTML += ", " + favsJSONObj[i].Contributors['Contributor_' + j];
+                        }
+                    }
+                }
+
+                caption.appendChild(p1);
+
+                var p2 = document.createElement("p");
+                var a2 = document.createElement("a");
+                a2.className = "btn btn-primary";
+                a2.href = "#";
+                //a2.onclick= "return gotoComic();";
+                a2.innerHTML = "Edit";
+                p2.appendChild(a2);
+                caption.appendChild(p2);
+
+                thumbnail.appendChild(caption);
             }
-            container.appendChild(fav);
+            container.appendChild(thumbnail);
         }
         //=======================
         /*

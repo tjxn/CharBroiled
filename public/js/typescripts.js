@@ -3,6 +3,7 @@
  */
 var comicJSONObj;
 var myDrop;
+var favsJSONObj;
 // Removes all files from Dropzone
 // Called when modal is closed
 function clearDropzone() {
@@ -645,10 +646,15 @@ function gotoViewComic() {
         window.location.replace("/view?id=" + data);
     });
 }
-//remove element
+// para: element to be removed
+// removes given element
+// return: none
 function removeElement(doc) {
     doc.parentElement.removeChild(doc);
 }
+// para: NodeList of items to be removed
+// loops through given list and removes each element
+// return: none
 function removeNodeList(doc) {
     for (var i = doc.length - 1; i >= 0; i--) {
         if (doc[i] && doc[i].parentElement) {
@@ -739,6 +745,75 @@ function saveFavourites() {
             alert(status);
             alert(thrownError);
         }
+    });
+}
+// para: none
+// creates favourite thumbnails on the account page in the given container corresponding to the given id
+// return: none
+function renderFavourites(id) {
+    var container = document.getElementById(id);
+    // returns list of comic JSON objects
+    $.get('/user/favComics', function (data) {
+        favsJSONObj = JSON.parse(data);
+        var length = lengthJSON(favsJSONObj);
+        for (var i = 0; i < length; i++) {
+            var title = favsJSONObj[i].Title;
+            var url = favsJSONObj[i].Panels.Panel_1.Image_URL;
+            var desc = favsJSONObj[i].Panels.Panel_1.Text;
+            if (url != "" || desc != "") {
+                var thumbnail = document.createElement("div");
+                thumbnail.className = "thumbnail";
+                thumbnail.className += " fav";
+                thumbnail.id = "fav_" + (i + 1).toString();
+                var caption = document.createElement("div");
+                caption.className = "caption";
+                var img = document.createElement("img");
+                img.className = "img-responsive";
+                img.src = url;
+                img.width = 100;
+                img.style.cssFloat = "right";
+                caption.appendChild(img);
+                var h3 = document.createElement("h3");
+                h3.innerHTML = title;
+                caption.appendChild(h3);
+                var p1 = document.createElement("p");
+                var first = true;
+                for (var j = 1; j <= 5; j++) {
+                    if (favsJSONObj[i].Contributors['Contributor_' + j]) {
+                        if (first) {
+                            p1.innerHTML = "Contributors: " + favsJSONObj[i].Contributors['Contributor_' + j];
+                            first = false;
+                        }
+                        else {
+                            p1.innerHTML += ", " + favsJSONObj[i].Contributors['Contributor_' + j];
+                        }
+                    }
+                }
+                caption.appendChild(p1);
+                var p2 = document.createElement("p");
+                var a2 = document.createElement("a");
+                a2.className = "btn btn-primary";
+                a2.href = "#";
+                //a2.onclick= "return gotoComic();";
+                a2.innerHTML = "Edit";
+                p2.appendChild(a2);
+                caption.appendChild(p2);
+                thumbnail.appendChild(caption);
+            }
+            container.appendChild(thumbnail);
+        }
+        //=======================
+        /*
+        if (comicJSONObj.Public == true) {
+            comicTitle.value = comicJSONObj.Title;
+
+            //console.log(comicJSONObj.Panels);
+            renderPanels("pictureContainer", comicJSONObj.Panels, false);
+        } else {
+            comicTitle.value = "This comic is private.";
+        }
+        */
+        //==========================
     });
 }
 //# sourceMappingURL=typescripts.js.map
