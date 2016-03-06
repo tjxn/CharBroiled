@@ -248,7 +248,7 @@ router.put('/user/fav', function (req, res, next) {
 // Send JSON array of fav comic ids
 router.get( '/user/fav', function (req, res, next) {
     console.log(req.user.customData.favourites);
-    res.send(req.user.customData.favourites.toString());
+    res.send(JSON.stringify(req.user.customData.favourites));
 });
 
 // Send JSON array of comic objects
