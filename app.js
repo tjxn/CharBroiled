@@ -81,9 +81,6 @@ app.use(stormpath.init(app, {
 app.get('/image', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
 });
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'views', 'Account.html'));
-});
 app.use('/', stormpath.loginRequired, routes);
 app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 //--------------------------------------------------------

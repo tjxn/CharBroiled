@@ -742,8 +742,8 @@ function paramToViewComic(){
 }
 
 function gotoAccount(){
-    //If Contributor, send to account.HTMl else accountviewer.html
-    window.location.replace("/account");
+    //Sends user to /account, if Viewer then redirects to AccountViewer.html else Account.html
+            window.location.replace("/account");
 }
 
 // used in login.jade

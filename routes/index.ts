@@ -54,13 +54,18 @@ router.get('/comicJSON/:id', function (req, res, next) {
 });
 
 /* GET account page. */
-router.get('/account', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../views', 'Account.html'));
+router.get('/', function (req, res, next) {
+    res.redirect('/account');
 });
 
-/* GET accountViewer page. */
-router.get('/accountviewer', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../views', 'AccountViewer.html'));
+/* GET account page. */
+router.get('/account', function (req, res, next) {
+
+    if(req.user.customData.userType == "Viewer"){
+        res.sendFile(path.join(__dirname, '../views', 'AccountViewer.html'));
+    }else {
+        res.sendFile(path.join(__dirname, '../views', 'Account.html'));
+    }
 });
 
 
@@ -146,8 +151,8 @@ router.get('/findUserEmail', function (req, res, next) {
 
 // don't know how restful this is, but seems better than putting it in '/findUserEmail'
 router.get('/findUserType', function (req, res, next) {
-    console.log(req.user.userType);
-    res.send(req.user.userType.toString());
+    console.log(req.user.customData.userType);
+    res.send(req.user.customData.userType.toString());
 });
 
 // returns first comic in the comic array
