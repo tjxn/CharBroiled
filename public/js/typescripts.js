@@ -278,6 +278,10 @@ function renderEditComic(id) {
             var publicPrivate = document.getElementById("privateBtn");
             publicPrivate.checked = true;
         }
+        //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
+        //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
+        //console.log(comicJSONObj.Contributors);
+        renderContributors(comicJSONObj);
         //if comic is favourited by the user, needs to also be updated in savefourite
         //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
         //favoriteButton.setAttribute("class","btn btn-primary");
@@ -300,6 +304,7 @@ function renderViewComic(id) {
         if (comicJSONObj.Public == true) {
             comicTitle.value = comicJSONObj.Title;
             //console.log(comicJSONObj.Panels);
+            renderContributors(comicJSONObj);
             renderPanels("pictureContainer", comicJSONObj.Panels, false);
         }
         else {
@@ -826,5 +831,16 @@ function renderFavourites(id) {
          */
         //==========================
     });
+}
+// para: comicJSON object
+// Adds names of contributors to the drop-down bar
+// return: none
+function renderContributors(json) {
+    for (var i = 1; i <= 5; i++) {
+        var cname = "Contributor_" + i;
+        var htmlcontrib = "C" + i;
+        var contribelem = document.getElementById(htmlcontrib);
+        contribelem.innerHTML = json["Contributors"][cname];
+    }
 }
 //# sourceMappingURL=typescripts.js.map

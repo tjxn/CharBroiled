@@ -321,6 +321,12 @@ function renderEditComic(id: string) {
             publicPrivate.checked = true;
         }
 
+        //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
+        //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
+        //console.log(comicJSONObj.Contributors);
+        renderContributors(comicJSONObj);
+
+
         //if comic is favourited by the user, needs to also be updated in savefourite
         //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
         //favoriteButton.setAttribute("class","btn btn-primary");
@@ -347,6 +353,7 @@ function renderViewComic(id: string) {
             comicTitle.value = comicJSONObj.Title;
 
             //console.log(comicJSONObj.Panels);
+            renderContributors(comicJSONObj);
             renderPanels("pictureContainer", comicJSONObj.Panels, false);
         } else {
             comicTitle.value = "This comic is private.";
@@ -382,6 +389,8 @@ function saveComic(){
     }else{
         comicJSONObj.Public = false;
     }
+
+
 
 
     var comic = JSON.stringify(comicJSONObj);
@@ -945,4 +954,16 @@ function renderFavourites(id: string): void {
         //==========================
     });
 
+}
+
+// para: comicJSON object
+// Adds names of contributors to the drop-down bar
+// return: none
+function renderContributors(json: JSON){
+    for (var i = 1; i<= 5; i++){
+        var cname = "Contributor_" + i;
+        var htmlcontrib = "C" + i;
+        var contribelem = (<HTMLInputElement> document.getElementById(htmlcontrib));
+        contribelem.innerHTML = json["Contributors"][cname];
+    }
 }
