@@ -6,11 +6,22 @@
     <meta name="description" content="Source code generated using layoutit.com">
     <meta name="author" content="LayoutIt!">
 
+    <link href="css/dropzone.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/basic.css" rel="stylesheet">
+    <!--<input type="hidden" id="comicStr" value="" />-->
+    <input type="hidden" id="userEmail" value=""/>
+    <input type="hidden" id="comicID" value=""/>
 
-    <input type="hidden" id="userEmail" value="" />
-    <input type="hidden" id="comicID" value="" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap-notify.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/typescripts.js"></script>
+    <script src="js/comic.js"></script>
+    <script src="js/panel.js"></script>
+    <script src="js/ComicWebService.js"></script>
+    <script src="js/dropzone.js"></script>
 
     <script>
         window.onload = function (event) {
@@ -18,9 +29,8 @@
             renderViewComic(id);
             setUserEmail();
             setUserType();
+            amIFavourite();
 
-            //renderViewPanels("pictureContainer", ["http://www.potatoes.com/files/5713/4202/4172/07.jpg","http://3.bp.blogspot.com/-k6mmw9BbX4E/VXtPzM22rgI/AAAAAAAAAp0/axlLjiF-QKI/s1600/potato.gif","http://images.wisegeek.com/bag-of-potatoes.jpg"]);
-            //renderViewTitle("titleID");
         };
     </script>
 
@@ -76,7 +86,7 @@
                 <h1 align = "center" id="titleID" value="Default">
                     <input disabled id="comicTitle" type="text" value="" class="form-control" style="text-align:center;"/>
                     &nbsp;
-                    <a href="#" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span class="glyphicon glyphicon-star"></span> </a>
+                    <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Contributors<strong class="caret"></strong></a>
@@ -111,9 +121,5 @@
 
 </div>
 
-
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/typescripts.js"></script>
 
 </body>
