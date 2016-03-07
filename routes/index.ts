@@ -144,6 +144,12 @@ router.get('/findUserEmail', function (req, res, next) {
     res.send(req.user.email.toString());
 });
 
+// don't know how restful this is, but seems better than putting it in '/findUserEmail'
+router.get('/findUserType', function (req, res, next) {
+    console.log(req.user.userType);
+    res.send(req.user.userType.toString());
+});
+
 // returns first comic in the comic array
 router.get('/comicID', function (req, res, next) {
     var comics:Array<string> = req.user.customData.comic;

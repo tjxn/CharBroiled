@@ -277,6 +277,16 @@ function setUserEmail() {
 }
 
 // para: none
+// sends GET request to get user's type. Sets value of userType element.
+// return: none
+function setUserType() {
+
+    $.get('/findUserType', function (data) {
+        console.log(data.toString());
+    });
+}
+
+// para: none
 // parses the id param from URL, creates input field and sets value to the id param's value.
 // return: none
 function setComicID() {
@@ -591,8 +601,10 @@ function addPanel() {
     //if (numStr > 9){
     //    alert("Only 9 panels are allowed in this comic");
     //}
-    //
-    //else {
+    if (i > 8){
+        alert("Only 9 panels are allowed in this comic");
+    }
+    else {
     //alert(i);
     var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
     var desc = "enter text here";
@@ -649,7 +661,7 @@ function addPanel() {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
-    //}
+    }
 }
 
 // para: none

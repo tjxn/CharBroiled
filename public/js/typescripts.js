@@ -242,6 +242,14 @@ function setUserEmail() {
     });
 }
 // para: none
+// sends GET request to get user's type. Sets value of userType element.
+// return: none
+function setUserType() {
+    $.get('/findUserType', function (data) {
+        console.log(data.toString());
+    });
+}
+// para: none
 // parses the id param from URL, creates input field and sets value to the id param's value.
 // return: none
 function setComicID() {
@@ -519,55 +527,57 @@ function addPanel() {
     //if (numStr > 9){
     //    alert("Only 9 panels are allowed in this comic");
     //}
-    //
-    //else {
-    //alert(i);
-    var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
-    var desc = "enter text here";
-    var el = document.getElementById("pictureContainer");
-    var panel = document.createElement("div");
-    panel.className = "col-md-4";
-    panel.className += " panel";
-    panel.id = "panel_" + numStr;
-    //panel.style.height = "500px";
-    //panel.style.width = "500px";
-    var thumbnail = document.createElement("div");
-    thumbnail.className = "thumbnail";
-    panel.appendChild(thumbnail);
-    var img = document.createElement("img");
-    img.alt = "Bootstrap Thumbnail First";
-    img.src = url;
-    img.id = "panelImg_" + numStr;
-    img.style.height = "300px";
-    img.style.width = "300px";
-    thumbnail.appendChild(img);
-    var caption = document.createElement("div");
-    caption.className = "caption";
-    thumbnail.appendChild(caption);
-    var par = document.createElement("p");
-    par.innerHTML = desc;
-    par.id = "desc_" + numStr;
-    caption.appendChild(par);
-    var button = document.createElement("button");
-    button.id = "button_" + numStr;
-    button.className = "btn btn-primary";
-    button.innerHTML = "Edit Panel";
-    button.setAttribute("data-toggle", "modal");
-    button.setAttribute("role", "button");
-    button.setAttribute("href", "#modal-container-94539");
-    button.setAttribute("onclick", "updateModal(this)");
-    var par1 = document.createElement("p");
-    caption.appendChild(par);
-    caption.appendChild(par1);
-    par1.appendChild(button);
-    el.appendChild(panel);
-    // update comicJSONObj and save
-    var url = document.getElementById("panelImg_" + numStr).src;
-    var desc = document.getElementById("desc_" + numStr).innerHTML;
-    comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
-    comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
-    saveComic();
-    //}
+    if (i > 8) {
+        alert("Only 9 panels are allowed in this comic");
+    }
+    else {
+        //alert(i);
+        var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
+        var desc = "enter text here";
+        var el = document.getElementById("pictureContainer");
+        var panel = document.createElement("div");
+        panel.className = "col-md-4";
+        panel.className += " panel";
+        panel.id = "panel_" + numStr;
+        //panel.style.height = "500px";
+        //panel.style.width = "500px";
+        var thumbnail = document.createElement("div");
+        thumbnail.className = "thumbnail";
+        panel.appendChild(thumbnail);
+        var img = document.createElement("img");
+        img.alt = "Bootstrap Thumbnail First";
+        img.src = url;
+        img.id = "panelImg_" + numStr;
+        img.style.height = "300px";
+        img.style.width = "300px";
+        thumbnail.appendChild(img);
+        var caption = document.createElement("div");
+        caption.className = "caption";
+        thumbnail.appendChild(caption);
+        var par = document.createElement("p");
+        par.innerHTML = desc;
+        par.id = "desc_" + numStr;
+        caption.appendChild(par);
+        var button = document.createElement("button");
+        button.id = "button_" + numStr;
+        button.className = "btn btn-primary";
+        button.innerHTML = "Edit Panel";
+        button.setAttribute("data-toggle", "modal");
+        button.setAttribute("role", "button");
+        button.setAttribute("href", "#modal-container-94539");
+        button.setAttribute("onclick", "updateModal(this)");
+        var par1 = document.createElement("p");
+        caption.appendChild(par);
+        caption.appendChild(par1);
+        par1.appendChild(button);
+        el.appendChild(panel);
+        // update comicJSONObj and save
+        var url = document.getElementById("panelImg_" + numStr).src;
+        var desc = document.getElementById("desc_" + numStr).innerHTML;
+        comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
+        comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
+        saveComic();
+    }
 }
 // para: none
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
