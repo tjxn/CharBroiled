@@ -390,8 +390,7 @@ function saveComic(){
         comicJSONObj.Public = false;
     }
 
-
-
+    addContributor();
 
     var comic = JSON.stringify(comicJSONObj);
     $.ajax({
@@ -965,5 +964,17 @@ function renderContributors(json: JSON){
         var htmlcontrib = "C" + i;
         var contribelem = (<HTMLInputElement> document.getElementById(htmlcontrib));
         contribelem.innerHTML = json["Contributors"][cname];
+    }
+}
+
+function addContributor(){
+    var currcontrib = document.getElementById("userEmail").value;
+    for (var i = 2; i<= 5; i++){
+        var cname = "Contributor_" + i;
+        var thiscontrib = comicJSONObj["Contributors"][cname];
+        if (thiscontrib != currcontrib && thiscontrib != ""){
+            comicJSONObj["Contributors"][cname] = currcontrib;
+            break;
+        }
     }
 }
