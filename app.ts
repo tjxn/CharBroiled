@@ -96,7 +96,7 @@ class Application {
 // -----------------------------------
 //              ROUTING
 // -----------------------------------
-        app.get('/image', function(req, res){
+        app.get('/image', function (req, res) {
             res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
         });
         app.use('/', stormpath.loginRequired, routes);

@@ -15,7 +15,6 @@ class Profile {
         let collectFormErrors = require('express-stormpath/lib/helpers').collectFormErrors;
 
 // Declare the schema of our form:
-
         var profileForm = forms.create({
             givenName: forms.fields.string({required: true}),
             email: forms.fields.string({required: true}),
@@ -26,7 +25,6 @@ class Profile {
 // A render function that will render our form and
 // provide the values of the fields, as well
 // as any situation-specific locals
-
         function renderForm(req, res, locals?) {
             res.render('profile', extend({
                 title: 'My Profile',
@@ -45,7 +43,6 @@ class Profile {
 
             // Capture all requests, the form library will negotiate
             // between GET and POST requests
-
             router.all('/', function (req, res) {
                 profileForm.handle(req, {
                     success: function (form) {

@@ -430,22 +430,6 @@ function newComic() {
 // return: none
 function renderPanels(elId, jsonPanels, edit) {
     var el = document.getElementById(elId);
-    /*
-     var TESTJSON = JSON.stringify({
-     Panel_1: {
-     "Image_URL": "http://cdn.toptenreviews.com/rev/prod/large/1219-i-am-bored-box.jpg",
-     "Text": "Jim is bored."
-     },
-     Panel_2: {
-     "Image_URL": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQdzsYYH6_rIt2kiB15jRv8VWw1zaKWTJNg3L4f9jSW2Ziy0Rf9",
-     "Text": "lets recharge my electric fork!"
-     },
-     Panel_3: {
-     "Image_URL": "https://media.giphy.com/media/XevXoNu5WZxe0/giphy.gif",
-     "Text": "R.I.P Jim 2016."
-     }
-     });
-     */
     var panels = jsonPanels;
     var length = lengthJSON(panels);
     for (var i = 1; i <= length; i++) {
@@ -624,17 +608,6 @@ function updatePanel(elId) {
     comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
     saveComic();
 }
-// used in login.jade
-// looks up the id of the comic associated with a user
-// redirects the user to the edit page of that comic
-/* JJ is deprecating this, we don't need this
- function gotoComic(){
- //Check to see if the user is a viewer, if they are don't let them go here.
- $.get('/comicID', function (data) {
- window.location.replace("/edit?id=" + data);
- });
- }
- */
 // para: none
 // Uses the id parameter in the url to redirect the user to the edit page of the comic
 // with that id
@@ -851,6 +824,38 @@ function addUserToComic() {
             comicJSONObj["Contributors"][cname] = currcontrib;
             saveComic();
             break;
+        }
+    }
+}
+function removeUnusedPhoto() {
+    var cloudinary_url = document.getElementById("cloudinary_URL").value;
+    var modal_url = document.getElementById("modalURL").value;
+    if (cloudinary_url != modal_url) {
+        var pattern = new RegExp('//[[0-9][a-z]]+\.jpg');
+        var id_occurance = modal_url.search(pattern);
+        var cloud = new RegExp('res.cloudinary.com');
+        var cloud_occurance = modal_url.search(cloud);
+        if (id_occurance < 1 && cloud_occurance < 1) {
+            var id = pattern.exec(modal_url);
+            console.log('here');
+            console.log(id);
+            $.ajax({
+                type: "DELETE",
+                url: "/image/" + id,
+                async: true,
+                dataType: 'json',
+                timeout: 4000,
+                success: function (data) {
+                },
+                error: function (xhr, status, thrownError) {
+                    amIFavourite();
+                    alert('ERROR - removeUnusedPhoto()');
+                    alert(xhr.responseText);
+                    alert(xhr.statusText);
+                    alert(status);
+                    alert(thrownError);
+                }
+            });
         }
     }
 }
