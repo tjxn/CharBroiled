@@ -2,100 +2,104 @@
 /// <reference path="./public/js/panel.ts" />
 /// <reference path="./public/js/comic.ts" />
 /// <reference path="./public/js/ComicWebService.ts" />
+/// <reference path="./node/node.d.ts" />
 
-import express = require("express");
-import Tools = require('./scripts');
-var Panel = require('./public/js/panel');
-var ComicWebService = require('./public/js/ComicWebService');
-var Comic = require('./public/js/comic');
+class Application {
 
-let path = require('path');
-let favicon = require('serve-favicon');
-let stormpath = require('express-stormpath');
-let logger = require('morgan');
-let cookieParser = require('cookie-parser');
-let bodyParser = require('body-parser');
+    constructor() {
+        var express = require("express");
+        var Tools = require('./scripts');
 
-let routes = require('./routes/index');
+        var Panel = require('./public/js/panel');
+        var ComicWebService = require('./public/js/ComicWebService');
+        var Comic = require('./public/js/comic');
 
-var app = express();
+        let path = require('path');
+        let favicon = require('serve-favicon');
+        let stormpath = require('express-stormpath');
+        let logger = require('morgan');
+        let cookieParser = require('cookie-parser');
+        let bodyParser = require('body-parser');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+        var routes = require('./routes/index');
+        var app = express();
+
+        // view engine setup
+        app.set('views', path.join(__dirname, 'views'));
+        app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+        app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+        app.use(logger('dev'));
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended: false}));
+        app.use(cookieParser());
+        app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(stormpath.init(app, {
-    client: {
-        apiKey: {
-            id: '4F42CDDRB565RJ2LFG9O8IR3F',
-            secret: '3V84FQEqVIQC09AupKMmjNLxSzmXPq0vAlyDA/qgODs',
-        },
-    },
-    application: {
-        href: 'https://api.stormpath.com/v1/applications/MCCvNPvyq2KR5cl0x2POL'
-    },
-
-    website: true,
-    web: {
-        login: {
-            enabled: true,
-            nextUri: "/account"
-        },
-        register: {
-            enabled: true,
-            fields: {
-                /*userName: {
-                    enabled: true,
-                    label: 'User Name',
-                    name: 'userName',
-                    placeholder: 'User Name',
-                    required: true,
-                    type: 'text'
-                },*/
-                givenName: {
-                    enabled: true,
-                    required: true
-                },
-                surname: {
-                    enabled: false,
-                    required: false
-                },
-                userType: {
-                    enabled: true,
-                    label: 'User Type',
-                    name: 'userType',
-                    placeholder: 'Enter Contributor or Viewer',
-                    required: true,
-                    type: 'text'
+        app.use(stormpath.init(app, {
+            client: {
+                apiKey: {
+                    id: '4F42CDDRB565RJ2LFG9O8IR3F',
+                    secret: '3V84FQEqVIQC09AupKMmjNLxSzmXPq0vAlyDA/qgODs',
                 },
             },
-            fieldOrder: ["givenName", "email", "password", "userType"],
-        },
-    },
+            application: {
+                href: 'https://api.stormpath.com/v1/applications/MCCvNPvyq2KR5cl0x2POL'
+            },
 
-    expand: {
-        customData: true
-    }
+            website: true,
+            web: {
+                login: {
+                    enabled: true,
+                    nextUri: "/account"
+                },
+                register: {
+                    enabled: true,
+                    fields: {
+                        /*userName: {
+                         enabled: true,
+                         label: 'User Name',
+                         name: 'userName',
+                         placeholder: 'User Name',
+                         required: true,
+                         type: 'text'
+                         },*/
+                        givenName: {
+                            enabled: true,
+                            required: true
+                        },
+                        surname: {
+                            enabled: false,
+                            required: false
+                        },
+                        userType: {
+                            enabled: true,
+                            label: 'User Type',
+                            name: 'userType',
+                            placeholder: 'Enter Contributor or Viewer',
+                            required: true,
+                            type: 'text'
+                        },
+                    },
+                    fieldOrder: ["givenName", "email", "password", "userType"],
+                },
+            },
 
-}));
+            expand: {
+                customData: true
+            }
+
+        }));
 
 
 // -----------------------------------
 //              ROUTING
 // -----------------------------------
-app.get('/image', function(req, res){
-    res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
-});
-app.use('/', stormpath.loginRequired, routes);
-app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
+        app.get('/image', function(req, res){
+            res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
+        });
+        app.use('/', stormpath.loginRequired, routes);
+        app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 
 //--------------------------------------------------------
 // ACCESSING COMIC WEB SERVICE API
@@ -126,37 +130,37 @@ app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
 
 
 //catch 404 and forward to error handler
-app.use((req, res, next) => {
-    let err:any;
-    err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
+        app.use((req, res, next) => {
+            let err:any;
+            err = new Error('Not Found');
+            err.status = 404;
+            next(err);
+        });
 
 // error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+        if (app.get('env') === 'development') {
 
-    app.use((err:any, req, res, next) => {
-        res.status(err['status'] || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
+            app.use((err:any, req, res, next) => {
+                res.status(err['status'] || 500);
+                res.render('error', {
+                    message: err.message,
+                    error: err
+                });
+            });
+        }
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err:any, req, res, next) => {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+        app.use((err:any, req, res, next) => {
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: {}
+            });
+        });
 
 
 //app.on('stormpath.ready',function() {
@@ -165,7 +169,11 @@ app.use((err:any, req, res, next) => {
 //});
 
 
-setTimeout(function () {
-    console.log('Stormpath Ready');
-    var server = app.listen(process.env.PORT || 3000);
-}, 7000);
+        setTimeout(function () {
+            console.log('Stormpath Ready');
+            var server = app.listen(process.env.PORT || 3000);
+        }, 7000);
+        module.exports = app;
+    }
+}
+var app = new Application();
