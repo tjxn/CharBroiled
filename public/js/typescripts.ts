@@ -390,7 +390,8 @@ function saveComic(){
         comicJSONObj.Public = false;
     }
 
-    addContributor();
+
+
 
     var comic = JSON.stringify(comicJSONObj);
     $.ajax({
@@ -738,6 +739,7 @@ function updatePanel(elId) {
 function paramToEditComic(){
     var id = getURLParameterByName("id");
     window.location.replace("/edit?id=" + id);
+
 }
 
 // para: none
@@ -792,11 +794,6 @@ function removeHTMLCollection(doc:HTMLCollection): void{
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
     changeFavIcon();
-    //check the button
-    //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
-    //favoriteButton.setAttribute("class","btn btn-primary active");
-    //favoriteButton.setAttribute("class","btn btn-primary");
-
 
     var favouriteComic = {
         "favourite": id,
@@ -967,14 +964,96 @@ function renderContributors(json: JSON){
     }
 }
 
-function addContributor(){
-    var currcontrib = document.getElementById("userEmail").value;
+
+// para: comicJSON object
+// Adds the UserID to the comic object(MongoDB)
+// return: none
+function addUserToComic(){
+    var currcontrib = (<HTMLInputElement>  document.getElementById("userEmail")).value;
+
     for (var i = 2; i<= 5; i++){
         var cname = "Contributor_" + i;
         var thiscontrib = comicJSONObj["Contributors"][cname];
-        if (thiscontrib != currcontrib && thiscontrib != ""){
+        if (thiscontrib != currcontrib && thiscontrib == ""){
             comicJSONObj["Contributors"][cname] = currcontrib;
+            saveComic();
             break;
         }
     }
+}
+
+// para: none
+// Adds the comicID to the user object(StormPath)
+// return: none
+function addComicToUser() {
+    var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
+
+    var conComic = {
+        "comicID": id,
+    };
+
+    var comicPut = JSON.stringify(conComic);
+
+    $.ajax({
+        type: "PUT",
+        url: "/user/comic",
+        contentType: "application/json; charset=utf-8",
+        data: comicPut,
+        async: true,
+        timeout: 4000,
+        dataType: 'json',
+        success: function (data) {
+            var note = $.notify({
+                // options
+                icon: 'glyphicon glyphicon-ok',
+                title: '',
+                message: data.Status,
+                url: '',
+                target: '_blank'
+            }, {
+                // settings
+                element: 'body',
+                position: null,
+                type: "success",
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 1031,
+                delay: 5000,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: null,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+                icon_type: 'class',
+                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                '<span data-notify="icon"></span> ' +
+                '<span data-notify="title">{1}</span> ' +
+                '<span data-notify="message">{2}</span>' +
+                '<div class="progress" data-notify="progressbar">' +
+                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                '</div>' +
+                '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                '</div>'
+            });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.responseText);
+            alert(thrownError);
+        }
+    });
+
 }
