@@ -85,32 +85,26 @@
             <div class="jumbotron">
                 <h1 align = "center" id="titleID" value="Default">
                     <input disabled id="comicTitle" type="text" value="" class="form-control" style="text-align:center;"/>
-                    &nbsp;
-                    <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Contributors<strong class="caret"></strong></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a id= "C1" href="#">Contributor</a>
-                                </li>
-                                <li>
-                                    <a id= "C2" href="#">Contributor</a>
-                                </li>
-                                <li>
-                                    <a id= "C3" href="#">Contributor</a>
-                                </li>
-                                <li>
-                                    <a id= "C4" href="#">Contributor</a>
-                                </li>
-                                <li>
-                                    <a id= "C5"href="#">Contributor</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
                 </h1>
+                <ul align ="center">
+                    <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
+                <div class = "btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" >
+                                Contributors <span class="caret"></span>
+                            </button>
+
+                            <ul class="dropdown-menu" role="cList" aria-labelledby="cList">
+                                <li><a id= "C1" href="#">Empty</a></li>
+                                <li><a id= "C2" href="#">Empy</a></li>
+                                <li><a id= "C3" href="#">Empty</a></li>
+                                <li><a id= "C4" href="#">Empty</a></li>
+                                <li><a id= "C5" href="#">Empty</a></li>
+                            </ul>
+                </div>
+                </ul>
+                </div>
             </div>
+        </div>
         </div>
     </div>
 </div>

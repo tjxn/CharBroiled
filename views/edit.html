@@ -89,7 +89,7 @@
         <div class="col-md-12">
             <div class="jumbotron">
 
-                <nav class="navbar navbar-default" role="navigation">
+                <nav class="navbar navbar-default">
                     <div class="navbar-header">
 
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -97,7 +97,7 @@
                         </button> <a class="navbar-brand" >Title</a>
                     </div>
 
-                        <form class="navbar-form navbar-left" role="search">
+                        <form class="navbar-form navbar-left">
                             <div class="form-group">
                                 <input id="comicTitle" type="text" value="" class="form-control" />
                             </div>
@@ -115,31 +115,21 @@
                             <button type="button" onclick="addPanel()" class="btn btn-default">Add Panel</button>
                             &nbsp;
                             <button type="button" onclick="removePanel()" class="btn btn-default">Remove Panel</button>
-                        </form>
-                    &nbsp;
-                    &nbsp;
-                            <ul class="nav navbar-nav navbar-right">
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contributors<strong class="caret"></strong></a>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a id= "C1" href="#">Contributor</a>
-                                        </li>
-                                        <li>
-                                            <a id= "C2" href="#">Contributor</a>
-                                        </li>
-                                        <li>
-                                            <a id= "C3" href="#">Contributor</a>
-                                        </li>
-                                        <li>
-                                            <a id= "C4" href="#">Contributor</a>
-                                        </li>
-                                        <li>
-                                            <a id= "C5" href="#">Contributor</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                            &nbsp;
+                            <div class = "btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" >
+                                Contributors <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="cList" aria-labelledby="cList">
+                                <li><a id= "C1" href="#">Empty</a></li>
+                                <li><a id= "C2" href="#">Empy</a></li>
+                                <li><a id= "C3" href="#">Empty</a></li>
+                                <li><a id= "C4" href="#">Empty</a></li>
+                                <li><a id= "C5" href="#">Empty</a></li>
                             </ul>
+                                </div>
+                        </form>
+
                 </nav>
             </div>
         </div>
