@@ -2,11 +2,11 @@
  * Created by Trevor Jackson on 08-Feb-2016.
  * Edited by Joshua Jackson on 10-Feb-2016.
  */
-/// <reference path="../../express/express.d.ts" />
+/// <reference path="express/express.d.ts" />
 /// <reference path="comic.ts" />
 /// <reference path="panel.ts" />
-/// <reference path="./../../typings/main/ambient/request/request.d.ts" />
-///  <reference path="./../../typings/main/ambient/form-data/form-data.d.ts" />
+/// <reference path="./typings/main/ambient/request/request.d.ts" />
+///  <reference path="./typings/main/ambient/form-data/form-data.d.ts" />
 
 import Comic = require ("./comic");
 

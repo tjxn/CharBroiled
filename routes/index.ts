@@ -10,9 +10,9 @@ import express = require("express");
 import Tools = require('../scripts');
 import path    = require("path");
 import ComicManager = require('../ComicManager');
-import ComicWebService = require("../public/js/ComicWebService");
-import Panel = require("../public/js/panel");
-import Comic = require("../public/js/comic");
+import ComicWebService = require("../ComicWebService");
+import Panel = require("../panel");
+import Comic = require("../comic");
 import ImageWebService = require("../ImageWebService");
 import multer = require('multer');
 
@@ -138,7 +138,6 @@ class Router {
             res.send(req.user.customData.comic);
         });
 
-// Retrieve IDs of comic(s) the user has contributed to
         router.put('/user/comic', function (req, res, next) {
             var comics:Array<string> = req.user.customData.comic;
             var id:string = req.body["comicID"];
@@ -192,24 +191,32 @@ class Router {
             var fav:Array<string> = req.user.customData.favourites;
             var givenFav:string = req.body['favourite'];
 
+            // if 1 then add, 0 then remove
+            var addRemove:number = req.body['action'];
+
             if (fav == undefined) {
                 fav = new Array();
             }
 
-            for (var i = 0; i < fav.length; i++) {
-                if (fav[i] == givenFav) {
-                    fav = removeFavourite(fav, givenFav);
-                    req.user.customData.favourites = fav;
-                    req.user.save();
-                    res.send(JSON.stringify({Status: 'Update Successful - Removed Favourite'}));
-                    return
+            if (addRemove == 0) {
+                for (var i = 0; i < fav.length; i++) {
+                    if (fav[i] == givenFav) {
+                        fav = removeFavourite(fav, givenFav);
+                        req.user.customData.favourites = fav;
+                        req.user.save();
+                        res.send(JSON.stringify({Status: 'Update Successful - Removed Favourite'}));
+                        return
+                    }
                 }
             }
 
-            fav.push(givenFav);
-            req.user.customData.favourites = fav;
-            req.user.save();
-            res.send(JSON.stringify({Status: "Update Successful - Added Favourite"}));
+            else {
+                fav.push(givenFav);
+                req.user.customData.favourites = fav;
+                req.user.save();
+                res.send(JSON.stringify({Status: "Update Successful - Added Favourite"}));
+            }
+
 
         });
 
@@ -226,13 +233,13 @@ class Router {
             });
         });
 
-        //// Send JSON array of fav comic ids
-        //router.get('/user/contributed/ids', function (req, res, next) {
-        //    console.log(req.user.customData.contributed);
-        //    res.send(JSON.stringify(req.user.customData.contributed));
-        //});
-        //
-        //// Send JSON array of comic objects
+        // Send JSON array of fav comic ids
+        router.get('/user/contributed/ids', function (req, res, next) {
+            console.log(req.user.customData.contributed);
+            res.send(JSON.stringify(req.user.customData.contributed));
+        });
+
+        // Send JSON array of comic objects
         router.get('/user/contributed', function (req, res, next) {
             var api = new ComicWebService();
             api.getComics(req.user.customData.contributed, function (request, response, body) {
