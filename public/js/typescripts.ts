@@ -1,13 +1,8 @@
-/// <reference path="comic" />
-/// <reference path="panel" />
+
 /// <reference path="../../typings/browser/ambient/jquery/jquery.d.ts"/>
 /// <reference path="../../typings/main/ambient/request/request.d.ts" />
 /// <reference path="../../typings/main/ambient/bootstrap-notify/bootstrap-notify.d.ts" />
 /// <reference path="../../typings/main/ambient/dropzone/dropzone.d.ts" />
-import Comic = require("./comic");
-import Panel = require("./panel");
-import ComicManager = require("../../ComicManager");
-
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
  */

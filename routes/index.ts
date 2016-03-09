@@ -10,9 +10,9 @@ import express = require("express");
 import Tools = require('../scripts');
 import path    = require("path");
 import ComicManager = require('../ComicManager');
-import ComicWebService = require("../public/js/ComicWebService");
-import Panel = require("../public/js/panel");
-import Comic = require("../public/js/comic");
+import ComicWebService = require("../ComicWebService");
+import Panel = require("../panel");
+import Comic = require("../comic");
 import ImageWebService = require("../ImageWebService");
 import multer = require('multer');
 

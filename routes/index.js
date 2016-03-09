@@ -7,9 +7,9 @@
 /// <reference path='../node/node.d.ts'/>
 var express = require("express");
 var path = require("path");
-var ComicWebService = require("../public/js/ComicWebService");
-var Panel = require("../public/js/panel");
-var Comic = require("../public/js/comic");
+var ComicWebService = require("../ComicWebService");
+var Panel = require("../panel");
+var Comic = require("../comic");
 var ImageWebService = require("../ImageWebService");
 var multer = require('multer');
 var Router = (function () {

@@ -1,11 +1,11 @@
 /**
  * Created by Trevor Jackson on 14-Feb-2016.
  */
-/// <reference path="./public/js/panel" />
-/// <reference path="./public/js/ComicWebService" />
-import Panel = require ('./public/js/panel');
-import Comic = require ('./public/js/comic');
-import ComicWebService = require ('./public/js/ComicWebService');
+/// <reference path="./panel" />
+/// <reference path="./ComicWebService" />
+import Panel = require ('./panel');
+import Comic = require ('./comic');
+import ComicWebService = require ('./ComicWebService');
 
 class ComicManager {
     public defaultImage:string;

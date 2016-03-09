@@ -1,15 +1,15 @@
 /// <reference path="./express/express.d.ts" />
-/// <reference path="./public/js/panel.ts" />
-/// <reference path="./public/js/comic.ts" />
-/// <reference path="./public/js/ComicWebService.ts" />
+/// <reference path="./panel.ts" />
+/// <reference path="./comic.ts" />
+/// <reference path="./ComicWebService.ts" />
 /// <reference path="./node/node.d.ts" />
 var Application = (function () {
     function Application() {
         var express = require("express");
         var Tools = require('./scripts');
-        var Panel = require('./public/js/panel');
-        var ComicWebService = require('./public/js/ComicWebService');
-        var Comic = require('./public/js/comic');
+        var Panel = require('./panel');
+        var ComicWebService = require('./ComicWebService');
+        var Comic = require('./comic');
         var path = require('path');
         var favicon = require('serve-favicon');
         var stormpath = require('express-stormpath');
