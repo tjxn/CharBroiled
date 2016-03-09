@@ -3,7 +3,9 @@
  */
 var comicJSONObj;
 var myDrop;
+var comicJSONObj;
 var favsJSONObj;
+var contJSONObj;
 // Removes all files from Dropzone
 // Called when modal is closed
 function clearDropzone() {
@@ -502,15 +504,8 @@ function updateModal(ele) {
     var urlEle = document.getElementById("modalURL");
     var descEle = document.getElementById("modalDesc");
     var hiddenInput = document.getElementById("panelNum");
-    var hiddenCloudinary = document.getElementById("cloudinary_database");
     hiddenInput.value = num;
     urlEle.value = img.getAttribute("src");
-    if (urlEle.value.indexOf("cloudinary.com") > -1) {
-        hiddenCloudinary.value = urlEle.value;
-    }
-    else {
-        hiddenCloudinary.value = "";
-    }
     descEle.value = desc;
 }
 // para: none
@@ -573,39 +568,6 @@ function addPanel() {
         comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
         comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
         saveComic();
-    }
-}
-// para: none
-// Checks the cloudinary_database element, if the url present there doesn't match the modalURL
-// then delete tell cloudinary to delete the image at the cloudinary_database url.
-// return: none
-function cleanUpCloudinary() {
-    var cloud = document.getElementById("cloudinary_database").value;
-    var modal = document.getElementById("modalURL").value;
-    if (cloud.toString() != modal.toString() && cloud.toString() != ("" || undefined)) {
-        var pattern = /[\w\d]+\.jpg/;
-        var cloudPattern = new RegExp('res.cloudinary.com');
-        var cloud_occurance = modal.search(cloudPattern);
-        if (cloud_occurance < 1) {
-            var id = pattern.exec(cloud)[0];
-            if (id != null) {
-                id = id.toString().replace('.jpg', '');
-            }
-            $.ajax({
-                type: "DELETE",
-                url: "/image/" + id,
-                async: true,
-                dataType: 'json',
-                timeout: 4000,
-                error: function (xhr, status, thrownError) {
-                    alert('ERROR - removeUnusedPhoto()');
-                    alert(xhr.responseText);
-                    alert(xhr.statusText);
-                    alert(status);
-                    alert(thrownError);
-                }
-            });
-        }
     }
 }
 // para: none
@@ -841,6 +803,74 @@ function renderFavourites(id) {
         //==========================
     });
 }
+// para: id of container to put elements in
+// creates contributed thumbnails on the account page in the given container corresponding to the given id
+// return: none
+function renderContributed(id) {
+    var container = document.getElementById(id);
+    // returns list of comic JSON objects
+    $.get('/user/contComics', function (data) {
+        contJSONObj = JSON.parse(data);
+        var length = lengthJSON(contJSONObj);
+        for (var i = 0; i < length; i++) {
+            var title = contJSONObj[i].Title;
+            var url = contJSONObj[i].Panels.Panel_1.Image_URL;
+            var desc = contJSONObj[i].Panels.Panel_1.Text;
+            if (url != "" || desc != "") {
+                var thumbnail = document.createElement("div");
+                thumbnail.className = "thumbnail";
+                thumbnail.className += " fav";
+                thumbnail.id = "cont_" + (i + 1).toString();
+                var caption = document.createElement("div");
+                caption.className = "caption";
+                var img = document.createElement("img");
+                img.className = "img-responsive";
+                img.src = url;
+                img.width = 100;
+                img.style.cssFloat = "right";
+                caption.appendChild(img);
+                var h3 = document.createElement("h3");
+                h3.innerHTML = title;
+                caption.appendChild(h3);
+                var p1 = document.createElement("p");
+                var first = true;
+                for (var j = 1; j <= 5; j++) {
+                    if (contJSONObj[i].Contributors['Contributor_' + j]) {
+                        if (first) {
+                            p1.innerHTML = "Contributors: " + contJSONObj[i].Contributors['Contributor_' + j];
+                            first = false;
+                        }
+                        else {
+                            p1.innerHTML += ", " + contJSONObj[i].Contributors['Contributor_' + j];
+                        }
+                    }
+                }
+                caption.appendChild(p1);
+                var p2 = document.createElement("p");
+                var a2 = document.createElement("a");
+                a2.className = "btn btn-primary";
+                a2.href = "/edit?id=" + contJSONObj[i]._id;
+                a2.innerHTML = "Edit";
+                p2.appendChild(a2);
+                caption.appendChild(p2);
+                thumbnail.appendChild(caption);
+            }
+            container.appendChild(thumbnail);
+        }
+        //=======================
+        /*
+         if (comicJSONObj.Public == true) {
+         comicTitle.value = comicJSONObj.Title;
+
+         //console.log(comicJSONObj.Panels);
+         renderPanels("pictureContainer", comicJSONObj.Panels, false);
+         } else {
+         comicTitle.value = "This comic is private.";
+         }
+         */
+        //==========================
+    });
+}
 // para: comicJSON object
 // Adds names of contributors to the drop-down bar
 // return: none
@@ -870,26 +900,33 @@ function addUserToComic() {
 function removeUnusedPhoto() {
     var cloudinary_url = document.getElementById("cloudinary_URL").value;
     var modal_url = document.getElementById("modalURL").value;
-    if (cloudinary_url.toString() != modal_url.toString() && cloudinary_url.toString() != ("" || undefined)) {
-        var pattern = /[\w\d]+\.jpg/;
-        var id = pattern.exec(cloudinary_url)[0];
-        if (id != null) {
-            id = id.toString().replace('.jpg', '');
+    if (cloudinary_url != modal_url) {
+        var pattern = new RegExp('//[[0-9][a-z]]+\.jpg');
+        var id_occurance = modal_url.search(pattern);
+        var cloud = new RegExp('res.cloudinary.com');
+        var cloud_occurance = modal_url.search(cloud);
+        if (id_occurance < 1 && cloud_occurance < 1) {
+            var id = pattern.exec(modal_url);
+            console.log('here');
+            console.log(id);
+            $.ajax({
+                type: "DELETE",
+                url: "/image/" + id,
+                async: true,
+                dataType: 'json',
+                timeout: 4000,
+                success: function (data) {
+                },
+                error: function (xhr, status, thrownError) {
+                    amIFavourite();
+                    alert('ERROR - removeUnusedPhoto()');
+                    alert(xhr.responseText);
+                    alert(xhr.statusText);
+                    alert(status);
+                    alert(thrownError);
+                }
+            });
         }
-        $.ajax({
-            type: "DELETE",
-            url: "/image/" + id,
-            async: true,
-            dataType: 'json',
-            timeout: 4000,
-            error: function (xhr, status, thrownError) {
-                alert('ERROR - removeUnusedPhoto()');
-                alert(xhr.responseText);
-                alert(xhr.statusText);
-                alert(status);
-                alert(thrownError);
-            }
-        });
     }
 }
 // para: none
