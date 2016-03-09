@@ -23,22 +23,21 @@ class ComicWebService {
         return;
     }
 
-    getComics(favIds: string[], callback:(error:string, response:string, body:string) => void) {
+    getComics(ids: string[], callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err:string, res:string, bod:string) {
             //var ans: string[] = [];
             var ans = {};
-            var favs = favIds;
             var temp = JSON.parse(bod);
             //console.log(temp);
-            if(typeof favs === 'undefined') {
-                //console.log("user has no favs");
+            if(typeof ids === 'undefined') {
+                //console.log("given list of ids is empty");
             } else {
                 var k=0;
                 for (var i = 0; i < temp.length; i++) {
-                    for (var j = 0; j < favs.length; j++) {
-                        if (temp[i]._id == favs[j]) { // if this comic is a fav
+                    for (var j = 0; j < ids.length; j++) {
+                        if (temp[i]._id == ids[j]) { // if this comic is a fav
                             ans[k] = temp[i];
                             k++;
                         }

@@ -1,9 +1,10 @@
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
  */
-var comicJSONObj;
 var myDrop;
+var comicJSONObj;
 var favsJSONObj;
+var contJSONObj;
 // Removes all files from Dropzone
 // Called when modal is closed
 function clearDropzone() {
@@ -780,6 +781,74 @@ function renderFavourites(id) {
                 var a2 = document.createElement("a");
                 a2.className = "btn btn-primary";
                 a2.href = "/edit?id=" + favsJSONObj[i]._id;
+                a2.innerHTML = "Edit";
+                p2.appendChild(a2);
+                caption.appendChild(p2);
+                thumbnail.appendChild(caption);
+            }
+            container.appendChild(thumbnail);
+        }
+        //=======================
+        /*
+         if (comicJSONObj.Public == true) {
+         comicTitle.value = comicJSONObj.Title;
+
+         //console.log(comicJSONObj.Panels);
+         renderPanels("pictureContainer", comicJSONObj.Panels, false);
+         } else {
+         comicTitle.value = "This comic is private.";
+         }
+         */
+        //==========================
+    });
+}
+// para: id of container to put elements in
+// creates contributed thumbnails on the account page in the given container corresponding to the given id
+// return: none
+function renderContributed(id) {
+    var container = document.getElementById(id);
+    // returns list of comic JSON objects
+    $.get('/user/contComics', function (data) {
+        contJSONObj = JSON.parse(data);
+        var length = lengthJSON(contJSONObj);
+        for (var i = 0; i < length; i++) {
+            var title = contJSONObj[i].Title;
+            var url = contJSONObj[i].Panels.Panel_1.Image_URL;
+            var desc = contJSONObj[i].Panels.Panel_1.Text;
+            if (url != "" || desc != "") {
+                var thumbnail = document.createElement("div");
+                thumbnail.className = "thumbnail";
+                thumbnail.className += " fav";
+                thumbnail.id = "cont_" + (i + 1).toString();
+                var caption = document.createElement("div");
+                caption.className = "caption";
+                var img = document.createElement("img");
+                img.className = "img-responsive";
+                img.src = url;
+                img.width = 100;
+                img.style.cssFloat = "right";
+                caption.appendChild(img);
+                var h3 = document.createElement("h3");
+                h3.innerHTML = title;
+                caption.appendChild(h3);
+                var p1 = document.createElement("p");
+                var first = true;
+                for (var j = 1; j <= 5; j++) {
+                    if (contJSONObj[i].Contributors['Contributor_' + j]) {
+                        if (first) {
+                            p1.innerHTML = "Contributors: " + contJSONObj[i].Contributors['Contributor_' + j];
+                            first = false;
+                        }
+                        else {
+                            p1.innerHTML += ", " + contJSONObj[i].Contributors['Contributor_' + j];
+                        }
+                    }
+                }
+                caption.appendChild(p1);
+                var p2 = document.createElement("p");
+                var a2 = document.createElement("a");
+                a2.className = "btn btn-primary";
+                a2.href = "/edit?id=" + contJSONObj[i]._id;
                 a2.innerHTML = "Edit";
                 p2.appendChild(a2);
                 caption.appendChild(p2);

@@ -259,16 +259,30 @@ class Router {
 
         });
 
-// Send JSON array of fav comic ids
+        // Send JSON array of fav comic ids
         router.get('/user/fav', function (req, res, next) {
             console.log(req.user.customData.favourites);
             res.send(JSON.stringify(req.user.customData.favourites));
         });
 
-// Send JSON array of comic objects
+        // Send JSON array of comic objects
         router.get('/user/favComics', function (req, res, next) {
             var api = new ComicWebService();
             api.getComics(req.user.customData.favourites, function (request, response, body) {
+                res.send(body);
+            });
+        });
+
+        // Send JSON array of fav comic ids
+        router.get('/user/cont', function (req, res, next) {
+            console.log(req.user.customData.contributed);
+            res.send(JSON.stringify(req.user.customData.contributed));
+        });
+
+        // Send JSON array of comic objects
+        router.get('/user/contComics', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getComics(req.user.customData.contributed, function (request, response, body) {
                 res.send(body);
             });
         });

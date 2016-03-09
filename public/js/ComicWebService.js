@@ -16,21 +16,20 @@ var ComicWebService = (function () {
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', callback);
         return;
     };
-    ComicWebService.prototype.getComics = function (favIds, callback) {
+    ComicWebService.prototype.getComics = function (ids, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err, res, bod) {
             //var ans: string[] = [];
             var ans = {};
-            var favs = favIds;
             var temp = JSON.parse(bod);
             //console.log(temp);
-            if (typeof favs === 'undefined') {
+            if (typeof ids === 'undefined') {
             }
             else {
                 var k = 0;
                 for (var i = 0; i < temp.length; i++) {
-                    for (var j = 0; j < favs.length; j++) {
-                        if (temp[i]._id == favs[j]) {
+                    for (var j = 0; j < ids.length; j++) {
+                        if (temp[i]._id == ids[j]) {
                             ans[k] = temp[i];
                             k++;
                         }
