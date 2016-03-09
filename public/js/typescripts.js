@@ -32,7 +32,7 @@ function changeFavIcon() {
 function amIFavourite() {
     var comicID = document.getElementById("comicID");
     var Icon = document.getElementById("FavIcon");
-    $.get('/user/fav', function (data) {
+    $.get('/user/fav/ids', function (data) {
         var favs;
         favs = JSON.parse(data);
         console.log('favs');
@@ -177,57 +177,6 @@ function renderPictures(elId, urls) {
         el.appendChild(img);
     }
 }
-function testingCall() {
-    var el = document.getElementById("TestCall");
-    $.post('/testingCall', { Title: "Hello World" }, function (data) {
-        var note = $.notify({
-            // options
-            icon: 'glyphicon glyphicon-ok',
-            title: '',
-            message: data.toString(),
-            url: '',
-            target: '_blank'
-        }, {
-            // settings
-            element: 'body',
-            position: null,
-            type: "success",
-            allow_dismiss: true,
-            newest_on_top: false,
-            showProgressbar: false,
-            placement: {
-                from: "top",
-                align: "right"
-            },
-            offset: 20,
-            spacing: 10,
-            z_index: 1031,
-            delay: 5000,
-            timer: 1000,
-            url_target: '_blank',
-            mouse_over: null,
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-            onShow: null,
-            onShown: null,
-            onClose: null,
-            onClosed: null,
-            icon_type: 'class',
-            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                '<span data-notify="icon"></span> ' +
-                '<span data-notify="title">{1}</span> ' +
-                '<span data-notify="message">{2}</span>' +
-                '<div class="progress" data-notify="progressbar">' +
-                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                '</div>' +
-                '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                '</div>'
-        });
-    });
-}
 function image() {
     var el = document.getElementById("ImageCall");
     $.post('/image', { Title: "Hello World" }, function (data) {
@@ -239,7 +188,7 @@ function image() {
 // return: none
 function setUserEmail() {
     var ID = document.getElementById("userEmail");
-    $.get('/findUserEmail', function (data) {
+    $.get('/user/email', function (data) {
         ID.value = data.toString();
     });
 }
@@ -247,7 +196,7 @@ function setUserEmail() {
 // sends GET request to get user's type. Sets value of userType element.
 // return: none
 function setUserType() {
-    $.get('/findUserType', function (data) {
+    $.get('/user/type', function (data) {
         console.log(data.toString());
     });
 }
@@ -267,7 +216,7 @@ function setComicID() {
 function renderEditComic(id) {
     var hiddenString = document.getElementById("comicStr");
     var comicStr;
-    $.get('/comicJSON/' + id, function (data) {
+    $.get('/comic/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
         var comicTitle = document.getElementById("comicTitle");
         comicTitle.value = comicJSONObj.Title;
@@ -300,7 +249,7 @@ function renderEditComic(id) {
 function renderViewComic(id) {
     var hiddenString = document.getElementById("comicStr");
     var comicStr;
-    $.get('/comicJSON/' + id, function (data) {
+    $.get('/comic/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
         var comicTitle = document.getElementById("comicTitle");
         if (comicJSONObj.Public == true) {
@@ -344,7 +293,7 @@ function saveComic() {
     var comic = JSON.stringify(comicJSONObj);
     $.ajax({
         type: "PUT",
-        url: "/saveComic/" + comicID.value,
+        url: "/comic/" + comicID.value,
         contentType: "application/json; charset=utf-8",
         data: comic,
         async: true,
@@ -414,7 +363,7 @@ function newComic() {
     var el = document.getElementById("NewComicbtn");
     $.ajax({
         type: "POST",
-        url: "/newComic",
+        url: "/comic",
         async: true,
         timeout: 4000,
         dataType: 'json',
@@ -670,14 +619,6 @@ function gotoAccount() {
     //Sends user to /account, if Viewer then redirects to AccountViewer.html else Account.html
     window.location.replace("/account");
 }
-// used in login.jade
-// looks up the id of the comic associated with a user
-// redirects the user to the edit page of that comic
-function gotoViewComic() {
-    $.get('/comicID', function (data) {
-        window.location.replace("/view?id=" + data);
-    });
-}
 // para: element to be removed
 // removes given element
 // return: none
@@ -710,7 +651,7 @@ function saveFavourites() {
     var fav = JSON.stringify(favouriteComic);
     $.ajax({
         type: "PUT",
-        url: "/user/fav",
+        url: "/user/fav/ids",
         contentType: "application/json; charset=utf-8",
         data: fav,
         async: true,
@@ -785,7 +726,7 @@ function renderFavourites(id) {
 // renders thumbnails inside the container corresponding to the given id
 // return: none
 function renderContributed(id) {
-    renderThumbnails(id, "cont");
+    renderThumbnails(id, "contributed");
 }
 function deleteComic() {
     var id = document.getElementById("comicID").value;
@@ -811,7 +752,7 @@ function deleteComic() {
 function renderThumbnails(id, type) {
     var container = document.getElementById(id);
     // returns list of comic JSON objects
-    $.get('/user/' + type + 'Comics', function (data) {
+    $.get('/user/' + type, function (data) {
         JSONObj = JSON.parse(data);
         var length = lengthJSON(JSONObj);
         for (var i = 0; i < length; i++) {

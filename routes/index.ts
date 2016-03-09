@@ -44,18 +44,6 @@ class Router {
             res.sendFile(path.join(__dirname, '../views', 'edit.html'));
         });
 
-        /* GET edit page. */
-        router.get('/comicJSON/:id', function (req, res, next) {
-            var id = req.params.id;
-            var api = new ComicWebService();
-
-            api.getAComic(id, function (err:string, response:string, body:string) {
-                res.setHeader('Content-Type', 'application/json');
-                res.send(JSON.stringify(body));
-                //res.json(body);
-            });
-
-        });
 
         /* GET account page. */
         router.get('/', function (req, res, next) {
@@ -73,28 +61,9 @@ class Router {
         });
 
 
-        /* GET account page. */
-        router.get('/testPage', function (req, res, next) {
-            res.sendFile(path.join(__dirname, '../views', 'initDropzone.html'));
-        });
-
-        /* GET home page. */
-        router.get('/initDropzone', function (req, res, next) {
-            console.log("initDropzone");
-            var tools = new Tools();
-            tools.WelcomeMessage();
-            res.render('index', {title: 'Express'});
-        });
-
-
-        /* GET home page. */
-        router.post('/testingCall', function (req, res, next) {
-            console.log(req.body);
-            res.send("Hello From Server");
-        });
 
         /* POST newComic. */
-        router.post('/newComic', function (req, res, next) {
+        router.post('/comic', function (req, res, next) {
             var api = new ComicWebService();
 
             var defaultImage = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
@@ -135,27 +104,15 @@ class Router {
         });
 
 
-        router.put('/saveComic/:id', function (req, res, next) {
-            var api = new ComicWebService();
-
-            var comic = jsonToComic(req.body);
-            comic.dbID = req.params.id;
-
-            api.updateComic(comic, function (err:string, response:string, body:string) {
-                res.send(JSON.stringify({Status: "Comic Saved"}));
-            });
-        });
-
-
         /* GET home page. */
-        router.get('/findUserEmail', function (req, res, next) {
+        router.get('/user/email', function (req, res, next) {
 
             console.log(req.user.email);
             res.send(req.user.email.toString());
         });
 
 // don't know how restful this is, but seems better than putting it in '/findUserEmail'
-        router.get('/findUserType', function (req, res, next) {
+        router.get('/user/type', function (req, res, next) {
             console.log(req.user.customData.userType);
             res.send(req.user.customData.userType.toString());
         });
@@ -207,10 +164,13 @@ class Router {
 
 // Retrieve JSON representation of a comic
         router.get('/comic/:id', function (req, res, next) {
+            var id = req.params.id;
             var api = new ComicWebService();
 
-            api.getAComic(req.params.id, function (request, response, body) {
-                res.send(body);
+            api.getAComic(id, function (err:string, response:string, body:string) {
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(body));
+                //res.json(body);
             });
         });
 
@@ -221,14 +181,14 @@ class Router {
             var comic = jsonToComic(req.body);
             comic.dbID = req.params.id;
 
-            api.updateComic(comic, function (request, response, body) {
-                res.send(body);
+            api.updateComic(comic, function (err:string, response:string, body:string) {
+                res.send(JSON.stringify({Status: "Comic Saved"}));
             });
         });
 
 
 // Add/Remove a Favourite Comic
-        router.put('/user/fav', function (req, res, next) {
+        router.put('/user/fav/ids', function (req, res, next) {
             var fav:Array<string> = req.user.customData.favourites;
             var givenFav:string = req.body['favourite'];
 
@@ -254,27 +214,26 @@ class Router {
         });
 
         // Send JSON array of fav comic ids
-        router.get('/user/fav', function (req, res, next) {
-            console.log(req.user.customData.favourites);
+        router.get('/user/fav/ids', function (req, res, next) {
             res.send(JSON.stringify(req.user.customData.favourites));
         });
 
-        // Send JSON array of comic objects
-        router.get('/user/favComics', function (req, res, next) {
+        //// Send JSON array of comic objects
+        router.get('/user/fav', function (req, res, next) {
             var api = new ComicWebService();
             api.getComics(req.user.customData.favourites, function (request, response, body) {
                 res.send(body);
             });
         });
 
-        // Send JSON array of fav comic ids
-        router.get('/user/cont', function (req, res, next) {
-            console.log(req.user.customData.contributed);
-            res.send(JSON.stringify(req.user.customData.contributed));
-        });
-
-        // Send JSON array of comic objects
-        router.get('/user/contComics', function (req, res, next) {
+        //// Send JSON array of fav comic ids
+        //router.get('/user/contributed/ids', function (req, res, next) {
+        //    console.log(req.user.customData.contributed);
+        //    res.send(JSON.stringify(req.user.customData.contributed));
+        //});
+        //
+        //// Send JSON array of comic objects
+        router.get('/user/contributed', function (req, res, next) {
             var api = new ComicWebService();
             api.getComics(req.user.customData.contributed, function (request, response, body) {
                 res.send(body);
