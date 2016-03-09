@@ -908,6 +908,28 @@ function renderContributed(id: string): void {
     renderThumbnails(id, "cont");
 }
 
+function deleteComic(){
+    var id = (<HTMLInputElement> document.getElementById("comicID")).value;
+
+    $.ajax({
+        type: "DELETE",
+        url: "/comic/" + id,
+        async: true,
+        dataType: 'json',
+        timeout: 4000,
+        error: function (xhr, status, thrownError) {
+            alert('ERROR - deleteComic()');
+            alert(xhr.responseText);
+            alert(xhr.statusText);
+            alert(status);
+            alert(thrownError);
+        }
+    });
+
+    window.location.replace("/account");
+}
+
+
 // para: id of container to put elements in, string of thumbnail type (type == 'cont' || 'fav')
 // creates contributed thumbnails on the account page in the given container corresponding to the given id
 // return: none
@@ -1007,12 +1029,14 @@ function renderContributors(json: JSON){
 function addUserToComic(){
     var currcontrib = (<HTMLInputElement>  document.getElementById("userEmail")).value;
 
-    for (var i = 2; i<= 5; i++){
+    for (var i = 1; i<= 5; i++){
         var cname = "Contributor_" + i;
         var thiscontrib = comicJSONObj["Contributors"][cname];
         if (thiscontrib != currcontrib && thiscontrib == ""){
             comicJSONObj["Contributors"][cname] = currcontrib;
             saveComic();
+            console.log('here');
+            console.log(comicJSONObj.toString());
             break;
         }
     }
