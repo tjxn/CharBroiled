@@ -85,7 +85,7 @@ var Router = (function () {
             var currComic = new Comic(defaultTitle, defaultPublicView, defpanels, defcontribs);
             api.newComic(currComic, function (err, response, body) {
                 var id = body['_id'];
-                var comics = req.user.customData.comic;
+                var comics = req.user.customData.contributed;
                 if (comics == undefined) {
                     comics = Array();
                 }
@@ -98,6 +98,7 @@ var Router = (function () {
                 }
                 comics.push(id);
                 req.user.customData.comic = comics;
+                req.user.customData.contributed = comics; // not sure if need this or above line !!!
                 req.user.save();
                 res.send(JSON.stringify({ ComicID: id }));
             });
@@ -169,13 +170,6 @@ var Router = (function () {
             comic.dbID = req.params.id;
             api.updateComic(comic, function (request, response, body) {
                 res.send(body);
-            });
-        });
-        // Remove a comic from the database
-        router.delete('/comic/:id', function (req, res, next) {
-            var api = new ComicWebService();
-            api.deleteAComic(req.params.id, function (request, response, body) {
-                res.send(JSON.stringify({ Status: "Comic Deleted" }));
             });
         });
         // Add/Remove a Favourite Comic
@@ -257,6 +251,29 @@ var Router = (function () {
                 res.send(JSON.stringify({ Status: "Image Removed" }));
             });
         });
+        // Retrieve IDs of comic(s) the user has contributed to
+        router.delete('/comic/:id', function (req, res, next) {
+            var api = new ComicWebService();
+            api.deleteAComic(req.params.id, function (result) {
+                res.send(JSON.stringify({ Status: "Comic Deleted" }));
+            });
+            console.log('here');
+            console.log(req.user.customData.contributed);
+            var contributed = removeComicFromStormpath(req.params.id, req.user.customData.contributed);
+            console.log(contributed);
+            req.user.customData.contributed = contributed;
+            var fav = removeFavourite(req.user.customData.favourites, req.params.id);
+            req.user.customData.favourites = fav;
+            req.user.save();
+        });
+        function removeComicFromStormpath(id, contributed) {
+            for (var i = 0; i < contributed.length; i++) {
+                if (contributed[i] == id) {
+                    contributed.splice(i, 1);
+                }
+            }
+            return contributed;
+        }
         function jsonToComic(data) {
             /* CODE IS FOR DYNAMIC PANEL SUPPORT
              var panels = [];
