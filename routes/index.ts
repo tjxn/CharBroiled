@@ -138,7 +138,6 @@ class Router {
             res.send(req.user.customData.comic);
         });
 
-// Retrieve IDs of comic(s) the user has contributed to
         router.put('/user/comic', function (req, res, next) {
             var comics:Array<string> = req.user.customData.comic;
             var id:string = req.body["comicID"];
@@ -226,13 +225,13 @@ class Router {
             });
         });
 
-        //// Send JSON array of fav comic ids
-        //router.get('/user/contributed/ids', function (req, res, next) {
-        //    console.log(req.user.customData.contributed);
-        //    res.send(JSON.stringify(req.user.customData.contributed));
-        //});
-        //
-        //// Send JSON array of comic objects
+        // Send JSON array of fav comic ids
+        router.get('/user/contributed/ids', function (req, res, next) {
+            console.log(req.user.customData.contributed);
+            res.send(JSON.stringify(req.user.customData.contributed));
+        });
+
+        // Send JSON array of comic objects
         router.get('/user/contributed', function (req, res, next) {
             var api = new ComicWebService();
             api.getComics(req.user.customData.contributed, function (request, response, body) {
