@@ -242,6 +242,7 @@ var Router = (function () {
         router.delete('/image/:id', function (req, res, next) {
             var api = new ImageWebService();
             api.deleteImage(req.params.id, function (result) {
+                res.send(JSON.stringify({ Status: "Image Removed" }));
             });
         });
         function jsonToComic(data) {

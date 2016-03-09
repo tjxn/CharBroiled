@@ -496,6 +496,7 @@ function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
 
         var url = panels['Panel_'+i].Image_URL;
         var desc = panels['Panel_'+i].Text;
+
         if (url != "" || desc != "") {
 
             var panel = document.createElement("div");
@@ -576,9 +577,17 @@ function updateModal(ele) {
     var urlEle = (<HTMLInputElement> document.getElementById("modalURL"));
     var descEle = (<HTMLInputElement>  document.getElementById("modalDesc"));
     var hiddenInput = (<HTMLInputElement> document.getElementById("panelNum"));
+    var hiddenCloudinary = (<HTMLInputElement> document.getElementById("cloudinary_database"));
 
     hiddenInput.value = num;
     urlEle.value = img.getAttribute("src");
+
+    if(urlEle.value.indexOf("cloudinary.com") > -1){
+        hiddenCloudinary.value = urlEle.value;
+    }else{
+        hiddenCloudinary.value = "";
+    }
+
     descEle.value = desc;
 }
 
@@ -653,6 +662,46 @@ function addPanel() {
     comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
     saveComic();
+    }
+}
+
+// para: none
+// Checks the cloudinary_database element, if the url present there doesn't match the modalURL
+// then delete tell cloudinary to delete the image at the cloudinary_database url.
+// return: none
+function cleanUpCloudinary(){
+    var cloud = (<HTMLInputElement>  document.getElementById("cloudinary_database")).value;
+    var modal = (<HTMLInputElement>  document.getElementById("modalURL")).value;
+
+    if(cloud.toString() != modal.toString() && cloud.toString() != ("" || undefined)){
+        var pattern = /[\w\d]+\.jpg/;
+
+        var cloudPattern = new RegExp ('res.cloudinary.com');
+        var cloud_occurance = modal.search(cloudPattern);
+
+        if (cloud_occurance < 1){
+
+            var id = pattern.exec(cloud)[0];
+
+            if (id != null){
+                id = id.toString().replace('.jpg', '');
+            }
+
+            $.ajax({
+                type: "DELETE",
+                url: "/image/" + id,
+                async: true,
+                dataType: 'json',
+                timeout: 4000,
+                error: function (xhr, status, thrownError) {
+                    alert('ERROR - removeUnusedPhoto()');
+                    alert(xhr.responseText);
+                    alert(xhr.statusText);
+                    alert(status);
+                    alert(thrownError);
+                }
+            });
+        }
     }
 }
 
@@ -959,27 +1008,21 @@ function removeUnusedPhoto(){
     var cloudinary_url = (<HTMLInputElement>  document.getElementById("cloudinary_URL")).value;
     var modal_url = (<HTMLInputElement>  document.getElementById("modalURL")).value;
 
-    if(cloudinary_url != modal_url){
-        var pattern = new RegExp ('//[[0-9][a-z]]+\.jpg');
-        var id_occurance = modal_url.search(pattern);
+    if(cloudinary_url.toString() != modal_url.toString() && cloudinary_url.toString() != ("" || undefined)){
+        var pattern = /[\w\d]+\.jpg/;
+            var id = pattern.exec(cloudinary_url)[0];
 
-        var cloud = new RegExp ('res.cloudinary.com');
-        var cloud_occurance = modal_url.search(cloud);
+            if (id != null){
+                id = id.toString().replace('.jpg', '');
+            }
 
-        if (id_occurance < 1 && cloud_occurance < 1){
-            var id = pattern.exec(modal_url);
-            console.log('here');
-                console.log(id);
             $.ajax({
                 type: "DELETE",
                 url: "/image/" + id,
                 async: true,
                 dataType: 'json',
                 timeout: 4000,
-                success: function (data) {
-                },
                 error: function (xhr, status, thrownError) {
-                    amIFavourite();
                     alert('ERROR - removeUnusedPhoto()');
                     alert(xhr.responseText);
                     alert(xhr.statusText);
@@ -988,7 +1031,6 @@ function removeUnusedPhoto(){
                 }
             });
         }
-    }
 }
 
 
