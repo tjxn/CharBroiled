@@ -12,9 +12,10 @@ import ComicManager = require("../../ComicManager");
  * Created by Trevor Jackson on 16-Feb-2016.
  */
 
-var comicJSONObj;
 var myDrop;
+var comicJSONObj;
 var favsJSONObj;
+var contJSONObj;
 
 
 // Removes all files from Dropzone
@@ -490,29 +491,13 @@ function newComic() {
 function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     var el = document.getElementById(elId);
 
-    /*
-     var TESTJSON = JSON.stringify({
-     Panel_1: {
-     "Image_URL": "http://cdn.toptenreviews.com/rev/prod/large/1219-i-am-bored-box.jpg",
-     "Text": "Jim is bored."
-     },
-     Panel_2: {
-     "Image_URL": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQdzsYYH6_rIt2kiB15jRv8VWw1zaKWTJNg3L4f9jSW2Ziy0Rf9",
-     "Text": "lets recharge my electric fork!"
-     },
-     Panel_3: {
-     "Image_URL": "https://media.giphy.com/media/XevXoNu5WZxe0/giphy.gif",
-     "Text": "R.I.P Jim 2016."
-     }
-     });
-     */
-
     var panels = jsonPanels;
     var length = lengthJSON(panels);
     for (var i = 1; i <= length; i++) {
 
         var url = panels['Panel_'+i].Image_URL;
         var desc = panels['Panel_'+i].Text;
+
         if (url != "" || desc != "") {
 
             var panel = document.createElement("div");
@@ -593,9 +578,17 @@ function updateModal(ele) {
     var urlEle = (<HTMLInputElement> document.getElementById("modalURL"));
     var descEle = (<HTMLInputElement>  document.getElementById("modalDesc"));
     var hiddenInput = (<HTMLInputElement> document.getElementById("panelNum"));
+    var hiddenCloudinary = (<HTMLInputElement> document.getElementById("cloudinary_database"));
 
     hiddenInput.value = num;
     urlEle.value = img.getAttribute("src");
+
+    if(urlEle.value.indexOf("cloudinary.com") > -1){
+        hiddenCloudinary.value = urlEle.value;
+    }else{
+        hiddenCloudinary.value = "";
+    }
+
     descEle.value = desc;
 }
 
@@ -674,6 +667,46 @@ function addPanel() {
 }
 
 // para: none
+// Checks the cloudinary_database element, if the url present there doesn't match the modalURL
+// then delete tell cloudinary to delete the image at the cloudinary_database url.
+// return: none
+function cleanUpCloudinary(){
+    var cloud = (<HTMLInputElement>  document.getElementById("cloudinary_database")).value;
+    var modal = (<HTMLInputElement>  document.getElementById("modalURL")).value;
+
+    if(cloud.toString() != modal.toString() && cloud.toString() != ("" || undefined)){
+        var pattern = /[\w\d]+\.jpg/;
+
+        var cloudPattern = new RegExp ('res.cloudinary.com');
+        var cloud_occurance = modal.search(cloudPattern);
+
+        if (cloud_occurance < 1){
+
+            var id = pattern.exec(cloud)[0];
+
+            if (id != null){
+                id = id.toString().replace('.jpg', '');
+            }
+
+            $.ajax({
+                type: "DELETE",
+                url: "/image/" + id,
+                async: true,
+                dataType: 'json',
+                timeout: 4000,
+                error: function (xhr, status, thrownError) {
+                    alert('ERROR - removeUnusedPhoto()');
+                    alert(xhr.responseText);
+                    alert(xhr.statusText);
+                    alert(status);
+                    alert(thrownError);
+                }
+            });
+        }
+    }
+}
+
+// para: none
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
 // return: none
 function removePanel() {
@@ -720,17 +753,6 @@ function updatePanel(elId) {
     saveComic();
 }
 
-// used in login.jade
-// looks up the id of the comic associated with a user
-// redirects the user to the edit page of that comic
-/* JJ is deprecating this, we don't need this
- function gotoComic(){
- //Check to see if the user is a viewer, if they are don't let them go here.
- $.get('/comicID', function (data) {
- window.location.replace("/edit?id=" + data);
- });
- }
- */
 
 // para: none
 // Uses the id parameter in the url to redirect the user to the edit page of the comic
@@ -952,6 +974,87 @@ function renderFavourites(id: string): void {
 
 }
 
+// para: id of container to put elements in
+// creates contributed thumbnails on the account page in the given container corresponding to the given id
+// return: none
+function renderContributed(id: string): void {
+    var container = (<HTMLInputElement>  document.getElementById(id));
+
+    // returns list of comic JSON objects
+    $.get('/user/contComics', function (data) {
+        contJSONObj = JSON.parse(data);
+
+        var length = lengthJSON(contJSONObj);
+        for (var i = 0; i < length; i++) { // for each cont comic
+
+            var title = contJSONObj[i].Title;
+            var url = contJSONObj[i].Panels.Panel_1.Image_URL;
+            var desc = contJSONObj[i].Panels.Panel_1.Text;
+
+            if (url != "" || desc != "") { // if panel is not empty
+                var thumbnail = document.createElement("div");
+                thumbnail.className = "thumbnail";
+                thumbnail.className += " fav";
+                thumbnail.id = "cont_" + (i+1).toString();
+
+                var caption = document.createElement("div");
+                caption.className = "caption";
+
+                var img = document.createElement("img");
+                img.className = "img-responsive";
+                img.src = url;
+                img.width = 100;
+                img.style.cssFloat = "right";
+                caption.appendChild(img);
+
+                var h3 = document.createElement("h3");
+                h3.innerHTML = title;
+                caption.appendChild(h3);
+
+                var p1 = document.createElement("p");
+
+                var first = true;
+                for(var j=1; j<=5; j++) {  // 5 = max number of contributors
+                    if(contJSONObj[i].Contributors['Contributor_' + j]) { // if contributor is defined
+                        if (first) {
+                            p1.innerHTML = "Contributors: " + contJSONObj[i].Contributors['Contributor_' + j];
+                            first = false;
+                        } else {
+                            p1.innerHTML += ", " + contJSONObj[i].Contributors['Contributor_' + j];
+                        }
+                    }
+                }
+
+                caption.appendChild(p1);
+
+                var p2 = document.createElement("p");
+                var a2 = document.createElement("a");
+                a2.className = "btn btn-primary";
+                a2.href = "/edit?id=" + contJSONObj[i]._id;
+                a2.innerHTML = "Edit";
+                p2.appendChild(a2);
+                caption.appendChild(p2);
+
+                thumbnail.appendChild(caption);
+            }
+            container.appendChild(thumbnail);
+        }
+        //=======================
+        /*
+         if (comicJSONObj.Public == true) {
+         comicTitle.value = comicJSONObj.Title;
+
+         //console.log(comicJSONObj.Panels);
+         renderPanels("pictureContainer", comicJSONObj.Panels, false);
+         } else {
+         comicTitle.value = "This comic is private.";
+         }
+         */
+        //==========================
+    });
+
+}
+
 // para: comicJSON object
 // Adds names of contributors to the drop-down bar
 // return: none
@@ -981,6 +1084,37 @@ function addUserToComic(){
         }
     }
 }
+
+
+function removeUnusedPhoto(){
+    var cloudinary_url = (<HTMLInputElement>  document.getElementById("cloudinary_URL")).value;
+    var modal_url = (<HTMLInputElement>  document.getElementById("modalURL")).value;
+
+    if(cloudinary_url.toString() != modal_url.toString() && cloudinary_url.toString() != ("" || undefined)){
+        var pattern = /[\w\d]+\.jpg/;
+            var id = pattern.exec(cloudinary_url)[0];
+
+            if (id != null){
+                id = id.toString().replace('.jpg', '');
+            }
+
+            $.ajax({
+                type: "DELETE",
+                url: "/image/" + id,
+                async: true,
+                dataType: 'json',
+                timeout: 4000,
+                error: function (xhr, status, thrownError) {
+                    alert('ERROR - removeUnusedPhoto()');
+                    alert(xhr.responseText);
+                    alert(xhr.statusText);
+                    alert(status);
+                    alert(thrownError);
+                }
+            });
+        }
+}
+
 
 // para: none
 // Adds the comicID to the user object(StormPath)

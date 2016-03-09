@@ -12,6 +12,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
+    <link href="css/basic.css" rel="stylesheet">
 
     <input type="hidden" id="userEmail" value="" />
     <input type="hidden" id="comicID" value="" />
@@ -23,14 +24,25 @@
     <script src="js/panel.js"></script>
     <script src="js/ComicWebService.js"></script>
 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+
+
     <script>
+
+        $(window).load(function() {
+            // Animate loader off screen
+            setTimeout( function(){
+                $(".se-pre-con").fadeOut("slow")
+            }, 1000);
+        });
+
         window.onload = function (event) {
         };
     </script>
 
 </head>
 <body>
-
+<div class="se-pre-con"></div>
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">

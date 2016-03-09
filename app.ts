@@ -21,6 +21,7 @@ class Application {
         let cookieParser = require('cookie-parser');
         let bodyParser = require('body-parser');
 
+        var profile = require('./routes/profile');
         var routes = require('./routes/index');
         var app = express();
 
@@ -95,11 +96,11 @@ class Application {
 // -----------------------------------
 //              ROUTING
 // -----------------------------------
-        app.get('/image', function(req, res){
+        app.get('/image', function (req, res) {
             res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
         });
         app.use('/', stormpath.loginRequired, routes);
-        app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
+        app.use('/profile', stormpath.loginRequired, profile);
 
 //--------------------------------------------------------
 // ACCESSING COMIC WEB SERVICE API

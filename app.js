@@ -16,6 +16,7 @@ var Application = (function () {
         var logger = require('morgan');
         var cookieParser = require('cookie-parser');
         var bodyParser = require('body-parser');
+        var profile = require('./routes/profile');
         var routes = require('./routes/index');
         var app = express();
         // view engine setup
@@ -86,7 +87,7 @@ var Application = (function () {
             res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
         });
         app.use('/', stormpath.loginRequired, routes);
-        app.use('/profile', stormpath.loginRequired, require('./routes/profile')());
+        app.use('/profile', stormpath.loginRequired, profile);
         //--------------------------------------------------------
         // ACCESSING COMIC WEB SERVICE API
         // NOTE: must give a callback function, these calls are ASYNC!!!

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Title</title>
+    <title>Account Page</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,7 +12,7 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-
+    <link href="css/basic.css" rel="stylesheet">
     <input type="hidden" id="userEmail" value="" />
     <input type="hidden" id="comicID" value="" />
 
@@ -24,15 +24,26 @@
     <script src="js/panel.js"></script>
     <script src="js/ComicWebService.js"></script>
 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
 
     <script>
-        window.onload = function (event) {
+
+        $(window).load(function() {
+            // Animate loader off screen
             renderFavourites("favContainer");
+            renderContributed("contContainer");
+            setTimeout( function(){
+                $(".se-pre-con").fadeOut("slow")
+            }, 1000);
+        });
+
+        window.onload = function (event) {
+            //renderFavourites("favContainer");
         };
     </script>
 </head>
 <body>
-
+<div class="se-pre-con"></div>
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -116,52 +127,13 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary" id="contContainer">
                 <div class="panel-heading">
                     <h3 class="panel-title">
                         Contributed
                     </h3>
                 </div>
                 <br>
-                <div class="thumbnail">
-
-                    <div class="caption">
-                        <h3>
-                            Comic Title
-                        </h3>
-                        <p>Owner: Scott Henry</p>
-                        <p>
-                            <a class="btn btn-primary btn-large" href="/edit">Edit</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h3>
-                            Comic Title
-                        </h3>
-                        <p>Owner: Scott Henry</p>
-                        <p>
-                            <a class="btn btn-primary btn-large" href="/edit">Edit</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="thumbnail">
-                    <div class="caption">
-                        <h3>
-                            Comic Title
-                        </h3>
-                        <p>Owner: Scott Henry</p>
-                        <p>
-                            <a class="btn btn-primary btn-large" href="/edit">Edit</a>
-                        </p>
-                    </div>
-                </div>
-                <div class="panel-footer">
-                    Search for new comics to find more to contribute to!
-                </div>
             </div>
         </div>
     </div>

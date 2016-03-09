@@ -211,6 +211,18 @@ var Router = (function () {
                 res.send(body);
             });
         });
+        // Send JSON array of fav comic ids
+        router.get('/user/cont', function (req, res, next) {
+            console.log(req.user.customData.contributed);
+            res.send(JSON.stringify(req.user.customData.contributed));
+        });
+        // Send JSON array of comic objects
+        router.get('/user/contComics', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getComics(req.user.customData.contributed, function (request, response, body) {
+                res.send(body);
+            });
+        });
         // Remove a string from an array of strings
         // Used for removing a comic ID from a list of comic IDs
         // See router.put('/user/fav'
@@ -242,6 +254,7 @@ var Router = (function () {
         router.delete('/image/:id', function (req, res, next) {
             var api = new ImageWebService();
             api.deleteImage(req.params.id, function (result) {
+                res.send(JSON.stringify({ Status: "Image Removed" }));
             });
         });
         function jsonToComic(data) {
