@@ -125,7 +125,8 @@ class Router {
                 }
 
                 comics.push(id);
-                req.user.customData.contributed = comics;
+                req.user.customData.comic = comics;
+                req.user.customData.contributed = comics; // not sure if need this or above line !!!
                 req.user.save();
 
                 res.send(JSON.stringify({ComicID: id}));

@@ -1087,7 +1087,7 @@ function addComicToUser() {
 
     $.ajax({
         type: "PUT",
-        url: "/user/comic",
+        url: "/user/cont",
         contentType: "application/json; charset=utf-8",
         data: comicPut,
         async: true,
