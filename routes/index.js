@@ -143,22 +143,28 @@ var Router = (function () {
         router.put('/user/fav/ids', function (req, res, next) {
             var fav = req.user.customData.favourites;
             var givenFav = req.body['favourite'];
+            // if 1 then add, 0 then remove
+            var addRemove = req.body['action'];
             if (fav == undefined) {
                 fav = new Array();
             }
-            for (var i = 0; i < fav.length; i++) {
-                if (fav[i] == givenFav) {
-                    fav = removeFavourite(fav, givenFav);
-                    req.user.customData.favourites = fav;
-                    req.user.save();
-                    res.send(JSON.stringify({ Status: 'Update Successful - Removed Favourite' }));
-                    return;
+            if (addRemove == 0) {
+                for (var i = 0; i < fav.length; i++) {
+                    if (fav[i] == givenFav) {
+                        fav = removeFavourite(fav, givenFav);
+                        req.user.customData.favourites = fav;
+                        req.user.save();
+                        res.send(JSON.stringify({ Status: 'Update Successful - Removed Favourite' }));
+                        return;
+                    }
                 }
             }
-            fav.push(givenFav);
-            req.user.customData.favourites = fav;
-            req.user.save();
-            res.send(JSON.stringify({ Status: "Update Successful - Added Favourite" }));
+            else {
+                fav.push(givenFav);
+                req.user.customData.favourites = fav;
+                req.user.save();
+                res.send(JSON.stringify({ Status: "Update Successful - Added Favourite" }));
+            }
         });
         // Send JSON array of fav comic ids
         router.get('/user/fav/ids', function (req, res, next) {

@@ -33,15 +33,18 @@ $(document).on("click",".dz-details", function(){
     panelURL.value = cloudinary_URL.value;
 });
 
-function changeFavIcon(){
+// return: 1 = Icon is yellow; 0 = Icon is white
+function changeFavIcon():number{
     var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
 
     if(Icon.style.color == "white"){
         Icon.className = "glyphicon glyphicon-star yellow";
         Icon.style.color = "yellow";
+        return 1;
     }else{
         Icon.className = "glyphicon glyphicon-star white";
         Icon.style.color = 'white';
+        return 0;
     }
 }
 
@@ -60,11 +63,8 @@ function amIFavourite() {
             if (favs[i] == comicID.value){
                 Icon.className = "glyphicon glyphicon-star yellow";
                 Icon.style.color = "yellow";
-                return
             }
         }
-        Icon.className = "glyphicon glyphicon-star white";
-        Icon.style.color = 'white';
     });
 
 }
@@ -754,10 +754,13 @@ function removeHTMLCollection(doc:HTMLCollection): void{
 
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
-    changeFavIcon();
+
+    // return: 1 = Icon is yellow (favourite); 0 = Icon is white (not a favourite)
+    var color = changeFavIcon();
 
     var favouriteComic = {
         "favourite": id,
+        "action": color,
     };
 
     var fav = JSON.stringify(favouriteComic);
@@ -819,15 +822,58 @@ function saveFavourites() {
                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
                 '</div>'
             });
-
+            amIFavourite();
         },
         error: function (xhr, status, thrownError) {
             amIFavourite();
-            alert('ERROR - saveFavourites()');
-            alert(xhr.responseText);
-            alert(xhr.statusText);
-            alert(status);
-            alert(thrownError);
+
+            var note = $.notify({
+                // options
+                icon: 'glyphicon glyphicon-remove',
+                title: '',
+                message: 'ERROR - Favourite Not Saved',
+                url: '',
+                target: '_blank'
+            }, {
+                // settings
+                element: 'body',
+                position: null,
+                type: "danger",
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 1031,
+                delay: 5000,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: null,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+                icon_type: 'class',
+                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                '<span data-notify="icon"></span> ' +
+                '<span data-notify="title">{1}</span> ' +
+                '<span data-notify="message">{2}</span>' +
+                '<div class="progress" data-notify="progressbar">' +
+                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                '</div>' +
+                '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                '</div>'
+            });
+            amIFavourite();
         }
     });
 }
