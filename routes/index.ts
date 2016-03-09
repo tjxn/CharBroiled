@@ -126,6 +126,7 @@ class Router {
 
                 comics.push(id);
                 req.user.customData.comic = comics;
+                req.user.customData.contributed = comics; // not sure if need this or above line !!!
                 req.user.save();
 
                 res.send(JSON.stringify({ComicID: id}));
@@ -170,19 +171,19 @@ class Router {
 // --------------------------------------------------
 
 // Retrieve IDs of comic(s) the user has contributed to
-        router.get('/user/comic', function (req, res, next) {
+        router.get('/user/cont', function (req, res, next) {
 
-            if (req.user.customData.comic == undefined) {
-                req.user.customData.comic = Array();
+            if (req.user.customData.contributed == undefined) {
+                req.user.customData.contributed = Array();
             }
 
-            console.log(req.user.customData.comic);
-            res.send(req.user.customData.comic);
+            console.log(req.user.customData.contributed);
+            res.send(req.user.customData.contributed);
         });
 
 // Retrieve IDs of comic(s) the user has contributed to
-        router.put('/user/comic', function (req, res, next) {
-            var comics:Array<string> = req.user.customData.comic;
+        router.put('/user/cont', function (req, res, next) {
+            var comics:Array<string> = req.user.customData.contributed;
             var id:string = req.body["comicID"];
 
             if (comics == undefined) {
@@ -198,7 +199,7 @@ class Router {
             }
 
             comics.push(id);
-            req.user.customData.comic = comics;
+            req.user.customData.contributed = comics;
             req.user.save();
             res.send(JSON.stringify({Status: "Success - ComicID added to Stormpath"}));
 
