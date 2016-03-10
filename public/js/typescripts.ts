@@ -196,14 +196,6 @@ function renderPictures(elId, urls) {
     }
 }
 
-function image() {
-    var el = (<HTMLInputElement> document.getElementById("ImageCall"));
-
-    $.post('/image', {Title: "Hello World"}, function (data) {
-        el.innerText = data.toString();
-    });
-}
-
 // para: none
 // sends GET request to get user's email. Sets value of userEmail element.
 // return: none
