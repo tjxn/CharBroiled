@@ -905,8 +905,6 @@ function checkIfViewer(){
             var id = (<HTMLAnchorElement>  document.getElementById("Edit-Button"));
             id.remove();
         }
-
-
     });
 }
 
