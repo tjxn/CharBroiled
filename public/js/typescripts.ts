@@ -262,7 +262,7 @@ function renderEditComic(id: string) {
         //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
         //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
         //console.log(comicJSONObj.Contributors);
-        renderContributors(comicJSONObj);
+
 
         //if comic is favourited by the user, needs to also be updated in savefourite
         //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
@@ -272,6 +272,10 @@ function renderEditComic(id: string) {
         //button.setAttribute("data-toggle", "modal");
         //console.log(comicJSONObj.Panels);
         renderPanels("pictureContainer", comicJSONObj.Panels, true);
+
+        addComicToUser();
+        addUserToComic();
+        renderContributors(comicJSONObj);
     });
 }
 
@@ -1247,8 +1251,6 @@ function addUserToComic(){
         if (thiscontrib != currcontrib && thiscontrib == ""){
             comicJSONObj["Contributors"][cname] = currcontrib;
             saveComic();
-            console.log('here');
-            console.log(comicJSONObj.toString());
             break;
         }
     }
