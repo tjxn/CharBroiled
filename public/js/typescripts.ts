@@ -12,21 +12,31 @@ var comicJSONObj;
 var JSONObj;
 
 
-// Removes all files from Dropzone
+
+
+// para: none
+// Removes all thumbnails from the dropzone modal
 // Called when modal is closed
+// return: none
 function clearDropzone(){
     myDrop.removeAllFiles();
 }
 
+
+// para: none
 // Checks every click, if it is a click on a thumbnail in dropzone
 // then change the modal url to the thumbnail's url
+// return: none
 $(document).on("click",".dz-details", function(){
     var cloudinary_URL = (<HTMLInputElement> document.getElementById("cloudinary_URL"));
     var panelURL = (<HTMLInputElement> document.getElementById("modalURL"));
     panelURL.value = cloudinary_URL.value;
 });
 
-// return: 1 = Icon is yellow; 0 = Icon is white
+// para: none
+// Change the color of the Favourite Button. If yellow set to white,
+// if white set to yellow.
+// return: number; If Favourite button is now yellow return 1, if white return 0
 function changeFavIcon():number{
     var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
 
@@ -41,6 +51,12 @@ function changeFavIcon():number{
     }
 }
 
+// para: none
+// Check if the comic is currently set as a favourite of the user.
+// GET request retrieves list of favourite comics of the user, goes through list
+// and sees if current comic is on list. If comic is a favourite set the Favourite
+// button icon to yellow.
+// return: none
 function amIFavourite() {
     var comicID = (<HTMLInputElement> document.getElementById("comicID"));
     var Icon = (<HTMLSpanElement> document.getElementById("FavIcon"));
@@ -57,7 +73,10 @@ function amIFavourite() {
     });
 }
 
-// setup dropzone
+// para: none
+// Configure Dropzone library and associate it with the modal.
+// Set up limitations: 5MB max, 1 file, jpg/gif/png format only
+// return: none
 function initDropzone(){
     Dropzone.autoDiscover = false;
     myDrop = new Dropzone('#demoUpload', {
@@ -510,7 +529,7 @@ function newComic() {
 }
 
 // para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
-//
+// TODO
 // return: none
 function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     var el = document.getElementById(elId);
@@ -837,6 +856,9 @@ function countPanels() {
     return count;
 }
 
+// para: none
+// TODO
+// return: none
 function updatePanel(elId) {
 
     var url = (<HTMLInputElement>  document.getElementById("modalURL")).value;
@@ -871,8 +893,10 @@ function paramToViewComic(){
     window.location.replace("/view?id=" + id);
 }
 
+// para: none
+// Sends user to /account
+// return: none
 function gotoAccount(){
-    //Sends user to /account, if Viewer then redirects to AccountViewer.html else Account.html
             window.location.replace("/account");
 }
 
@@ -905,7 +929,11 @@ function removeHTMLCollection(doc:HTMLCollection): void{
     }
 }
 
+// para: none
 // Used on the View Page to hide the Edit button from a Viewer
+// Does a GET request to check what type the user is, if Viewer
+// Then remove the Edit button
+// return: none
 function checkIfViewer(){
     $.get('/user/type', function (data) {
 
@@ -916,7 +944,11 @@ function checkIfViewer(){
     });
 }
 
+// para: none
 // Used on the Edit Page to redirect a Viewer to the View Page
+// Does a GET request to check if the user is a Viewer, if so then redirect user
+// to the view page of that comic.
+// return: none
 function checkIfContributor(){
     $.get('/user/type', function (data) {
 
@@ -929,6 +961,10 @@ function checkIfContributor(){
     });
 }
 
+// para: none
+// Changes the color of the Favourite button, send PUT request to server with indication
+// of whether to add or remove the given comic ID to the Favourite list kept on the Server
+// return: none
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
 
@@ -1076,6 +1112,9 @@ function renderContributed(id: string): void {
     renderThumbnails(id, "contributed", "edit");
 }
 
+// para: none
+// Delete a comic in the database then redirect user to the account page.
+// return: none
 function deleteComic(){
     var id = (<HTMLInputElement> document.getElementById("comicID")).value;
 
@@ -1266,6 +1305,12 @@ function addUserToComic(){
     }
 }
 
+
+// NEEDS TO BE IMPROVED
+// para: none
+// Attempts to determine if a photo on the cloudinary database is no longer being used, if so
+// delete the unused image.
+// return: none
 function removeUnusedPhoto(){
     var cloudinary_url = (<HTMLInputElement>  document.getElementById("cloudinary_URL")).value;
     var modal_url = (<HTMLInputElement>  document.getElementById("modalURL")).value;

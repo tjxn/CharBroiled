@@ -16,6 +16,9 @@ class ComicWebService {
 
     result:string;
 
+    // para: callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // retrieve every single comic in the mongo database
+    // return: none
     getAllComics(callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
@@ -23,6 +26,9 @@ class ComicWebService {
         return;
     }
 
+    // para: ids:string[] - ids of comics, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given an array of comic ids, get the associated JSON comic objects from the database
+    // return: none
     getComics(ids: string[], callback:(error:string, response:string, body:string) => void) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err:string, res:string, bod:string) {
@@ -47,6 +53,10 @@ class ComicWebService {
         return;
     }
 
+
+    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a comic id, get the associated JSON comic object from the database
+    // return: none
     getAComic(comicId:string, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
@@ -54,6 +64,10 @@ class ComicWebService {
         return;
     }
 
+
+    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a comic id, delete the associated JSON comic object from the mongo database
+    // return: none
     deleteAComic(comicId:string, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
@@ -68,6 +82,10 @@ class ComicWebService {
         return;
     }
 
+
+    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Create a new comic in the mongo database
+    // return: none
     newComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
@@ -134,6 +152,9 @@ class ComicWebService {
         return;
     }
 
+    // para: comic:Comic - Comic Object, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a comic object update the associated object in the mongo database
+    // return: none
     updateComic(comic:Comic, callback:(error:string, response:string, body:string) => void) {
         var request = require("request");
 

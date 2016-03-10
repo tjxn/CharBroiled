@@ -11,11 +11,17 @@ var ComicWebService = (function () {
     function ComicWebService() {
     }
     ;
+    // para: callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // retrieve every single comic in the mongo database
+    // return: none
     ComicWebService.prototype.getAllComics = function (callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', callback);
         return;
     };
+    // para: ids:string[] - ids of comics, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given an array of comic ids, get the associated JSON comic objects from the database
+    // return: none
     ComicWebService.prototype.getComics = function (ids, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err, res, bod) {
@@ -39,11 +45,17 @@ var ComicWebService = (function () {
         });
         return;
     };
+    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a comic id, get the associated JSON comic object from the database
+    // return: none
     ComicWebService.prototype.getAComic = function (comicId, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/' + comicId, callback);
         return;
     };
+    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a comic id, delete the associated JSON comic object from the mongo database
+    // return: none
     ComicWebService.prototype.deleteAComic = function (comicId, callback) {
         var request = require('request');
         var options = {
@@ -56,6 +68,9 @@ var ComicWebService = (function () {
         request(options, callback);
         return;
     };
+    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Create a new comic in the mongo database
+    // return: none
     ComicWebService.prototype.newComic = function (comic, callback) {
         var request = require('request');
         var options = {
@@ -117,6 +132,9 @@ var ComicWebService = (function () {
         request(options, callback);
         return;
     };
+    // para: comic:Comic - Comic Object, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a comic object update the associated object in the mongo database
+    // return: none
     ComicWebService.prototype.updateComic = function (comic, callback) {
         var request = require("request");
         var options = {

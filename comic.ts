@@ -45,7 +45,4 @@ class Comic {
 
     }
 
-    //updatePanel(panelloc:number, text:string, image_URL:string) {
-    //    this.panels[panelloc] = Panel.updatePanel(text, image_URL);
-    //}
 }export = Comic;
