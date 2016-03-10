@@ -205,7 +205,7 @@ function setUserEmail() {
 
     $.get('/user/email', function (data) {
         ID.value = data.toString();
-        userEmail.innerText = "Welcome "+data.toString()+" to our Comic Maker!";
+        userEmail.textContent = "Welcome "+data.toString()+" to our Comic Maker!";
     });
 }
 

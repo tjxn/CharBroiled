@@ -188,7 +188,7 @@ function setUserEmail() {
     var userEmail = document.getElementById("userEmail2");
     $.get('/user/email', function (data) {
         ID.value = data.toString();
-        userEmail.innerText = "Welcome " + data.toString() + " to our Comic Maker!";
+        userEmail.textContent = "Welcome " + data.toString() + " to our Comic Maker!";
     });
 }
 // para: none
