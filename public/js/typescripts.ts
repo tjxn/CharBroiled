@@ -907,10 +907,8 @@ function checkIfViewer(){
 
         if(data.toString() == "Viewer"){
             var id = (<HTMLAnchorElement>  document.getElementById("Edit-Button"));
-            id.style.visibility = "hidden";
+            id.remove();
         }
-
-
     });
 }
 

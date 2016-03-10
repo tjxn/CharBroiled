@@ -822,7 +822,7 @@ function checkIfViewer() {
     $.get('/user/type', function (data) {
         if (data.toString() == "Viewer") {
             var id = document.getElementById("Edit-Button");
-            id.style.visibility = "hidden";
+            id.remove();
         }
     });
 }
