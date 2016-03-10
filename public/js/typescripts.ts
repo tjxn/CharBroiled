@@ -65,8 +65,9 @@ function amIFavourite() {
 function initDropzone(){
     Dropzone.autoDiscover = false;
     myDrop = new Dropzone('#demoUpload', {
-        acceptedFiles: ".jpg,.JPG,.jpeg,.JPEG",
+        acceptedFiles: ".jpg,.JPG,.jpeg,.JPEG,.gif,.GIF,.png,.PNG",
         maxFiles: 1,
+        maxFilesize: 5,
         method: "post",
         url: "/image"
     })
