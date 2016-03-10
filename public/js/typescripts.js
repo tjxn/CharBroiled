@@ -40,11 +40,7 @@ function amIFavourite() {
     $.get('/user/fav/ids', function (data) {
         var favs;
         favs = JSON.parse(data);
-        console.log('favs');
-        console.log(data);
         for (var i = 0; i < favs.length; i++) {
-            console.log(favs[i]);
-            console.log(comicID.value);
             if (favs[i] == comicID.value) {
                 Icon.className = "glyphicon glyphicon-star yellow";
                 Icon.style.color = "yellow";
@@ -184,6 +180,16 @@ function renderPictures(elId, urls) {
 // sends GET request to get user's email. Sets value of userEmail element.
 // return: none
 function setUserEmail() {
+    var ID = document.getElementById("userEmail");
+    var userEmail = document.getElementById("userEmail2");
+    $.get('/user/email', function (data) {
+        ID.value = data.toString();
+    });
+}
+// para: none
+// sends GET request to get user's email. Sets value of userEmail element.
+// return: none
+function setUserEmails() {
     var ID = document.getElementById("userEmail");
     var userEmail = document.getElementById("userEmail2");
     $.get('/user/email', function (data) {
