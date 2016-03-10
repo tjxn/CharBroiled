@@ -1310,7 +1310,9 @@ function addComicToUser() {
         async: true,
         timeout: 4000,
         dataType: 'json',
-        success: function (data) {
+        /*
+        success:
+            function (data) {
             var note = $.notify({
                 // options
                 icon: 'glyphicon glyphicon-ok',
@@ -1358,6 +1360,7 @@ function addComicToUser() {
                 '</div>'
             });
         },
+        */
         error: function (xhr, ajaxOptions, thrownError) {
         }
     });
