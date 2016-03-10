@@ -4,6 +4,12 @@
 /// <reference path="./express/express.d.ts" />
 /// <reference path="./app.ts" />
 
+/*
+ *             Libraries Used Throughout ImageWebService Class
+ * cloudinary - http://cloudinary.com/documentation/node_integration
+ *
+ * */
+
 import express = require("express");
 
 class ImageWebService {

@@ -18,9 +18,6 @@ class Comic {
      Contributor_4:string;
      Contributor_5:string;
 
-    //NOTE: Just made it a list of strings, since we don't need to link the contributor name in any way right now,
-    // and I assume that the list of contributors is stored in the database?
-    //private _contributors: string[];
     constructor(title:string, publicView:boolean, panels:Panel[], contributors:string[]) {
         this.title = title;
         this.publicView = publicView;
@@ -34,6 +31,9 @@ class Comic {
 
     }
 
+    // param: panel:Panel
+    // Add a panel to this comic object
+    // return: none
     addPanel(panel:Panel) {
         var i = this.panels.length;
         if (i < this.panelLimit) {

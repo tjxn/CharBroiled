@@ -5,6 +5,13 @@
 /**
  * Created by Trevor Jackson on 16-Feb-2016.
  */
+/*
+ *             Libraries Used Throughout typescripts.ts
+ * dropzonejs - http://www.dropzonejs.com/
+ * bootstrap-notify - http://bootstrap-notify.remabledesigns.com/
+ * jquery - https://jquery.com/
+ *
+ * */
 var myDrop;
 var comicJSONObj;
 var JSONObj;

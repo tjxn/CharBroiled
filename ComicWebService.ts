@@ -8,6 +8,12 @@
 /// <reference path="./typings/main/ambient/request/request.d.ts" />
 ///  <reference path="./typings/main/ambient/form-data/form-data.d.ts" />
 
+/*
+ *             Libraries Used Throughout ComicWebService Class
+ * request - https://github.com/request/request
+ *
+ * */
+
 import Comic = require ("./comic");
 
 class ComicWebService {

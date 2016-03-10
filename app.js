@@ -3,10 +3,19 @@
 /// <reference path="./comic.ts" />
 /// <reference path="./ComicWebService.ts" />
 /// <reference path="./node/node.d.ts" />
+/*
+ *             Libraries Used Throughout Application Class
+ * path - https://www.npmjs.com/package/path
+ * serve-favicon - https://github.com/expressjs/serve-favicon
+ * express-stormpath - https://docs.stormpath.com/nodejs/express/latest/
+ * morgan - https://github.com/expressjs/morgan
+ * cookie-parser - https://www.npmjs.com/package/cookie-parser
+ * body-parser - https://www.npmjs.com/package/body-parser
+ *
+ * */
 var Application = (function () {
     function Application() {
         var express = require("express");
-        var Tools = require('./scripts');
         var Panel = require('./panel');
         var ComicWebService = require('./ComicWebService');
         var Comic = require('./comic');

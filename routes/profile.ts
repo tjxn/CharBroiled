@@ -2,6 +2,15 @@
  * Created by Trevor Jackson on 16-Feb-2016.
  */
 /// <reference path="../express/express.d.ts" />
+
+/*
+ *             Libraries Used Throughout Profile Class
+ * xtend - https://www.npmjs.com/package/xtend
+ * forms - https://www.npmjs.com/package/forms
+ * express-stormpath - https://docs.stormpath.com/nodejs/express/latest/
+ *
+ * */
+
 import express = require("express");
 import Request = Express.Request;
 import Response = Express.Response;

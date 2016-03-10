@@ -5,6 +5,12 @@
 /// <reference path="../app.ts" />
 /// <reference path="../typings/main/ambient/multer/multer.d.ts" />
 /// <reference path='../node/node.d.ts'/>
+/*
+*             Libraries Used Throughout Router Class
+* multer - https://github.com/expressjs/multer
+* cloudinary - http://cloudinary.com/documentation/node_integration
+*
+* */
 var express = require("express");
 var path = require("path");
 var ComicWebService = require("../ComicWebService");

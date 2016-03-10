@@ -4,9 +4,6 @@
  */
 /// <reference path="./panel" />
 var Comic = (function () {
-    //NOTE: Just made it a list of strings, since we don't need to link the contributor name in any way right now,
-    // and I assume that the list of contributors is stored in the database?
-    //private _contributors: string[];
     function Comic(title, publicView, panels, contributors) {
         this.panelLimit = 9;
         this.title = title;
@@ -19,6 +16,9 @@ var Comic = (function () {
         this.Contributor_5 = contributors[4];
         this.dbID = "";
     }
+    // param: panel:Panel
+    // Add a panel to this comic object
+    // return: none
     Comic.prototype.addPanel = function (panel) {
         var i = this.panels.length;
         if (i < this.panelLimit) {
