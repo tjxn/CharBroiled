@@ -5,7 +5,7 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    baseUrl: '/base',
 
 
     // frameworks to use
@@ -16,8 +16,9 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test-main.js',
+        {pattern: 'node_modules/request/request.js', included: false},
       {pattern: 'app.ts', included: false},
-      {pattern: 'index.ts', include: false},
+      //{pattern: 'routes/index.ts', include: false},
       {pattern: 'test/restfulspec.js', included: false},
       {pattern: 'test/comicthruindexspec.js', include: false}
     ],
