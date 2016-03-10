@@ -280,7 +280,7 @@ function getURLParameterByName(name) {
 // para: none
 // PUT request to save the comicJSONObj to the server
 // return: none
-function saveComic() {
+function saveComic(notify) {
     var comicID = document.getElementById("comicID");
     var newTitle = document.getElementById("comicTitle");
     comicJSONObj.Title = newTitle.value;
@@ -301,52 +301,54 @@ function saveComic() {
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-ok',
-                title: '',
-                message: data.Status,
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "success",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            if (notify) {
+                var note = $.notify({
+                    // options
+                    icon: 'glyphicon glyphicon-ok',
+                    title: '',
+                    message: data.Status,
+                    url: '',
+                    target: '_blank'
+                }, {
+                    // settings
+                    element: 'body',
+                    position: null,
+                    type: "success",
+                    allow_dismiss: true,
+                    newest_on_top: false,
+                    showProgressbar: false,
+                    placement: {
+                        from: "top",
+                        align: "right"
+                    },
+                    offset: 20,
+                    spacing: 10,
+                    z_index: 1031,
+                    delay: 5000,
+                    timer: 1000,
+                    url_target: '_blank',
+                    mouse_over: null,
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    onShow: null,
+                    onShown: null,
+                    onClose: null,
+                    onClosed: null,
+                    icon_type: 'class',
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                        '<span data-notify="icon"></span> ' +
+                        '<span data-notify="title">{1}</span> ' +
+                        '<span data-notify="message">{2}</span>' +
+                        '<div class="progress" data-notify="progressbar">' +
+                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                        '</div>' +
+                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                        '</div>'
+                });
+            }
         },
         error: function (xhr, status, thrownError) {
             var note = $.notify({
@@ -649,7 +651,7 @@ function addPanel() {
         var desc = document.getElementById("desc_" + numStr).innerHTML;
         comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
         comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
-        saveComic();
+        saveComic(true);
     }
 }
 // para: none
@@ -690,7 +692,7 @@ function removePanel() {
         removeElement(document.getElementById(id));
         comicJSONObj['Panels']["Panel_" + i].Image_URL = "";
         comicJSONObj['Panels']["Panel_" + i].Text = "";
-        saveComic();
+        saveComic(true);
     }
     else {
         var note = $.notify({
@@ -766,7 +768,7 @@ function updatePanel(elId) {
     document.getElementById("desc_" + numStr).innerHTML = desc;
     comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
     comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
-    saveComic();
+    saveComic(true);
 }
 // para: none
 // Uses the id parameter in the url to redirect the user to the edit page of the comic
@@ -1136,7 +1138,7 @@ function addUserToComic() {
             var thiscontrib = comicJSONObj["Contributors"][cname];
             if (thiscontrib != currcontrib && thiscontrib == "") {
                 comicJSONObj["Contributors"][cname] = currcontrib;
-                saveComic();
+                saveComic(false);
                 break;
             }
         }
