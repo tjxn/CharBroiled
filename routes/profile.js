@@ -12,7 +12,7 @@ var Profile = (function () {
         // Declare the schema of our form:
         var profileForm = forms.create({
             givenName: forms.fields.string({ required: true }),
-            email: forms.fields.string({ required: true }),
+            surname: forms.fields.string({ required: true }),
             password: forms.fields.string({ required: true })
         });
         // A render function that will render our form and
@@ -22,7 +22,7 @@ var Profile = (function () {
             res.render('profile', extend({
                 title: 'My Profile',
                 givenName: req.user.givenName,
-                email: req.user.email,
+                surname: req.user.surname,
                 password: req.user.password
             }, locals || {}));
         }
@@ -41,8 +41,7 @@ var Profile = (function () {
                         // about and then cal save() on the user object:
                         //req.user.userName = form.data.userName;
                         req.user.givenName = form.data.givenName;
-                        req.user.email = form.data.email;
-                        req.user.password = form.data.password;
+                        req.user.surname = form.data.surname;
                         //req.user.customData.comic1 = "";
                         //req.user.customData.streetAddress = form.data.streetAddress;
                         //req.user.customData.save();
