@@ -936,14 +936,20 @@ function saveFavourites() {
 // para: id of favourites container
 // renders thumbnails inside the container corresponding to the given id
 // return: none
-function renderFavourites(id) {
-    renderThumbnails(id, "fav");
+function renderViewFavourites(id) {
+    renderThumbnails(id, "fav", "view");
+}
+// para: id of favourites container
+// renders thumbnails inside the container corresponding to the given id
+// return: none
+function renderEditFavourites(id) {
+    renderThumbnails(id, "fav", "edit");
 }
 // para: id of contributed container
 // renders thumbnails inside the container corresponding to the given id
 // return: none
 function renderContributed(id) {
-    renderThumbnails(id, "contributed");
+    renderThumbnails(id, "contributed", "edit");
 }
 function deleteComic() {
     var id = document.getElementById("comicID").value;
@@ -1007,7 +1013,7 @@ function deleteComic() {
 // para: id of container to put elements in, string of thumbnail type (type == 'cont' || 'fav')
 // creates contributed thumbnails on the account page in the given container corresponding to the given id
 // return: none
-function renderThumbnails(id, type) {
+function renderThumbnails(id, type, page) {
     var container = document.getElementById(id);
     // returns list of comic JSON objects
     $.get('/user/' + type, function (data) {
@@ -1050,8 +1056,13 @@ function renderThumbnails(id, type) {
                 var p2 = document.createElement("p");
                 var a2 = document.createElement("a");
                 a2.className = "btn btn-primary";
-                a2.href = "/edit?id=" + JSONObj[i]._id;
-                a2.innerHTML = "Edit";
+                a2.href = "/" + page + "?id=" + JSONObj[i]._id;
+                if (page == "edit") {
+                    a2.innerHTML = "Edit";
+                }
+                else {
+                    a2.innerHTML = "View";
+                }
                 p2.appendChild(a2);
                 caption.appendChild(p2);
                 thumbnail.appendChild(caption);

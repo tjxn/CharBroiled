@@ -19,7 +19,6 @@ var ComicWebService = (function () {
     ComicWebService.prototype.getComics = function (ids, callback) {
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err, res, bod) {
-            //var ans: string[] = [];
             var ans = {};
             var temp = JSON.parse(bod);
             //console.log(temp);

@@ -1046,15 +1046,22 @@ function saveFavourites() {
 // para: id of favourites container
 // renders thumbnails inside the container corresponding to the given id
 // return: none
-function renderFavourites(id: string): void {
-    renderThumbnails(id, "fav");
+function renderViewFavourites(id: string): void {
+    renderThumbnails(id, "fav", "view");
+}
+
+// para: id of favourites container
+// renders thumbnails inside the container corresponding to the given id
+// return: none
+function renderEditFavourites(id: string): void {
+    renderThumbnails(id, "fav", "edit");
 }
 
 // para: id of contributed container
 // renders thumbnails inside the container corresponding to the given id
 // return: none
 function renderContributed(id: string): void {
-    renderThumbnails(id, "contributed");
+    renderThumbnails(id, "contributed", "edit");
 }
 
 function deleteComic(){
@@ -1124,7 +1131,7 @@ function deleteComic(){
 // para: id of container to put elements in, string of thumbnail type (type == 'cont' || 'fav')
 // creates contributed thumbnails on the account page in the given container corresponding to the given id
 // return: none
-function renderThumbnails(id: string, type: string): void {
+function renderThumbnails(id: string, type: string, page: string): void {
     var container = (<HTMLInputElement>  document.getElementById(id));
 
     // returns list of comic JSON objects
@@ -1177,8 +1184,12 @@ function renderThumbnails(id: string, type: string): void {
                 var p2 = document.createElement("p");
                 var a2 = document.createElement("a");
                 a2.className = "btn btn-primary";
-                a2.href = "/edit?id=" + JSONObj[i]._id;
-                a2.innerHTML = "Edit";
+                a2.href = "/"+page+"?id=" + JSONObj[i]._id;
+                if(page == "edit") {
+                    a2.innerHTML = "Edit";
+                } else {
+                    a2.innerHTML = "View";
+                }
                 p2.appendChild(a2);
                 caption.appendChild(p2);
 

@@ -24,10 +24,8 @@ class ComicWebService {
     }
 
     getComics(ids: string[], callback:(error:string, response:string, body:string) => void) {
-
         var request = require('request');
         request.get('http://glacial-retreat-45891.herokuapp.com/comic/', function (err:string, res:string, bod:string) {
-            //var ans: string[] = [];
             var ans = {};
             var temp = JSON.parse(bod);
             //console.log(temp);
