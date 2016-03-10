@@ -814,6 +814,24 @@ function removeHTMLCollection(doc) {
         }
     }
 }
+// Used on the View Page to hide the Edit button from a Viewer
+function checkIfViewer() {
+    $.get('/user/type', function (data) {
+        if (data.toString() == "Viewer") {
+            var id = document.getElementById("Edit-Button");
+            id.style.visibility = "hidden";
+        }
+    });
+}
+// Used on the Edit Page to redirect a Viewer to the View Page
+function checkIfContributor() {
+    $.get('/user/type', function (data) {
+        if (data.toString() == "Viewer") {
+            var id = document.getElementById("comicID").value;
+            window.location.replace("/view?id=" + id);
+        }
+    });
+}
 function saveFavourites() {
     var id = document.getElementById("comicID").value;
     // return: 1 = Icon is yellow (favourite); 0 = Icon is white (not a favourite)
