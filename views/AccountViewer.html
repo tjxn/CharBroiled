@@ -28,6 +28,7 @@
 
         $(window).load(function() {
             // Animate loader off screen
+            setUserEmail();
             renderViewFavourites("favContainer");
             setTimeout( function(){
                 $(".se-pre-con").fadeOut("slow")
@@ -74,9 +75,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="jumbotron well">
-                <h2>
-                    Welcome to our Comic Maker!
-                </h2>
+                <h2 id="userEmail2">Welcome</h2>
                 <p>
                     We hope you have a lovely time expressing yourself while building fun, innovative and imaginative comics! If you want to edit your account information, you can also do that
                     <a class="btn btn-primary btn-large" href="/profile">Edit my Profile</a>.

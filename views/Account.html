@@ -26,6 +26,7 @@
 
         $(window).load(function() {
             // Animate loader off screen
+            setUserEmail();
             renderEditFavourites("favContainer");
             renderContributed("contContainer");
             setTimeout( function(){
@@ -79,9 +80,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="jumbotron well">
-                <h2>
-                    Welcome to our Comic Maker!
-                </h2>
+                <h2 id="userEmail2">Welcome</h2>
                 <p>
                     We hope you have a lovely time expressing yourself while building fun, innovative and imaginative
                     comics! Get started now,

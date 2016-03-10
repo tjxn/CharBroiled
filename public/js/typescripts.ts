@@ -209,9 +209,11 @@ function image() {
 // return: none
 function setUserEmail() {
     var ID = (<HTMLInputElement> document.getElementById("userEmail"));
+    var userEmail = (<HTMLInputElement> document.getElementById("userEmail2"));
 
     $.get('/user/email', function (data) {
         ID.value = data.toString();
+        userEmail.innerText = "Welcome "+data.toString()+" to our Comic Maker!";
     });
 }
 
