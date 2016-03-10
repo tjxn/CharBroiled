@@ -1195,11 +1195,18 @@ function renderThumbnails(id: string, type: string, page: string): void {
 // Adds names of contributors to the drop-down bar for edit and view page
 // return: none
 function renderContributors(json: JSON){
+    var container = (<HTMLInputElement> document.getElementById("contributors"));
     for (var i = 1; i<= 5; i++){
-        var cname = "Contributor_" + i;
-        var htmlcontrib = "C" + i;
-        var contribelem = (<HTMLInputElement> document.getElementById(htmlcontrib));
-        contribelem.innerHTML = json["Contributors"][cname];
+        var contributor = json["Contributors"]["Contributor_" + i];
+        if(contributor != "") { // don't render an empty li
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.id = "C" + i;
+            a.innerHTML = contributor;
+            a.href = "#";
+            li.appendChild(a);
+            container.appendChild(li);
+        }
     }
 }
 
@@ -1261,7 +1268,7 @@ function addComicToUser() {
 
     $.ajax({
         type: "PUT",
-        url: "/user/comic",
+        url: "/user/contributed",
         contentType: "application/json; charset=utf-8",
         data: comicPut,
         async: true,

@@ -88,38 +88,25 @@ var Router = (function () {
         });
         // returns first comic in the comic array
         router.get('/comicID', function (req, res, next) {
-            var comics = req.user.customData.comic;
+            var comics = JSON.parse(req.user.customData.contributed)[0];
             res.send(comics[0]);
         });
         // --------------------------------------------------
         //                 RESTFUL API
         // --------------------------------------------------
         // Retrieve IDs of comic(s) the user has contributed to
+        /*
         router.get('/user/comic', function (req, res, next) {
+
             if (req.user.customData.comic == undefined) {
                 req.user.customData.comic = Array();
             }
+
             console.log(req.user.customData.comic);
             res.send(req.user.customData.comic);
         });
-        router.put('/user/comic', function (req, res, next) {
-            var comics = req.user.customData.comic;
-            var id = req.body["comicID"];
-            if (comics == undefined) {
-                comics = Array();
-            }
-            // Check if the comic is already in the array of comics
-            for (var i = 0; i < comics.length; i++) {
-                if (comics[i] == id) {
-                    res.send(JSON.stringify({ Status: "Success - ComicID already in Stormpath" }));
-                    return;
-                }
-            }
-            comics.push(id);
-            req.user.customData.comic = comics;
-            req.user.save();
-            res.send(JSON.stringify({ Status: "Success - ComicID added to Stormpath" }));
-        });
+        */
+        //  get and put for '/user/contributed' is defined further down in code
         // Retrieve JSON representation of a comic
         router.get('/comic/:id', function (req, res, next) {
             var id = req.params.id;
@@ -188,6 +175,25 @@ var Router = (function () {
             api.getComics(req.user.customData.contributed, function (request, response, body) {
                 res.send(body);
             });
+        });
+        // save contributed array
+        router.put('/user/contributed', function (req, res, next) {
+            var comics = req.user.customData.contributed;
+            var id = req.body["comicID"];
+            if (comics == undefined) {
+                comics = Array();
+            }
+            // Check if the comic is already in the array of comics
+            for (var i = 0; i < comics.length; i++) {
+                if (comics[i] == id) {
+                    res.send(JSON.stringify({ Status: "Success - ComicID already in Stormpath" }));
+                    return;
+                }
+            }
+            comics.push(id);
+            req.user.customData.contributed = comics;
+            req.user.save();
+            res.send(JSON.stringify({ Status: "Success - ComicID added to Stormpath" }));
         });
         // Remove a string from an array of strings
         // Used for removing a comic ID from a list of comic IDs

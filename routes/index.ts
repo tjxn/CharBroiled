@@ -119,7 +119,7 @@ class Router {
 
 // returns first comic in the comic array
         router.get('/comicID', function (req, res, next) {
-            var comics:Array<string> = req.user.customData.comic;
+            var comics:Array<string> = JSON.parse(req.user.customData.contributed)[0];
             res.send(comics[0]);
         });
 
@@ -128,6 +128,7 @@ class Router {
 // --------------------------------------------------
 
 // Retrieve IDs of comic(s) the user has contributed to
+        /*
         router.get('/user/comic', function (req, res, next) {
 
             if (req.user.customData.comic == undefined) {
@@ -137,29 +138,11 @@ class Router {
             console.log(req.user.customData.comic);
             res.send(req.user.customData.comic);
         });
+        */
 
-        router.put('/user/comic', function (req, res, next) {
-            var comics:Array<string> = req.user.customData.comic;
-            var id:string = req.body["comicID"];
+        //  get and put for '/user/contributed' is defined further down in code
 
-            if (comics == undefined) {
-                comics = Array();
-            }
 
-            // Check if the comic is already in the array of comics
-            for (var i = 0; i < comics.length; i++) {
-                if (comics[i] == id) {
-                    res.send(JSON.stringify({Status: "Success - ComicID already in Stormpath"}));
-                    return
-                }
-            }
-
-            comics.push(id);
-            req.user.customData.comic = comics;
-            req.user.save();
-            res.send(JSON.stringify({Status: "Success - ComicID added to Stormpath"}));
-
-        });
 
 // Retrieve JSON representation of a comic
         router.get('/comic/:id', function (req, res, next) {
@@ -245,6 +228,29 @@ class Router {
             api.getComics(req.user.customData.contributed, function (request, response, body) {
                 res.send(body);
             });
+        });
+
+        // save contributed array
+        router.put('/user/contributed', function (req, res, next) {
+            var comics:Array<string> = req.user.customData.contributed;
+            var id:string = req.body["comicID"];
+
+            if (comics == undefined) {
+                comics = Array();
+            }
+
+            // Check if the comic is already in the array of comics
+            for (var i = 0; i < comics.length; i++) {
+                if (comics[i] == id) {
+                    res.send(JSON.stringify({Status: "Success - ComicID already in Stormpath"}));
+                    return
+                }
+            }
+
+            comics.push(id);
+            req.user.customData.contributed = comics;
+            req.user.save();
+            res.send(JSON.stringify({Status: "Success - ComicID added to Stormpath"}));
         });
 
 // Remove a string from an array of strings
