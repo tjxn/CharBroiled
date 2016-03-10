@@ -180,12 +180,6 @@ function renderPictures(elId, urls) {
         el.appendChild(img);
     }
 }
-function image() {
-    var el = document.getElementById("ImageCall");
-    $.post('/image', { Title: "Hello World" }, function (data) {
-        el.innerText = data.toString();
-    });
-}
 // para: none
 // sends GET request to get user's email. Sets value of userEmail element.
 // return: none
