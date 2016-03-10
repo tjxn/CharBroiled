@@ -9,8 +9,6 @@
 
 var myDrop;
 var comicJSONObj;
-var favsJSONObj;
-var contJSONObj;
 var JSONObj;
 
 
@@ -36,7 +34,7 @@ function changeFavIcon():number{
         Icon.className = "glyphicon glyphicon-star yellow";
         Icon.style.color = "yellow";
         return 1;
-    }else{
+    } else {
         Icon.className = "glyphicon glyphicon-star white";
         Icon.style.color = 'white';
         return 0;
@@ -61,9 +59,7 @@ function amIFavourite() {
             }
         }
     });
-
 }
-
 
 // setup dropzone
 function initDropzone(){
@@ -124,7 +120,7 @@ function initDropzone(){
                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
                 '</div>'
             });
-        }else{
+        } else {
             // Do something with url
             var url = data.toString();
 
@@ -184,7 +180,6 @@ function initDropzone(){
     });
 }
 
-
 // para: elementID of pictureContainer, array of urls for pictures' source
 // creates img element for each url and add to given pictureContainer.
 // return: none
@@ -223,7 +218,6 @@ function setUserEmail() {
 // sends GET request to get user's type. Sets value of userType element.
 // return: none
 function setUserType() {
-
     $.get('/user/type', function (data) {
         console.log(data.toString());
     });
@@ -268,7 +262,6 @@ function renderEditComic(id: string) {
         //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
         //console.log(comicJSONObj.Contributors);
         renderContributors(comicJSONObj);
-
 
         //if comic is favourited by the user, needs to also be updated in savefourite
         //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
@@ -321,7 +314,6 @@ function getURLParameterByName(name: string) {
 // PUT request to save the comicJSONObj to the server
 // return: none
 function saveComic(){
-
     var comicID = (<HTMLInputElement> document.getElementById("comicID"));
     var newTitle = (<HTMLInputElement> document.getElementById("comicTitle"));
     comicJSONObj.Title = newTitle.value;
@@ -329,12 +321,9 @@ function saveComic(){
     var publicPrivate = (<HTMLInputElement> document.getElementById("publicBtn"));
     if (publicPrivate.checked == true){
         comicJSONObj.Public = true;
-    }else{
+    } else {
         comicJSONObj.Public = false;
     }
-
-
-
 
     var comic = JSON.stringify(comicJSONObj);
     $.ajax({
@@ -517,16 +506,13 @@ function newComic() {
 // return: none
 function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     var el = document.getElementById(elId);
-
     var panels = jsonPanels;
     var length = lengthJSON(panels);
     for (var i = 1; i <= length; i++) {
-
         var url = panels['Panel_'+i].Image_URL;
         var desc = panels['Panel_'+i].Text;
 
         if (url != "" || desc != "") {
-
             var panel = document.createElement("div");
             panel.className = "col-md-4";
             panel.className += " panel";
@@ -565,13 +551,11 @@ function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
                 button.setAttribute("href", "#modal-container-94539");
                 button.setAttribute("onclick", "updateModal(this)");
 
-
                 var par1 = document.createElement("p");
                 caption.appendChild(par);
                 caption.appendChild(par1);
                 par1.appendChild(button);
             }
-
             el.appendChild(panel);
         }
     }
@@ -596,7 +580,6 @@ function lengthJSON(json: JSON) {
 // extracts number from button element and updates the Modal with the appropriate info
 // return: none
 function updateModal(ele) {
-
     var button = (<HTMLInputElement>  document.getElementById(ele.id));
     var num = button.id.substring(7);  // gets panel number = button number
     var img = (<HTMLInputElement>  document.getElementById("panelImg_" + num));
@@ -673,65 +656,61 @@ function addPanel() {
             '<a href="{3}" target="{4}" data-notify="url"></a>' +
             '</div>'
         });
+    } else {
+        var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
+        var desc = "enter text here";
+        var el = document.getElementById("pictureContainer");
 
-    }
-    else {
+        var panel = document.createElement("div");
+        panel.className = "col-md-4";
+        panel.className += " panel";
+        panel.id = "panel_" + numStr;
+        //panel.style.height = "500px";
+        //panel.style.width = "500px";
 
-    var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
-    var desc = "enter text here";
-    var el = document.getElementById("pictureContainer");
+        var thumbnail = document.createElement("div");
+        thumbnail.className = "thumbnail";
+        panel.appendChild(thumbnail);
 
-    var panel = document.createElement("div");
-    panel.className = "col-md-4";
-    panel.className += " panel";
-    panel.id = "panel_" + numStr;
-    //panel.style.height = "500px";
-    //panel.style.width = "500px";
+        var img = document.createElement("img");
+        img.alt = "Bootstrap Thumbnail First";
+        img.src = url;
+        img.id = "panelImg_" + numStr;
+        img.style.height = "300px";
+        img.style.width = "300px";
+        thumbnail.appendChild(img);
 
-    var thumbnail = document.createElement("div");
-    thumbnail.className = "thumbnail";
-    panel.appendChild(thumbnail);
+        var caption = document.createElement("div");
+        caption.className = "caption";
+        thumbnail.appendChild(caption);
 
-    var img = document.createElement("img");
-    img.alt = "Bootstrap Thumbnail First";
-    img.src = url;
-    img.id = "panelImg_" + numStr;
-    img.style.height = "300px";
-    img.style.width = "300px";
-    thumbnail.appendChild(img);
+        var par = document.createElement("p");
+        par.innerHTML = desc;
+        par.id = "desc_" + numStr;
+        caption.appendChild(par);
 
-    var caption = document.createElement("div");
-    caption.className = "caption";
-    thumbnail.appendChild(caption);
+        var button = document.createElement("button");
+        button.id = "button_" + numStr;
+        button.className = "btn btn-primary";
+        button.innerHTML = "Edit Panel";
+        button.setAttribute("data-toggle", "modal");
+        button.setAttribute("role", "button");
+        button.setAttribute("href", "#modal-container-94539");
+        button.setAttribute("onclick", "updateModal(this)");
 
-    var par = document.createElement("p");
-    par.innerHTML = desc;
-    par.id = "desc_" + numStr;
-    caption.appendChild(par);
+        var par1 = document.createElement("p");
+        caption.appendChild(par);
+        caption.appendChild(par1);
+        par1.appendChild(button);
 
-    var button = document.createElement("button");
-    button.id = "button_" + numStr;
-    button.className = "btn btn-primary";
-    button.innerHTML = "Edit Panel";
-    button.setAttribute("data-toggle", "modal");
-    button.setAttribute("role", "button");
-    button.setAttribute("href", "#modal-container-94539");
-    button.setAttribute("onclick", "updateModal(this)");
+        el.appendChild(panel);
 
-
-    var par1 = document.createElement("p");
-    caption.appendChild(par);
-    caption.appendChild(par1);
-    par1.appendChild(button);
-
-    el.appendChild(panel);
-
-    // update comicJSONObj and save
-    var url = (<HTMLInputElement>  document.getElementById("panelImg_"+numStr)).src;
-    var desc = (<HTMLInputElement>  document.getElementById("desc_"+numStr)).innerHTML;
-    comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
-    comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
-    saveComic();
+        // update comicJSONObj and save
+        var url = (<HTMLInputElement>  document.getElementById("panelImg_"+numStr)).src;
+        var desc = (<HTMLInputElement>  document.getElementById("desc_"+numStr)).innerHTML;
+        comicJSONObj["Panels"]["Panel_"+numStr].Image_URL = url;
+        comicJSONObj["Panels"]["Panel_"+numStr].Text = desc;
+        saveComic();
     }
 }
 
@@ -865,7 +844,6 @@ function updatePanel(elId) {
     saveComic();
 }
 
-
 // para: none
 // Uses the id parameter in the url to redirect the user to the edit page of the comic
 // with that id
@@ -890,7 +868,6 @@ function gotoAccount(){
             window.location.replace("/account");
 }
 
-
 // para: element to be removed
 // removes given element
 // return: none
@@ -909,6 +886,9 @@ function removeNodeList(doc:NodeList): void{
     }
 }
 
+// para: HTMLCollection of items to be removed
+// loops through given collection and removes each element
+// return: none
 function removeHTMLCollection(doc:HTMLCollection): void{
     for(var i = doc.length - 1; i >= 0; i--) {
         if(doc[i] && doc[i].parentElement) {
@@ -1044,21 +1024,21 @@ function saveFavourites() {
 }
 
 // para: id of favourites container
-// renders thumbnails inside the container corresponding to the given id
+// renders thumbnails inside the container corresponding to the given id for the view page
 // return: none
 function renderViewFavourites(id: string): void {
     renderThumbnails(id, "fav", "view");
 }
 
 // para: id of favourites container
-// renders thumbnails inside the container corresponding to the given id
+// renders thumbnails inside the container corresponding to the given id for the edit page
 // return: none
 function renderEditFavourites(id: string): void {
     renderThumbnails(id, "fav", "edit");
 }
 
 // para: id of contributed container
-// renders thumbnails inside the container corresponding to the given id
+// renders thumbnails inside the container corresponding to the given id for the edit page
 // return: none
 function renderContributed(id: string): void {
     renderThumbnails(id, "contributed", "edit");
@@ -1127,8 +1107,7 @@ function deleteComic(){
     window.location.replace("/account");
 }
 
-
-// para: id of container to put elements in, string of thumbnail type (type == 'cont' || 'fav')
+// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav')
 // creates contributed thumbnails on the account page in the given container corresponding to the given id
 // return: none
 function renderThumbnails(id: string, type: string, page: string): void {
@@ -1213,7 +1192,7 @@ function renderThumbnails(id: string, type: string, page: string): void {
 }
 
 // para: comicJSON object
-// Adds names of contributors to the drop-down bar
+// Adds names of contributors to the drop-down bar for edit and view page
 // return: none
 function renderContributors(json: JSON){
     for (var i = 1; i<= 5; i++){
@@ -1223,7 +1202,6 @@ function renderContributors(json: JSON){
         contribelem.innerHTML = json["Contributors"][cname];
     }
 }
-
 
 // para: comicJSON object
 // Adds the UserID to the comic object(MongoDB)
@@ -1243,7 +1221,6 @@ function addUserToComic(){
         }
     }
 }
-
 
 function removeUnusedPhoto(){
     var cloudinary_url = (<HTMLInputElement>  document.getElementById("cloudinary_URL")).value;
@@ -1339,8 +1316,6 @@ function addComicToUser() {
             });
         },
         error: function (xhr, ajaxOptions, thrownError) {
-
         }
     });
-
 }
