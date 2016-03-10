@@ -1123,17 +1123,25 @@ function renderContributors(json) {
     }
 }
 // para: comicJSON object
-// Adds the UserID to the comic object(MongoDB)
+// Adds the UserID to the comic object(MongoDB) unless they are already a contributor
 // return: none
 function addUserToComic() {
     var currcontrib = document.getElementById("userEmail").value;
+    var contains = false;
     for (var i = 1; i <= 5; i++) {
-        var cname = "Contributor_" + i;
-        var thiscontrib = comicJSONObj["Contributors"][cname];
-        if (thiscontrib != currcontrib && thiscontrib == "") {
-            comicJSONObj["Contributors"][cname] = currcontrib;
-            saveComic();
-            break;
+        if (comicJSONObj["Contributors"]["Contributor_" + i.toString()] == currcontrib) {
+            contains = true;
+        }
+    }
+    if (!contains) {
+        for (var i = 1; i <= 5; i++) {
+            var cname = "Contributor_" + i;
+            var thiscontrib = comicJSONObj["Contributors"][cname];
+            if (thiscontrib != currcontrib && thiscontrib == "") {
+                comicJSONObj["Contributors"][cname] = currcontrib;
+                saveComic();
+                break;
+            }
         }
     }
 }
