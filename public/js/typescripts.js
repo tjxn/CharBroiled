@@ -7,8 +7,6 @@
  */
 var myDrop;
 var comicJSONObj;
-var favsJSONObj;
-var contJSONObj;
 var JSONObj;
 // Removes all files from Dropzone
 // Called when modal is closed
@@ -807,6 +805,9 @@ function removeNodeList(doc) {
         }
     }
 }
+// para: HTMLCollection of items to be removed
+// loops through given collection and removes each element
+// return: none
 function removeHTMLCollection(doc) {
     for (var i = doc.length - 1; i >= 0; i--) {
         if (doc[i] && doc[i].parentElement) {
@@ -952,19 +953,19 @@ function saveFavourites() {
     });
 }
 // para: id of favourites container
-// renders thumbnails inside the container corresponding to the given id
+// renders thumbnails inside the container corresponding to the given id for the view page
 // return: none
 function renderViewFavourites(id) {
     renderThumbnails(id, "fav", "view");
 }
 // para: id of favourites container
-// renders thumbnails inside the container corresponding to the given id
+// renders thumbnails inside the container corresponding to the given id for the edit page
 // return: none
 function renderEditFavourites(id) {
     renderThumbnails(id, "fav", "edit");
 }
 // para: id of contributed container
-// renders thumbnails inside the container corresponding to the given id
+// renders thumbnails inside the container corresponding to the given id for the edit page
 // return: none
 function renderContributed(id) {
     renderThumbnails(id, "contributed", "edit");
@@ -1028,7 +1029,7 @@ function deleteComic() {
     });
     window.location.replace("/account");
 }
-// para: id of container to put elements in, string of thumbnail type (type == 'cont' || 'fav')
+// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav')
 // creates contributed thumbnails on the account page in the given container corresponding to the given id
 // return: none
 function renderThumbnails(id, type, page) {
@@ -1102,7 +1103,7 @@ function renderThumbnails(id, type, page) {
     });
 }
 // para: comicJSON object
-// Adds names of contributors to the drop-down bar
+// Adds names of contributors to the drop-down bar for edit and view page
 // return: none
 function renderContributors(json) {
     for (var i = 1; i <= 5; i++) {
