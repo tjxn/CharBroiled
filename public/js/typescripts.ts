@@ -537,7 +537,7 @@ function newComic() {
 }
 
 // para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
-// TODO
+// creates panels and adds them to the element corresponding to the given id
 // return: none
 function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     var el = document.getElementById(elId);
@@ -865,7 +865,7 @@ function countPanels() {
 }
 
 // para: none
-// TODO
+// updates/changes the panel url and text when the modal applys changes
 // return: none
 function updatePanel(elId) {
 

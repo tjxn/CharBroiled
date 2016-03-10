@@ -494,7 +494,7 @@ function newComic() {
     });
 }
 // para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
-// TODO
+// creates panels and adds them to the element corresponding to the given id
 // return: none
 function renderPanels(elId, jsonPanels, edit) {
     var el = document.getElementById(elId);
@@ -789,7 +789,7 @@ function countPanels() {
     return count;
 }
 // para: none
-// TODO
+// updates/changes the panel url and text when the modal applys changes
 // return: none
 function updatePanel(elId) {
     var url = document.getElementById("modalURL").value;
