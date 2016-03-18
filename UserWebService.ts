@@ -23,7 +23,6 @@ class UserWebService {
     // return: none
     getAllUsers(callback:(error:string, response:string, body:string) => void) {
         var request = require('request');
-        //request.get('http://charbroiled-user-api.herokuapp.com/user/', callback);
         request.get('http://charbroiled-user-api.herokuapp.com/user/', callback);
         return;
     }
