@@ -28,7 +28,6 @@ class Comic {
         this.Contributor_4 = contributors[3];
         this.Contributor_5 = contributors[4];
         this.dbID = "";
-
     }
 
     // param: panel:Panel

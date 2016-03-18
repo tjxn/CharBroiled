@@ -17,6 +17,7 @@
 
 
 
+import User = require("./user");
 class Application {
 
     constructor() {
@@ -181,10 +182,13 @@ class Application {
 //    app.listen(process.env.PORT || 3000);
 //});
 
-
+        var testUser = new User("stormpathID", ["Trevor", "Jeff"], ["Leanne"], "Viewer", "test@gmail.com");
+        testUser.setUserID();
         setTimeout(function () {
             console.log('Stormpath Ready');
-            var server = app.listen(process.env.PORT || 3000);
+            console.log(testUser.UserID);
+
+            var server = app.listen(process.env.PORT || 4000);
         }, 7000);
         module.exports = app;
     }
