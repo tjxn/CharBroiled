@@ -38,15 +38,32 @@ describe("Testing default", function() {
             });
         });
     });
-    describe("bad POST /login", function() {
-        request( {method: 'POST',
-            url: base_url + "/login?next=%2F",
-            json: {
-                "username": "bad@mbad.com",
-                "password": "doublebad"}
-        }, function(response){
-            expect(response.statusCode).toBe(404);
-            done();
+});
+describe("testing /login", function() {
+    describe("bad login attempt", function() {
+       it("returns status code 400", function() {
+    request( {method: 'POST',
+     url: base_url + "/login",
+     json: {
+     "username": "bad@mbad.com",
+     "password": "doublebad"}
+     }, function(response) {
+        expect(response.statusCode).toBe(400);
+        done();
+    });
+    });
+    });
+    describe("good login attempt", function() {
+        it("returns status code 200", function() {
+            request( {method: 'POST',
+                url: base_url + "/login",
+                json: {
+                    "username": "charbroiledtestcontrib@mailinator.com",
+                    "password": "charbroiledtestcontrib"}
+            }, function(response) {
+                expect(response.statusCode).toBe(200);
+                done();
+            });
         });
     });
 });
