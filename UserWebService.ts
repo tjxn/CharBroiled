@@ -19,7 +19,7 @@ class UserWebService {
     constructor() {};
 
     // para: callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
-    // retrieve every single comic in the mongo database
+    // retrieve every single user in the mongo user database
     // return: none
     getAllUsers(callback:(error:string, response:string, body:string) => void) {
         var request = require('request');
@@ -27,8 +27,8 @@ class UserWebService {
         return;
     }
 
-    // para: ids:string[] - ids of comics, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
-    // Given an array of user ids, get the associated JSON user objects from the database
+    // para: ids:string[] - ids of users, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given an array of user ids, get the associated JSON user objects from the user database
     // return: none
     getUsers(ids: string[], callback:(error:string, response:string, body:string) => void) {
         var request = require('request');
@@ -55,8 +55,8 @@ class UserWebService {
     }
 
 
-    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
-    // Given a comic id, get the associated JSON comic object from the database
+    // para: ids:string - id of user, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a user id, get the associated JSON user object from the user database
     // return: none
     getAUser(userId:string, callback:(error:string, response:string, body:string) => void) {
 
@@ -66,8 +66,8 @@ class UserWebService {
     }
 
 
-    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
-    // Given a comic id, delete the associated JSON comic object from the mongo database
+    // para: ids:string - id of user, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a user id, delete the associated JSON user object from the user mongo database
     // return: none
     deleteAUser(userId:string, callback:(error:string, response:string, body:string) => void) {
 
@@ -84,12 +84,11 @@ class UserWebService {
     }
 
 
-    // para: ids:string - id of comic, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
-    // Create a new comic in the mongo database
+    // para: ids:string - id of user, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Create a new user in the user mongo database
     // return: none
     newUser(user:User, callback:(error:string, response:string, body:string) => void) {
-        console.log("User");
-        console.log(user.StormpathID);
+
         var request = require('request');
 
         var options = {
@@ -112,8 +111,8 @@ class UserWebService {
         return;
     }
 
-    // para: comic:Comic - Comic Object, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
-    // Given a comic object update the associated object in the mongo database
+    // para: user:User - User Object, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a user object update the associated user object in the mongo database
     // return: none
     updateUser(user:User, callback:(error:string, response:string, body:string) => void) {
         var request = require("request");
