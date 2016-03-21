@@ -15,7 +15,6 @@ import User = require ("./user");
 
 class UserWebService {
 
-
     constructor() {};
 
     // para: callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
