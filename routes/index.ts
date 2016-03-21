@@ -55,6 +55,12 @@ class Router {
             res.redirect('/account');
         });
 
+        /* GET search page. */
+        router.get('/search', function (req, res, next) {
+            res.sendFile(path.join(__dirname, '../views', 'search.html'));
+        });
+
+
         /* GET account page. */
         router.get('/account', function (req, res, next) {
 
