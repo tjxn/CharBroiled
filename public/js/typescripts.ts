@@ -577,6 +577,7 @@ function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
             caption.appendChild(par);
 
             if (edit) {
+                // create "Edit Panel" button
                 var button = document.createElement("button");
                 button.id = "button_" + (i).toString();
                 button.className = "btn btn-primary";
@@ -586,10 +587,20 @@ function renderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
                 button.setAttribute("href", "#modal-container-94539");
                 button.setAttribute("onclick", "updateModal(this)");
 
+                // create "Delete Panel" button
+                var button2 = document.createElement("button");
+                button2.id = "buttonRem_" + (i).toString();
+                button2.className = "btn btn-primary";
+                button2.innerHTML = "Delete Panel";
+                button2.setAttribute("role", "button");
+                button2.setAttribute("onclick", "removePanel(this)");
+
+                // buttons are held within a "p" element
                 var par1 = document.createElement("p");
                 caption.appendChild(par);
                 caption.appendChild(par1);
                 par1.appendChild(button);
+                par1.appendChild(button2);
             }
             el.appendChild(panel);
         }
@@ -724,6 +735,7 @@ function addPanel() {
         par.id = "desc_" + numStr;
         caption.appendChild(par);
 
+        // create " Edit Panel" button
         var button = document.createElement("button");
         button.id = "button_" + numStr;
         button.className = "btn btn-primary";
@@ -733,10 +745,20 @@ function addPanel() {
         button.setAttribute("href", "#modal-container-94539");
         button.setAttribute("onclick", "updateModal(this)");
 
+        // create "Delete Panel" button
+        var button2 = document.createElement("button");
+        button2.id = "buttonRem_" + numStr
+        button2.className = "btn btn-primary";
+        button2.innerHTML = "Delete Panel";
+        button2.setAttribute("role", "button");
+        button2.setAttribute("onclick", "removePanel(this)");
+
+        // buttons are held within a "p" element
         var par1 = document.createElement("p");
         caption.appendChild(par);
         caption.appendChild(par1);
         par1.appendChild(button);
+        par1.appendChild(button2);
 
         el.appendChild(panel);
 
@@ -789,18 +811,33 @@ function cleanUpCloudinary(){
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
 // return: none
 function removePanel(ele: Element) {
-    var i=Number(ele.id.substring(6));
+    var i=Number(ele.id.substring(10)); // id is of form: "buttonRem_#"
+    var count = countPanels();
     if (i > 0) {
         var id = "panel_"+i;
         removeElement((<HTMLInputElement> document.getElementById(id)));
 
-        for(var j=i; j<9; j++) {  // shift all panels down one
+
+        for(var j=i; j<count; j++) { // 9 is max number of panels
+            //shift all panel elements on the page (change their identifying number)
+            document.getElementById("panel_"+(j+1)).id = "panel_"+(j);
+            document.getElementById("panelImg_"+(j+1)).id = "panelImg_"+(j);
+            document.getElementById("desc_"+(j+1)).id = "desc_"+(j);
+            document.getElementById("button_"+(j+1)).id = "button_"+(j);
+            document.getElementById("buttonRem_"+(j+1)).id = "buttonRem_"+(j);
+
+            // shift all panels down one slot in the comicJSONObj
             comicJSONObj['Panels']["Panel_"+j].Image_URL = comicJSONObj['Panels']["Panel_"+(j+1)].Image_URL;
             comicJSONObj['Panels']["Panel_"+j].Text = comicJSONObj['Panels']["Panel_"+(j+1)].Text;
+
+            // clear last panel
+            if(j == (count-1)) {
+                comicJSONObj['Panels']["Panel_"+(j+1)].Image_URL = "";
+                comicJSONObj['Panels']["Panel_"+(j+1)].Text = "";
+            }
         }
 
-        comicJSONObj['Panels']["Panel_"+i].Image_URL = "";
-        comicJSONObj['Panels']["Panel_"+i].Text = "";
+        console.log(comicJSONObj);
 
         saveComic(true);
     }else{
