@@ -811,12 +811,12 @@ function cleanUpCloudinary(){
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
 // return: none
 function removePanel(ele: Element) {
-    var i=Number(ele.id.substring(10)); // id is of form: "buttonRem_#"
+    var i = Number(ele.id.substring(10)); // id is of form: "buttonRem_#"
     var count = countPanels();
-    if (i > 0) {
+
+    if (i > 0) { // just being safe
         var id = "panel_"+i;
         removeElement((<HTMLInputElement> document.getElementById(id)));
-
 
         for(var j=i; j<count; j++) { // 9 is max number of panels
             //shift all panel elements on the page (change their identifying number)
@@ -836,8 +836,6 @@ function removePanel(ele: Element) {
                 comicJSONObj['Panels']["Panel_"+(j+1)].Text = "";
             }
         }
-
-        console.log(comicJSONObj);
 
         saveComic(true);
     }else{

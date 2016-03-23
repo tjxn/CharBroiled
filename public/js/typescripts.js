@@ -756,7 +756,6 @@ function removePanel(ele) {
                 comicJSONObj['Panels']["Panel_" + (j + 1)].Text = "";
             }
         }
-        console.log(comicJSONObj);
         saveComic(true);
     }
     else {
