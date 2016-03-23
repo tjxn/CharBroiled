@@ -788,13 +788,20 @@ function cleanUpCloudinary(){
 // para: none
 // removes the HTML element of the last panel, updates comicJSONObj accordingly, saves Comic
 // return: none
-function removePanel() {
-    var i=countPanels();
+function removePanel(ele: Element) {
+    var i=Number(ele.id.substring(6));
     if (i > 0) {
         var id = "panel_"+i;
         removeElement((<HTMLInputElement> document.getElementById(id)));
+
+        for(var j=i; j<9; j++) {  // shift all panels down one
+            comicJSONObj['Panels']["Panel_"+j].Image_URL = comicJSONObj['Panels']["Panel_"+(j+1)].Image_URL;
+            comicJSONObj['Panels']["Panel_"+j].Text = comicJSONObj['Panels']["Panel_"+(j+1)].Text;
+        }
+
         comicJSONObj['Panels']["Panel_"+i].Image_URL = "";
         comicJSONObj['Panels']["Panel_"+i].Text = "";
+
         saveComic(true);
     }else{
         var note = $.notify({
@@ -1418,4 +1425,8 @@ function addComicToUser() {
         error: function (xhr, ajaxOptions, thrownError) {
         }
     });
+}
+
+function deletePanel() {
+
 }
