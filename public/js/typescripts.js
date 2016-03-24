@@ -263,7 +263,7 @@ function renderEditComic(id) {
         var comicTitle = document.getElementById("comicTitle");
         comicTitle.value = comicJSONObj.Title;
         var publicPrivate = document.getElementById("optradio");
-        if (comicJSONObj.Public == true) {
+        if (comicJSONObj.Public) {
             var publicPrivate = document.getElementById("publicBtn");
             publicPrivate.checked = true;
         }
@@ -296,7 +296,7 @@ function renderViewComic(id) {
     $.get('/comic/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
         var comicTitle = document.getElementById("comicTitle");
-        if (comicJSONObj.Public == true) {
+        if (comicJSONObj.Public) {
             comicTitle.value = comicJSONObj.Title;
             //console.log(comicJSONObj.Panels);
             renderContributors(comicJSONObj);
@@ -518,72 +518,75 @@ function renderPanels(elId, jsonPanels, edit) {
         var url = panels['Panel_' + i].Image_URL;
         var desc = panels['Panel_' + i].Text;
         if (url != "" || desc != "") {
-            var panel = document.createElement("div");
-            panel.className = "col-md-4";
-            panel.className += " panel";
-            panel.id = "panel_" + (i).toString();
-            //panel.style.height = "500px";
-            //panel.style.width = "500px";
-            var thumbnail = document.createElement("div");
-            thumbnail.className = "thumbnail";
-            panel.appendChild(thumbnail);
-            var img = document.createElement("img");
-            img.alt = "Bootstrap Thumbnail First";
-            img.src = panels["Panel_" + i].Image_URL;
-            img.id = "panelImg_" + (i).toString();
-            img.style.height = "300px";
-            img.style.width = "300px";
-            thumbnail.appendChild(img);
-            var caption = document.createElement("div");
-            caption.className = "caption";
-            thumbnail.appendChild(caption);
-            var par = document.createElement("p");
-            par.innerHTML = panels["Panel_" + i].Text;
-            par.id = "desc_" + (i).toString();
-            caption.appendChild(par);
-            if (edit) {
-                // create "Swap Left" button
-                var button1 = document.createElement("button");
-                button1.id = "buttonSwapL_" + (i).toString();
-                button1.className = "btn btn-primary";
-                button1.innerHTML = "Swap Left";
-                button1.setAttribute("role", "button");
-                button1.setAttribute("onclick", "swapPanelLeft(this)");
-                // create "Swap Right" button
-                var button2 = document.createElement("button");
-                button2.id = "buttonSwapR_" + (i).toString();
-                button2.className = "btn btn-primary";
-                button2.innerHTML = "Swap Right";
-                button2.setAttribute("role", "button");
-                button2.setAttribute("onclick", "swapPanelRight(this)");
-                // create "Edit Panel" button
-                var button3 = document.createElement("button");
-                button3.id = "button_" + (i).toString();
-                button3.className = "btn btn-primary";
-                button3.innerHTML = "Edit Panel";
-                button3.setAttribute("data-toggle", "modal");
-                button3.setAttribute("role", "button");
-                button3.setAttribute("href", "#modal-container-94539");
-                button3.setAttribute("onclick", "updateModal(this)");
-                // create "Delete Panel" button
-                var button4 = document.createElement("button");
-                button4.id = "buttonRem_" + (i).toString();
-                button4.className = "btn btn-primary";
-                button4.innerHTML = "Delete Panel";
-                button4.setAttribute("role", "button");
-                button4.setAttribute("onclick", "removePanel(this)");
-                // buttons are held within a "p" element
-                var par1 = document.createElement("p");
-                caption.appendChild(par);
-                caption.appendChild(par1);
-                par1.appendChild(button1);
-                par1.appendChild(button2);
-                par1.appendChild(button3);
-                par1.appendChild(button4);
-            }
-            el.appendChild(panel);
+            createPanel(url, desc, i.toString(), edit, el);
         }
     }
+}
+function createPanel(url, desc, numStr, edit, container) {
+    var panel = document.createElement("div");
+    panel.className = "col-md-4";
+    panel.className += " panel";
+    panel.id = "panel_" + numStr;
+    //panel.style.height = "500px";
+    //panel.style.width = "500px";
+    var thumbnail = document.createElement("div");
+    thumbnail.className = "thumbnail";
+    panel.appendChild(thumbnail);
+    var img = document.createElement("img");
+    img.alt = "Bootstrap Thumbnail First";
+    img.src = url;
+    img.id = "panelImg_" + numStr;
+    img.style.height = "300px";
+    img.style.width = "300px";
+    thumbnail.appendChild(img);
+    var caption = document.createElement("div");
+    caption.className = "caption";
+    thumbnail.appendChild(caption);
+    var par = document.createElement("p");
+    par.innerHTML = desc;
+    par.id = "desc_" + numStr;
+    caption.appendChild(par);
+    if (edit) {
+        // create "Swap Left" button
+        var button1 = document.createElement("button");
+        button1.id = "buttonSwapL_" + numStr;
+        button1.className = "btn btn-primary";
+        button1.innerHTML = "Swap Left";
+        button1.setAttribute("role", "button");
+        button1.setAttribute("onclick", "swapPanelLeft(this)");
+        // create "Swap Right" button
+        var button2 = document.createElement("button");
+        button2.id = "buttonSwapR_" + numStr;
+        button2.className = "btn btn-primary";
+        button2.innerHTML = "Swap Right";
+        button2.setAttribute("role", "button");
+        button2.setAttribute("onclick", "swapPanelRight(this)");
+        // create " Edit Panel" button
+        var button3 = document.createElement("button");
+        button3.id = "button_" + numStr;
+        button3.className = "btn btn-primary";
+        button3.innerHTML = "Edit Panel";
+        button3.setAttribute("data-toggle", "modal");
+        button3.setAttribute("role", "button");
+        button3.setAttribute("href", "#modal-container-94539");
+        button3.setAttribute("onclick", "updateModal(this)");
+        // create "Delete Panel" button
+        var button4 = document.createElement("button");
+        button4.id = "buttonRem_" + numStr;
+        button4.className = "btn btn-primary";
+        button4.innerHTML = "Delete Panel";
+        button4.setAttribute("role", "button");
+        button4.setAttribute("onclick", "removePanel(this)");
+        // buttons are held within a "p" element
+        var par1 = document.createElement("p");
+        caption.appendChild(par);
+        caption.appendChild(par1);
+        par1.appendChild(button1);
+        par1.appendChild(button2);
+        par1.appendChild(button3);
+        par1.appendChild(button4);
+    }
+    container.appendChild(panel);
 }
 // para: JSON object to evaluate
 // counts the number of properties/fields in the given object
@@ -679,71 +682,8 @@ function addPanel() {
         var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
         var desc = "enter text here";
         var el = document.getElementById("pictureContainer");
-        var panel = document.createElement("div");
-        panel.className = "col-md-4";
-        panel.className += " panel";
-        panel.id = "panel_" + numStr;
-        //panel.style.height = "500px";
-        //panel.style.width = "500px";
-        var thumbnail = document.createElement("div");
-        thumbnail.className = "thumbnail";
-        panel.appendChild(thumbnail);
-        var img = document.createElement("img");
-        img.alt = "Bootstrap Thumbnail First";
-        img.src = url;
-        img.id = "panelImg_" + numStr;
-        img.style.height = "300px";
-        img.style.width = "300px";
-        thumbnail.appendChild(img);
-        var caption = document.createElement("div");
-        caption.className = "caption";
-        thumbnail.appendChild(caption);
-        var par = document.createElement("p");
-        par.innerHTML = desc;
-        par.id = "desc_" + numStr;
-        caption.appendChild(par);
-        // create "Swap Left" button
-        var button1 = document.createElement("button");
-        button1.id = "buttonSwapL_" + numStr;
-        button1.className = "btn btn-primary";
-        button1.innerHTML = "Swap Left";
-        button1.setAttribute("role", "button");
-        button1.setAttribute("onclick", "swapPanelLeft(this)");
-        // create "Swap Right" button
-        var button2 = document.createElement("button");
-        button2.id = "buttonSwapR_" + numStr;
-        button2.className = "btn btn-primary";
-        button2.innerHTML = "Swap Right";
-        button2.setAttribute("role", "button");
-        button2.setAttribute("onclick", "swapPanelRight(this)");
-        // create " Edit Panel" button
-        var button3 = document.createElement("button");
-        button3.id = "button_" + numStr;
-        button3.className = "btn btn-primary";
-        button3.innerHTML = "Edit Panel";
-        button3.setAttribute("data-toggle", "modal");
-        button3.setAttribute("role", "button");
-        button3.setAttribute("href", "#modal-container-94539");
-        button3.setAttribute("onclick", "updateModal(this)");
-        // create "Delete Panel" button
-        var button4 = document.createElement("button");
-        button4.id = "buttonRem_" + numStr;
-        button4.className = "btn btn-primary";
-        button4.innerHTML = "Delete Panel";
-        button4.setAttribute("role", "button");
-        button4.setAttribute("onclick", "removePanel(this)");
-        // buttons are held within a "p" element
-        var par1 = document.createElement("p");
-        caption.appendChild(par);
-        caption.appendChild(par1);
-        par1.appendChild(button1);
-        par1.appendChild(button2);
-        par1.appendChild(button3);
-        par1.appendChild(button4);
-        el.appendChild(panel);
+        createPanel(url, desc, numStr, true, el);
         // update comicJSONObj and save
-        var url = document.getElementById("panelImg_" + numStr).src;
-        var desc = document.getElementById("desc_" + numStr).innerHTML;
         comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
         comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
         saveComic(true);
