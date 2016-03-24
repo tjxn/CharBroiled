@@ -247,10 +247,6 @@ function setComicID() {
     ID.value = comicID;
     return comicID;
 }
-function setDataAndRenderComic(id) {
-    setUserType();
-    setUserEmail();
-}
 // para: id for comic to get
 // sends GET request to get comic JSON object. Sets value of comicStr element.
 // renders comic onto page.
@@ -263,7 +259,7 @@ function renderEditComic(id) {
         var comicTitle = document.getElementById("comicTitle");
         comicTitle.value = comicJSONObj.Title;
         var publicPrivate = document.getElementById("optradio");
-        if (comicJSONObj.Public == true) {
+        if (comicJSONObj.Public) {
             var publicPrivate = document.getElementById("publicBtn");
             publicPrivate.checked = true;
         }
@@ -296,7 +292,7 @@ function renderViewComic(id) {
     $.get('/comic/' + id, function (data) {
         comicJSONObj = JSON.parse(data);
         var comicTitle = document.getElementById("comicTitle");
-        if (comicJSONObj.Public == true) {
+        if (comicJSONObj.Public) {
             comicTitle.value = comicJSONObj.Title;
             //console.log(comicJSONObj.Panels);
             renderContributors(comicJSONObj);
@@ -518,56 +514,102 @@ function renderPanels(elId, jsonPanels, edit) {
         var url = panels['Panel_' + i].Image_URL;
         var desc = panels['Panel_' + i].Text;
         if (url != "" || desc != "") {
-            var panel = document.createElement("div");
-            panel.className = "col-md-4";
-            panel.className += " panel";
-            panel.id = "panel_" + (i).toString();
-            //panel.style.height = "500px";
-            //panel.style.width = "500px";
-            var thumbnail = document.createElement("div");
-            thumbnail.className = "thumbnail";
-            panel.appendChild(thumbnail);
-            var img = document.createElement("img");
-            img.alt = "Bootstrap Thumbnail First";
-            img.src = panels["Panel_" + i].Image_URL;
-            img.id = "panelImg_" + (i).toString();
-            img.style.height = "300px";
-            img.style.width = "300px";
-            thumbnail.appendChild(img);
-            var caption = document.createElement("div");
-            caption.className = "caption";
-            thumbnail.appendChild(caption);
-            var par = document.createElement("p");
-            par.innerHTML = panels["Panel_" + i].Text;
-            par.id = "desc_" + (i).toString();
-            caption.appendChild(par);
-            if (edit) {
-                // create "Edit Panel" button
-                var button = document.createElement("button");
-                button.id = "button_" + (i).toString();
-                button.className = "btn btn-primary";
-                button.innerHTML = "Edit Panel";
-                button.setAttribute("data-toggle", "modal");
-                button.setAttribute("role", "button");
-                button.setAttribute("href", "#modal-container-94539");
-                button.setAttribute("onclick", "updateModal(this)");
-                // create "Delete Panel" button
-                var button2 = document.createElement("button");
-                button2.id = "buttonRem_" + (i).toString();
-                button2.className = "btn btn-primary";
-                button2.innerHTML = "Delete Panel";
-                button2.setAttribute("role", "button");
-                button2.setAttribute("onclick", "removePanel(this)");
-                // buttons are held within a "p" element
-                var par1 = document.createElement("p");
-                caption.appendChild(par);
-                caption.appendChild(par1);
-                par1.appendChild(button);
-                par1.appendChild(button2);
+            if (i == 1) {
+                createPanel(url, desc, i.toString(), edit, "left", el);
             }
-            el.appendChild(panel);
+            else if (i == countPanels()) {
+                createPanel(url, desc, i.toString(), edit, "right", el);
+            }
+            else {
+                createPanel(url, desc, i.toString(), edit, "", el);
+            }
         }
     }
+}
+// para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
+// deletes all panels and rerenders them
+// return: none
+function rerenderPanels(elId, jsonPanels, edit) {
+    // delete the panels
+    removeNodeList(document.getElementById("pictureContainer").children);
+    // re-render the panels
+    renderPanels("pictureContainer", comicJSONObj["Panels"], true);
+}
+// para: url, text, and number for panel, boolean for "edit" panel, omission = which swap buttons to omit,
+// and an Element to put the panel in
+// Creates the panel element based of off inputs and adds it to given parent element.
+// return: none
+function createPanel(url, desc, numStr, edit, omission, container) {
+    var panel = document.createElement("div");
+    panel.className = "col-md-4";
+    panel.className += " panel";
+    panel.id = "panel_" + numStr;
+    var thumbnail = document.createElement("div");
+    thumbnail.className = "thumbnail";
+    panel.appendChild(thumbnail);
+    var img = document.createElement("img");
+    img.alt = "Bootstrap Thumbnail First";
+    img.src = url;
+    img.id = "panelImg_" + numStr;
+    img.style.height = "300px";
+    img.style.width = "300px";
+    thumbnail.appendChild(img);
+    var caption = document.createElement("div");
+    caption.className = "caption";
+    thumbnail.appendChild(caption);
+    var par = document.createElement("p");
+    par.innerHTML = desc;
+    par.id = "desc_" + numStr;
+    caption.appendChild(par);
+    if (edit) {
+        if (omission != "left") {
+            // create "Swap Left" button
+            var button1 = document.createElement("button");
+            button1.id = "buttonSwapL_" + numStr;
+            button1.className = "btn btn-primary";
+            button1.innerHTML = "Swap Left";
+            button1.setAttribute("role", "button");
+            button1.setAttribute("onclick", "swapPanelLeft(this)");
+        }
+        if (omission != "right") {
+            // create "Swap Right" button
+            var button2 = document.createElement("button");
+            button2.id = "buttonSwapR_" + numStr;
+            button2.className = "btn btn-primary";
+            button2.innerHTML = "Swap Right";
+            button2.setAttribute("role", "button");
+            button2.setAttribute("onclick", "swapPanelRight(this)");
+        }
+        // create " Edit Panel" button
+        var button3 = document.createElement("button");
+        button3.id = "button_" + numStr;
+        button3.className = "btn btn-primary";
+        button3.innerHTML = "Edit Panel";
+        button3.setAttribute("data-toggle", "modal");
+        button3.setAttribute("role", "button");
+        button3.setAttribute("href", "#modal-container-94539");
+        button3.setAttribute("onclick", "updateModal(this)");
+        // create "Delete Panel" button
+        var button4 = document.createElement("button");
+        button4.id = "buttonRem_" + numStr;
+        button4.className = "btn btn-primary";
+        button4.innerHTML = "Delete Panel";
+        button4.setAttribute("role", "button");
+        button4.setAttribute("onclick", "removePanel(this)");
+        // buttons are held within a "p" element
+        var par1 = document.createElement("p");
+        caption.appendChild(par);
+        caption.appendChild(par1);
+        if (omission != "left") {
+            par1.appendChild(button1);
+        }
+        if (omission != "right") {
+            par1.appendChild(button2);
+        }
+        par1.appendChild(button3);
+        par1.appendChild(button4);
+    }
+    container.appendChild(panel);
 }
 // para: JSON object to evaluate
 // counts the number of properties/fields in the given object
@@ -590,7 +632,6 @@ function updateModal(ele) {
     var num = button.id.substring(7); // gets panel number = button number
     var img = document.getElementById("panelImg_" + num);
     var desc = (document.getElementById("desc_" + num).innerHTML);
-    //var modal = document.getElementById(button.getAttribute("href").substring(1));
     var urlEle = document.getElementById("modalURL");
     var descEle = document.getElementById("modalDesc");
     var hiddenInput = document.getElementById("panelNum");
@@ -663,57 +704,11 @@ function addPanel() {
         var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
         var desc = "enter text here";
         var el = document.getElementById("pictureContainer");
-        var panel = document.createElement("div");
-        panel.className = "col-md-4";
-        panel.className += " panel";
-        panel.id = "panel_" + numStr;
-        //panel.style.height = "500px";
-        //panel.style.width = "500px";
-        var thumbnail = document.createElement("div");
-        thumbnail.className = "thumbnail";
-        panel.appendChild(thumbnail);
-        var img = document.createElement("img");
-        img.alt = "Bootstrap Thumbnail First";
-        img.src = url;
-        img.id = "panelImg_" + numStr;
-        img.style.height = "300px";
-        img.style.width = "300px";
-        thumbnail.appendChild(img);
-        var caption = document.createElement("div");
-        caption.className = "caption";
-        thumbnail.appendChild(caption);
-        var par = document.createElement("p");
-        par.innerHTML = desc;
-        par.id = "desc_" + numStr;
-        caption.appendChild(par);
-        // create " Edit Panel" button
-        var button = document.createElement("button");
-        button.id = "button_" + numStr;
-        button.className = "btn btn-primary";
-        button.innerHTML = "Edit Panel";
-        button.setAttribute("data-toggle", "modal");
-        button.setAttribute("role", "button");
-        button.setAttribute("href", "#modal-container-94539");
-        button.setAttribute("onclick", "updateModal(this)");
-        // create "Delete Panel" button
-        var button2 = document.createElement("button");
-        button2.id = "buttonRem_" + numStr;
-        button2.className = "btn btn-primary";
-        button2.innerHTML = "Delete Panel";
-        button2.setAttribute("role", "button");
-        button2.setAttribute("onclick", "removePanel(this)");
-        // buttons are held within a "p" element
-        var par1 = document.createElement("p");
-        caption.appendChild(par);
-        caption.appendChild(par1);
-        par1.appendChild(button);
-        par1.appendChild(button2);
-        el.appendChild(panel);
+        //createPanel(url, desc, numStr, true, el);
         // update comicJSONObj and save
-        var url = document.getElementById("panelImg_" + numStr).src;
-        var desc = document.getElementById("desc_" + numStr).innerHTML;
         comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
         comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
         saveComic(true);
     }
 }
@@ -753,21 +748,14 @@ function removePanel(ele) {
     var count = countPanels();
     if (i > 0) {
         var id = "panel_" + i;
-        removeElement(document.getElementById(id));
         for (var j = i; j < count; j++) {
-            //shift all panel elements on the page (change their identifying number)
-            document.getElementById("panel_" + (j + 1)).id = "panel_" + (j);
-            document.getElementById("panelImg_" + (j + 1)).id = "panelImg_" + (j);
-            document.getElementById("desc_" + (j + 1)).id = "desc_" + (j);
-            document.getElementById("button_" + (j + 1)).id = "button_" + (j);
-            document.getElementById("buttonRem_" + (j + 1)).id = "buttonRem_" + (j);
             // shift all panels down one slot in the comicJSONObj
             comicJSONObj['Panels']["Panel_" + j].Image_URL = comicJSONObj['Panels']["Panel_" + (j + 1)].Image_URL;
             comicJSONObj['Panels']["Panel_" + j].Text = comicJSONObj['Panels']["Panel_" + (j + 1)].Text;
         }
         comicJSONObj['Panels']["Panel_" + count].Image_URL = "";
         comicJSONObj['Panels']["Panel_" + count].Text = "";
-        console.log(comicJSONObj);
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
         saveComic(true);
     }
     else {
@@ -817,6 +805,43 @@ function removePanel(ele) {
                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
                 '</div>'
         });
+    }
+}
+// para: none
+// swaps the panel with the panel one index larger than it.
+// return: number of panels in use in comicJSONObj
+function swapPanelRight(ele) {
+    var num = Number(ele.id.substring(12)); // id is of form: "buttonSwapR_#"
+    var count = countPanels();
+    if (num < count) {
+        var tempURL = comicJSONObj["Panels"]["Panel_" + num].Image_URL;
+        var tempText = comicJSONObj["Panels"]["Panel_" + num].Text;
+        // set given ele to larger index ele
+        comicJSONObj["Panels"]["Panel_" + num].Image_URL = comicJSONObj["Panels"]["Panel_" + (num + 1)].Image_URL;
+        comicJSONObj["Panels"]["Panel_" + num].Text = comicJSONObj["Panels"]["Panel_" + (num + 1)].Text;
+        // set larger index ele with given ele
+        comicJSONObj["Panels"]["Panel_" + (num + 1)].Image_URL = tempURL;
+        comicJSONObj["Panels"]["Panel_" + (num + 1)].Text = tempText;
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
+        saveComic(false);
+    }
+}
+// para: none
+// swaps the panel with the panel one index smaller than it.
+// return: number of panels in use in comicJSONObj
+function swapPanelLeft(ele) {
+    var num = Number(ele.id.substring(12)); // id is of form: "buttonSwapR_#"
+    if (num > 1) {
+        var tempURL = comicJSONObj["Panels"]["Panel_" + num].Image_URL;
+        var tempText = comicJSONObj["Panels"]["Panel_" + num].Text;
+        // set given ele to larger index ele
+        comicJSONObj["Panels"]["Panel_" + num].Image_URL = comicJSONObj["Panels"]["Panel_" + (num - 1)].Image_URL;
+        comicJSONObj["Panels"]["Panel_" + num].Text = comicJSONObj["Panels"]["Panel_" + (num - 1)].Text;
+        // set larger index ele with given ele
+        comicJSONObj["Panels"]["Panel_" + (num - 1)].Image_URL = tempURL;
+        comicJSONObj["Panels"]["Panel_" + (num - 1)].Text = tempText;
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
+        saveComic(false);
     }
 }
 // para: none
