@@ -39,9 +39,12 @@
         window.onload = function (event) {
             initDropzone();
             amIFavourite();
+            //setUserType();
             var id = setComicID();
-            renderEditComic(id);
-            setUserEmail();
+            setUserTypeAndRender(id);
+            // renderEditComic(id);
+            //setUserEmail();
+
             //addComicToUser(); called by renderEditComic
             //addUserToComic(); called by renderEditComic
         };

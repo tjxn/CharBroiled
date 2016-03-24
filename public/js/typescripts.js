@@ -15,6 +15,7 @@
 var myDrop;
 var comicJSONObj;
 var JSONObj;
+var userType;
 // para: none
 // Removes all thumbnails from the dropzone modal
 // Called when modal is closed
@@ -225,7 +226,16 @@ function setUserEmails() {
 // return: none
 function setUserType() {
     $.get('/user/type', function (data) {
-        console.log(data.toString());
+        userType = data.toString();
+    });
+}
+// para: none
+// sends GET request to get user's type. Sets value of userType element. Renders comic after.
+// return: none
+function setUserTypeAndRender(id) {
+    $.get('/user/type', function (data) {
+        userType = data.toString();
+        renderEditComic(id);
     });
 }
 // para: none
@@ -237,6 +247,10 @@ function setComicID() {
     ID.value = comicID;
     return comicID;
 }
+function setDataAndRenderComic(id) {
+    setUserType();
+    setUserEmail();
+}
 // para: id for comic to get
 // sends GET request to get comic JSON object. Sets value of comicStr element.
 // renders comic onto page.
@@ -244,33 +258,35 @@ function setComicID() {
 function renderEditComic(id) {
     var hiddenString = document.getElementById("comicStr");
     var comicStr;
-    $.get('/comic/' + id, function (data) {
-        comicJSONObj = JSON.parse(data);
-        var comicTitle = document.getElementById("comicTitle");
-        comicTitle.value = comicJSONObj.Title;
-        var publicPrivate = document.getElementById("optradio");
-        if (comicJSONObj.Public == true) {
-            var publicPrivate = document.getElementById("publicBtn");
-            publicPrivate.checked = true;
-        }
-        else {
-            var publicPrivate = document.getElementById("privateBtn");
-            publicPrivate.checked = true;
-        }
-        //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
-        //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
-        //console.log(comicJSONObj.Contributors);
-        //if comic is favourited by the user, needs to also be updated in savefourite
-        //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
-        //favoriteButton.setAttribute("class","btn btn-primary");
-        //favoriteButton.setAttribute("class","btn btn-primary active");
-        //button.setAttribute("data-toggle", "modal");
-        //console.log(comicJSONObj.Panels);
-        renderPanels("pictureContainer", comicJSONObj.Panels, true);
-        addComicToUser();
-        addUserToComic();
-        renderContributors(comicJSONObj);
-    });
+    if (userType == "Contributor") {
+        $.get('/comic/' + id, function (data) {
+            comicJSONObj = JSON.parse(data);
+            var comicTitle = document.getElementById("comicTitle");
+            comicTitle.value = comicJSONObj.Title;
+            var publicPrivate = document.getElementById("optradio");
+            if (comicJSONObj.Public == true) {
+                var publicPrivate = document.getElementById("publicBtn");
+                publicPrivate.checked = true;
+            }
+            else {
+                var publicPrivate = document.getElementById("privateBtn");
+                publicPrivate.checked = true;
+            }
+            //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
+            //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
+            //console.log(comicJSONObj.Contributors);
+            //if comic is favourited by the user, needs to also be updated in savefourite
+            //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+            //favoriteButton.setAttribute("class","btn btn-primary");
+            //favoriteButton.setAttribute("class","btn btn-primary active");
+            //button.setAttribute("data-toggle", "modal");
+            //console.log(comicJSONObj.Panels);
+            renderPanels("pictureContainer", comicJSONObj.Panels, true);
+            addComicToUser();
+            addUserToComic();
+            renderContributors(comicJSONObj);
+        });
+    }
 }
 // para: id for comic to get
 // sends GET request to get comic JSON object. Sets value of comicStr element.
@@ -750,12 +766,10 @@ function removePanel(ele) {
             // shift all panels down one slot in the comicJSONObj
             comicJSONObj['Panels']["Panel_" + j].Image_URL = comicJSONObj['Panels']["Panel_" + (j + 1)].Image_URL;
             comicJSONObj['Panels']["Panel_" + j].Text = comicJSONObj['Panels']["Panel_" + (j + 1)].Text;
-            // clear last panel
-            if (j == (count - 1)) {
-                comicJSONObj['Panels']["Panel_" + (j + 1)].Image_URL = "";
-                comicJSONObj['Panels']["Panel_" + (j + 1)].Text = "";
-            }
         }
+        comicJSONObj['Panels']["Panel_" + count].Image_URL = "";
+        comicJSONObj['Panels']["Panel_" + count].Text = "";
+        console.log(comicJSONObj);
         saveComic(true);
     }
     else {
@@ -1324,7 +1338,5 @@ function addComicToUser() {
         error: function (xhr, ajaxOptions, thrownError) {
         }
     });
-}
-function deletePanel() {
 }
 //# sourceMappingURL=typescripts.js.map
