@@ -9,6 +9,7 @@ var Application = (function () {
         var Panel = require('./panel');
         var ComicWebService = require('./ComicWebService');
         var Comic = require('./comic');
+        var TranslateWebService = require('./TranslateWebService');
         var path = require('path');
         var favicon = require('serve-favicon');
         var stormpath = require('express-stormpath');

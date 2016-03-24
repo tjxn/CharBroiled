@@ -26,6 +26,7 @@ class Application {
         var Panel = require('./panel');
         var ComicWebService = require('./ComicWebService');
         var Comic = require('./comic');
+        var TranslateWebService = require('./TranslateWebService')
 
         let path = require('path');
         let favicon = require('serve-favicon');

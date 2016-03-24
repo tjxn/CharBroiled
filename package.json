@@ -12,6 +12,7 @@
     "express": "~4.13.4",
     "express-stormpath": "^2.4.0",
     "form-data": "^1.0.0-rc3",
+    "google-translate": "^1.0.6",
     "http": "0.0.0",
     "jade": "~1.11.0",
     "jasmine-node": "^1.14.5",
