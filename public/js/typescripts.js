@@ -518,11 +518,28 @@ function renderPanels(elId, jsonPanels, edit) {
         var url = panels['Panel_' + i].Image_URL;
         var desc = panels['Panel_' + i].Text;
         if (url != "" || desc != "") {
-            createPanel(url, desc, i.toString(), edit, el);
+            if (i == 1) {
+                createPanel(url, desc, i.toString(), edit, "left", el);
+            }
+            else if (i == countPanels()) {
+                createPanel(url, desc, i.toString(), edit, "right", el);
+            }
+            else {
+                createPanel(url, desc, i.toString(), edit, "", el);
+            }
         }
     }
 }
-function createPanel(url, desc, numStr, edit, container) {
+// para: elementID of panel container, JSON object of panels, bool: true = edit mode and false = view mode
+// deletes all panels and rerenders them
+// return: none
+function rerenderPanels(elId, jsonPanels, edit) {
+    // delete the panels
+    removeNodeList(document.getElementById("pictureContainer").children);
+    // re-render the panels
+    renderPanels("pictureContainer", comicJSONObj["Panels"], true);
+}
+function createPanel(url, desc, numStr, edit, omission, container) {
     var panel = document.createElement("div");
     panel.className = "col-md-4";
     panel.className += " panel";
@@ -547,20 +564,24 @@ function createPanel(url, desc, numStr, edit, container) {
     par.id = "desc_" + numStr;
     caption.appendChild(par);
     if (edit) {
-        // create "Swap Left" button
-        var button1 = document.createElement("button");
-        button1.id = "buttonSwapL_" + numStr;
-        button1.className = "btn btn-primary";
-        button1.innerHTML = "Swap Left";
-        button1.setAttribute("role", "button");
-        button1.setAttribute("onclick", "swapPanelLeft(this)");
-        // create "Swap Right" button
-        var button2 = document.createElement("button");
-        button2.id = "buttonSwapR_" + numStr;
-        button2.className = "btn btn-primary";
-        button2.innerHTML = "Swap Right";
-        button2.setAttribute("role", "button");
-        button2.setAttribute("onclick", "swapPanelRight(this)");
+        if (omission != "left") {
+            // create "Swap Left" button
+            var button1 = document.createElement("button");
+            button1.id = "buttonSwapL_" + numStr;
+            button1.className = "btn btn-primary";
+            button1.innerHTML = "Swap Left";
+            button1.setAttribute("role", "button");
+            button1.setAttribute("onclick", "swapPanelLeft(this)");
+        }
+        if (omission != "right") {
+            // create "Swap Right" button
+            var button2 = document.createElement("button");
+            button2.id = "buttonSwapR_" + numStr;
+            button2.className = "btn btn-primary";
+            button2.innerHTML = "Swap Right";
+            button2.setAttribute("role", "button");
+            button2.setAttribute("onclick", "swapPanelRight(this)");
+        }
         // create " Edit Panel" button
         var button3 = document.createElement("button");
         button3.id = "button_" + numStr;
@@ -581,8 +602,12 @@ function createPanel(url, desc, numStr, edit, container) {
         var par1 = document.createElement("p");
         caption.appendChild(par);
         caption.appendChild(par1);
-        par1.appendChild(button1);
-        par1.appendChild(button2);
+        if (omission != "left") {
+            par1.appendChild(button1);
+        }
+        if (omission != "right") {
+            par1.appendChild(button2);
+        }
         par1.appendChild(button3);
         par1.appendChild(button4);
     }
@@ -609,7 +634,6 @@ function updateModal(ele) {
     var num = button.id.substring(7); // gets panel number = button number
     var img = document.getElementById("panelImg_" + num);
     var desc = (document.getElementById("desc_" + num).innerHTML);
-    //var modal = document.getElementById(button.getAttribute("href").substring(1));
     var urlEle = document.getElementById("modalURL");
     var descEle = document.getElementById("modalDesc");
     var hiddenInput = document.getElementById("panelNum");
@@ -682,10 +706,11 @@ function addPanel() {
         var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
         var desc = "enter text here";
         var el = document.getElementById("pictureContainer");
-        createPanel(url, desc, numStr, true, el);
+        //createPanel(url, desc, numStr, true, el);
         // update comicJSONObj and save
         comicJSONObj["Panels"]["Panel_" + numStr].Image_URL = url;
         comicJSONObj["Panels"]["Panel_" + numStr].Text = desc;
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
         saveComic(true);
     }
 }
@@ -725,21 +750,14 @@ function removePanel(ele) {
     var count = countPanels();
     if (i > 0) {
         var id = "panel_" + i;
-        removeElement(document.getElementById(id));
         for (var j = i; j < count; j++) {
-            //shift all panel elements on the page (change their identifying number)
-            document.getElementById("panel_" + (j + 1)).id = "panel_" + (j);
-            document.getElementById("panelImg_" + (j + 1)).id = "panelImg_" + (j);
-            document.getElementById("desc_" + (j + 1)).id = "desc_" + (j);
-            document.getElementById("button_" + (j + 1)).id = "button_" + (j);
-            document.getElementById("buttonRem_" + (j + 1)).id = "buttonRem_" + (j);
             // shift all panels down one slot in the comicJSONObj
             comicJSONObj['Panels']["Panel_" + j].Image_URL = comicJSONObj['Panels']["Panel_" + (j + 1)].Image_URL;
             comicJSONObj['Panels']["Panel_" + j].Text = comicJSONObj['Panels']["Panel_" + (j + 1)].Text;
         }
         comicJSONObj['Panels']["Panel_" + count].Image_URL = "";
         comicJSONObj['Panels']["Panel_" + count].Text = "";
-        console.log(comicJSONObj);
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
         saveComic(true);
     }
     else {
@@ -806,10 +824,7 @@ function swapPanelRight(ele) {
         // set larger index ele with given ele
         comicJSONObj["Panels"]["Panel_" + (num + 1)].Image_URL = tempURL;
         comicJSONObj["Panels"]["Panel_" + (num + 1)].Text = tempText;
-        // delete the panels and re-render
-        removeNodeList(document.getElementById("pictureContainer").children);
-        // re-render the panels
-        renderPanels("pictureContainer", comicJSONObj["Panels"], true);
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
         saveComic(false);
     }
 }
@@ -827,10 +842,7 @@ function swapPanelLeft(ele) {
         // set larger index ele with given ele
         comicJSONObj["Panels"]["Panel_" + (num - 1)].Image_URL = tempURL;
         comicJSONObj["Panels"]["Panel_" + (num - 1)].Text = tempText;
-        // delete the panels and re-render
-        removeNodeList(document.getElementById("pictureContainer").children);
-        // re-render the panels
-        renderPanels("pictureContainer", comicJSONObj["Panels"], true);
+        rerenderPanels("pictureContainer", comicJSONObj["Panels"], true);
         saveComic(false);
     }
 }
