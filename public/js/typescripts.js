@@ -258,35 +258,33 @@ function setDataAndRenderComic(id) {
 function renderEditComic(id) {
     var hiddenString = document.getElementById("comicStr");
     var comicStr;
-    if (userType == "Contributor") {
-        $.get('/comic/' + id, function (data) {
-            comicJSONObj = JSON.parse(data);
-            var comicTitle = document.getElementById("comicTitle");
-            comicTitle.value = comicJSONObj.Title;
-            var publicPrivate = document.getElementById("optradio");
-            if (comicJSONObj.Public == true) {
-                var publicPrivate = document.getElementById("publicBtn");
-                publicPrivate.checked = true;
-            }
-            else {
-                var publicPrivate = document.getElementById("privateBtn");
-                publicPrivate.checked = true;
-            }
-            //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
-            //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
-            //console.log(comicJSONObj.Contributors);
-            //if comic is favourited by the user, needs to also be updated in savefourite
-            //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
-            //favoriteButton.setAttribute("class","btn btn-primary");
-            //favoriteButton.setAttribute("class","btn btn-primary active");
-            //button.setAttribute("data-toggle", "modal");
-            //console.log(comicJSONObj.Panels);
-            renderPanels("pictureContainer", comicJSONObj.Panels, true);
-            addComicToUser();
-            addUserToComic();
-            renderContributors(comicJSONObj);
-        });
-    }
+    $.get('/comic/' + id, function (data) {
+        comicJSONObj = JSON.parse(data);
+        var comicTitle = document.getElementById("comicTitle");
+        comicTitle.value = comicJSONObj.Title;
+        var publicPrivate = document.getElementById("optradio");
+        if (comicJSONObj.Public == true) {
+            var publicPrivate = document.getElementById("publicBtn");
+            publicPrivate.checked = true;
+        }
+        else {
+            var publicPrivate = document.getElementById("privateBtn");
+            publicPrivate.checked = true;
+        }
+        //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
+        //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
+        //console.log(comicJSONObj.Contributors);
+        //if comic is favourited by the user, needs to also be updated in savefourite
+        //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
+        //favoriteButton.setAttribute("class","btn btn-primary");
+        //favoriteButton.setAttribute("class","btn btn-primary active");
+        //button.setAttribute("data-toggle", "modal");
+        //console.log(comicJSONObj.Panels);
+        renderPanels("pictureContainer", comicJSONObj.Panels, true);
+        addComicToUser();
+        addUserToComic();
+        renderContributors(comicJSONObj);
+    });
 }
 // para: id for comic to get
 // sends GET request to get comic JSON object. Sets value of comicStr element.
