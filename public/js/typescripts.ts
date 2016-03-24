@@ -21,8 +21,6 @@ var JSONObj;
 var userType;
 
 
-
-
 // para: none
 // Removes all thumbnails from the dropzone modal
 // Called when modal is closed
@@ -30,7 +28,6 @@ var userType;
 function clearDropzone(){
     myDrop.removeAllFiles();
 }
-
 
 // para: none
 // Checks every click, if it is a click on a thumbnail in dropzone
@@ -273,13 +270,6 @@ function setComicID() {
 
     ID.value = comicID;
     return comicID;
-}
-
-function setDataAndRenderComic(id: string) {
-    setUserType();
-    setUserEmail();
-
-
 }
 
 // para: id for comic to get
@@ -588,13 +578,15 @@ function rerenderPanels(elId: string, jsonPanels: JSON, edit:boolean) {
     renderPanels("pictureContainer", comicJSONObj["Panels"], true);
 }
 
+// para: url, text, and number for panel, boolean for "edit" panel, omission = which swap buttons to omit,
+// and an Element to put the panel in
+// Creates the panel element based of off inputs and adds it to given parent element.
+// return: none
 function createPanel(url: string, desc: string, numStr: string, edit: boolean, omission: string, container: Element) {
     var panel = document.createElement("div");
     panel.className = "col-md-4";
     panel.className += " panel";
     panel.id = "panel_" + numStr;
-    //panel.style.height = "500px";
-    //panel.style.width = "500px";
 
     var thumbnail = document.createElement("div");
     thumbnail.className = "thumbnail";
@@ -797,7 +789,6 @@ function cleanUpCloudinary(){
         var cloud_occurance = modal.search(cloudPattern);
 
         if (cloud_occurance < 1){
-
             var id = pattern.exec(cloud)[0];
 
             if (id != null){
