@@ -56,12 +56,12 @@
 <div class="se-pre-con"></div>
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
         </button> <a class="navbar-brand" href="/account">Comic</a>
     </div>
 
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li>
                 <a href="#" onclick="gotoAccount(); return false;">Account</a>
@@ -106,11 +106,11 @@
                 <nav class="navbar navbar-default">
                     <div class="navbar-header">
 
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-search-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                         </button> <a class="navbar-brand" >Title</a>
                     </div>
-
+                    <div class="collapse navbar-collapse" id="bs-search-navbar-collapse-1">
                         <form class="navbar-form navbar-left">
                             <div class="form-group">
                                 <input id="comicTitle" type="text" value="" class="form-control" />
@@ -119,28 +119,23 @@
                             <label class="radio-inline"><input type="radio" id="publicBtn" name="optradio">Public</label>
                             <label class="radio-inline"><input type="radio" id="privateBtn" name="optradio">Private</label>
                             &nbsp;
-                            <button type="button" onclick="saveComic(true)" class="btn btn-default" data-toggle="modal">
-                                Save
-                            </button>
+                            <button type="button" onclick="saveComic(true)" class="btn btn-default" data-toggle="modal">Save</button>
                             &nbsp;
                             <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
                             &nbsp;
-                            <!--<button id="ImageCall" href=# role="button" type="button" onclick="image()" class="btn btn-primary">Upload Image Test</button>-->
                             <button type="button" onclick="addPanel()" class="btn btn-default">Add Panel</button>
-                            &nbsp;
-                            <button type="button" onclick="removePanel()" class="btn btn-default">Remove Panel</button>
                             &nbsp;
                             <button type="button" onclick="deleteComic()" class="btn btn-default">Delete Comic</button>
                             &nbsp;
-                            <div class = "btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" >
-                                Contributors <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" id="contributors" role="cList" aria-labelledby="cList">
-                            </ul>
-                                </div>
-                        </form>
 
+                            <div class = "btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                Contributors <span class="caret"></span></button>
+
+                            <ul class="dropdown-menu" id="contributors" role="cList" aria-labelledby="cList"></ul>
+                            </div>
+                        </form>
+                    </div>
                 </nav>
             </div>
         </div>
