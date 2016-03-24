@@ -71,21 +71,13 @@ class Application {
                 register: {
                     enabled: true,
                     fields: {
-                        /*userName: {
-                         enabled: true,
-                         label: 'User Name',
-                         name: 'userName',
-                         placeholder: 'User Name',
-                         required: true,
-                         type: 'text'
-                         },*/
                         givenName: {
                             enabled: true,
                             required: true
                         },
                         surname: {
-                            enabled: false,
-                            required: false
+                            enabled: true,
+                            required: true
                         },
                         userType: {
                             enabled: true,
@@ -96,7 +88,7 @@ class Application {
                             type: 'text'
                         },
                     },
-                    fieldOrder: ["givenName", "email", "password", "userType"],
+                    fieldOrder: ["givenName", "surname", "email", "password", "userType"],
                 },
             },
 
