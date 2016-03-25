@@ -21,6 +21,7 @@ import Comic = require("../comic");
 import ImageWebService = require("../ImageWebService");
 import multer = require('multer');
 import ComicSearchManager = require("../search");
+import TranslateWebService = require("../TranslateWebService");
 
 class Router {
 
@@ -178,6 +179,16 @@ class Router {
 
             });
 
+        });
+
+        // Get Translated Text
+        router.get('/translate', function (req, res, next) {
+            var api = new TranslateWebService();
+            var text:Array<string> = req.body["Text"];
+            var toLang:string = req.body["ToLang"];
+            api.translateText(text, toLang, function (error:string, response:string, body:string){
+                res.send(body);
+            });
         });
 
         // Get the search results for given text

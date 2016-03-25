@@ -18,6 +18,7 @@ var Panel = require("../panel");
 var Comic = require("../comic");
 var ImageWebService = require("../ImageWebService");
 var multer = require('multer');
+var TranslateWebService = require("../TranslateWebService");
 var Router = (function () {
     function Router() {
         var fs = require("fs");
@@ -132,6 +133,15 @@ var Router = (function () {
             var api = new ComicWebService();
             api.getAllComics(function (err, response, body) {
                 //var searchManager = new ComicSearchManager();
+            });
+        });
+        // Get Translated Text
+        router.get('/translate', function (req, res, next) {
+            var api = new TranslateWebService();
+            var text = req.body["Text"];
+            var toLang = req.body["ToLang"];
+            api.translateText(text, toLang, function (error, response, body) {
+                res.send(body);
             });
         });
         // Get the search results for given text

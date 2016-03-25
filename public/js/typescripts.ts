@@ -57,6 +57,31 @@ function changeFavIcon():number{
     }
 }
 
+function translateComic(){
+
+    var texts:string[];
+
+    // TODO
+    // get all text from comic object that needs translating
+    // place text in texts array
+    // place response back into comic object, update comic viewer sees
+
+    $.ajax({
+        type: "GET",
+        url: "/translate",
+        contentType: "application/json; charset=utf-8",
+        data: texts,
+        async: true,
+        dataType: 'json',
+        timeout: 4000,
+        success: function (data) {
+        },
+        error: function (xhr, status, thrownError) {
+        }
+    });
+
+}
+
 // para: none
 // Check if the comic is currently set as a favourite of the user.
 // GET request retrieves list of favourite comics of the user, goes through list
