@@ -18,9 +18,9 @@ var Profile = (function () {
         var collectFormErrors = require('express-stormpath/lib/helpers').collectFormErrors;
         // Declare the schema of our form:
         var profileForm = forms.create({
-            givenName: forms.fields.string({ required: true }),
-            surname: forms.fields.string({ required: true }),
-            password: forms.fields.string({ required: true })
+            givenName: forms.fields.string({ required: false }),
+            surname: forms.fields.string({ required: false }),
+            password: forms.fields.string({ required: false })
         });
         // A render function that will render our form and
         // provide the values of the fields, as well
@@ -49,6 +49,7 @@ var Profile = (function () {
                         //req.user.userName = form.data.userName;
                         req.user.givenName = form.data.givenName;
                         req.user.surname = form.data.surname;
+                        req.user.password = form.data.password;
                         //req.user.customData.comic1 = "";
                         //req.user.customData.streetAddress = form.data.streetAddress;
                         //req.user.customData.save();

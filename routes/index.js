@@ -127,6 +127,20 @@ var Router = (function () {
                 //res.json(body);
             });
         });
+        // Get the search results for given text
+        router.get('/search/text', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getAllComics(function (err, response, body) {
+                //var searchManager = new ComicSearchManager();
+            });
+        });
+        // Get the search results for given text
+        router.get('/search/contributor', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getAllComics(function (err, response, body) {
+                //var searchManager = new ComicSearchManager();
+            });
+        });
         // Update a comic in the database
         router.put('/comic/:id', function (req, res, next) {
             var api = new ComicWebService();

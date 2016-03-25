@@ -20,6 +20,7 @@ import Panel = require("../panel");
 import Comic = require("../comic");
 import ImageWebService = require("../ImageWebService");
 import multer = require('multer');
+import ComicSearchManager = require("../search");
 
 class Router {
 
@@ -165,6 +166,29 @@ class Router {
                 res.send(JSON.stringify(body));
                 //res.json(body);
             });
+        });
+
+
+        // Get the search results for given text
+        router.get('/search/text', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getAllComics(function (err:string, response:string, body:string) {
+
+                //var searchManager = new ComicSearchManager();
+
+            });
+
+        });
+
+        // Get the search results for given text
+        router.get('/search/contributor', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getAllComics(function (err:string, response:string, body:string) {
+
+                //var searchManager = new ComicSearchManager();
+
+            });
+
         });
 
 // Update a comic in the database
