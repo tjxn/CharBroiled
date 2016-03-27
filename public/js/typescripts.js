@@ -1095,19 +1095,19 @@ function saveFavourites() {
 // renders thumbnails inside the container corresponding to the given id for the view page
 // return: none
 function renderViewFavourites(id) {
-    renderThumbnails(id, "fav", "view");
+    getAndRenderThumbnails(id, "fav", "view");
 }
 // para: id of favourites container
 // renders thumbnails inside the container corresponding to the given id for the edit page
 // return: none
 function renderEditFavourites(id) {
-    renderThumbnails(id, "fav", "edit");
+    getAndRenderThumbnails(id, "fav", "edit");
 }
 // para: id of contributed container
 // renders thumbnails inside the container corresponding to the given id for the edit page
 // return: none
 function renderContributed(id) {
-    renderThumbnails(id, "contributed", "edit");
+    getAndRenderThumbnails(id, "contributed", "edit");
 }
 // para: none
 // Delete a comic in the database then redirect user to the account page.
@@ -1171,78 +1171,85 @@ function deleteComic() {
     });
     window.location.replace("/account");
 }
-// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav')
-// creates contributed thumbnails on the account page in the given container corresponding to the given id
+// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav' || 'searchRes')
+// creates fav/contributed thumbnails in the given container corresponding to the given id
 // return: none
-function renderThumbnails(id, type, page) {
-    var container = document.getElementById(id);
+function getAndRenderThumbnails(id, type, page) {
     // returns list of comic JSON objects
     $.get('/user/' + type, function (data) {
-        JSONObj = JSON.parse(data);
-        var length = lengthJSON(JSONObj);
-        for (var i = 0; i < length; i++) {
-            var title = JSONObj[i].Title;
-            var url = JSONObj[i].Panels.Panel_1.Image_URL;
-            var desc = JSONObj[i].Panels.Panel_1.Text;
-            if (url != "" || desc != "") {
-                var thumbnail = document.createElement("div");
-                thumbnail.className = "thumbnail";
-                thumbnail.className += " " + type;
-                thumbnail.id = type + "_" + (i + 1).toString();
-                var caption = document.createElement("div");
-                caption.className = "caption";
-                var img = document.createElement("img");
-                img.className = "img-responsive";
-                img.src = url;
-                img.width = 100;
-                img.style.cssFloat = "right";
-                caption.appendChild(img);
-                var h3 = document.createElement("h3");
-                h3.innerHTML = title;
-                caption.appendChild(h3);
-                var p1 = document.createElement("p");
-                var first = true;
-                for (var j = 1; j <= 5; j++) {
-                    if (JSONObj[i].Contributors['Contributor_' + j]) {
-                        if (first) {
-                            p1.innerHTML = "Contributors: " + JSONObj[i].Contributors['Contributor_' + j];
-                            first = false;
-                        }
-                        else {
-                            p1.innerHTML += ", " + JSONObj[i].Contributors['Contributor_' + j];
-                        }
+        //JSONObj = JSON.parse(data); data is parsed in helper
+        renderThumbnails(id, type, page, data);
+    });
+}
+// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav' || 'searchRes')
+// creates fav/contributed/search thumbnails in the given container corresponding to the given id
+// return: none
+function renderThumbnails(id, type, page, comics) {
+    var container = document.getElementById(id);
+    JSONObj = JSON.parse(comics);
+    var length = lengthJSON(JSONObj);
+    for (var i = 0; i < length; i++) {
+        var title = JSONObj[i].Title;
+        var url = JSONObj[i].Panels.Panel_1.Image_URL;
+        var desc = JSONObj[i].Panels.Panel_1.Text;
+        if (url != "" || desc != "") {
+            var thumbnail = document.createElement("div");
+            thumbnail.className = "thumbnail";
+            thumbnail.className += " " + type;
+            thumbnail.id = type + "_" + (i + 1).toString();
+            var caption = document.createElement("div");
+            caption.className = "caption";
+            var img = document.createElement("img");
+            img.className = "img-responsive";
+            img.src = url;
+            img.width = 100;
+            img.style.cssFloat = "right";
+            caption.appendChild(img);
+            var h3 = document.createElement("h3");
+            h3.innerHTML = title;
+            caption.appendChild(h3);
+            var p1 = document.createElement("p");
+            var first = true;
+            for (var j = 1; j <= 5; j++) {
+                if (JSONObj[i].Contributors['Contributor_' + j]) {
+                    if (first) {
+                        p1.innerHTML = "Contributors: " + JSONObj[i].Contributors['Contributor_' + j];
+                        first = false;
+                    }
+                    else {
+                        p1.innerHTML += ", " + JSONObj[i].Contributors['Contributor_' + j];
                     }
                 }
-                caption.appendChild(p1);
-                var p2 = document.createElement("p");
-                var a2 = document.createElement("a");
-                a2.className = "btn btn-primary";
-                a2.href = "/" + page + "?id=" + JSONObj[i]._id;
-                if (page == "edit") {
-                    a2.innerHTML = "Edit";
-                }
-                else {
-                    a2.innerHTML = "View";
-                }
-                p2.appendChild(a2);
-                caption.appendChild(p2);
-                thumbnail.appendChild(caption);
             }
-            container.appendChild(thumbnail);
+            caption.appendChild(p1);
+            var p2 = document.createElement("p");
+            var a2 = document.createElement("a");
+            a2.className = "btn btn-primary";
+            a2.href = "/" + page + "?id=" + JSONObj[i]._id;
+            if (page == "edit") {
+                a2.innerHTML = "Edit";
+            }
+            else {
+                a2.innerHTML = "View";
+            }
+            p2.appendChild(a2);
+            caption.appendChild(p2);
+            thumbnail.appendChild(caption);
         }
-        //=======================
-        /*
-         if (comicJSONObj.Public == true) {
-         comicTitle.value = comicJSONObj.Title;
+        container.appendChild(thumbnail);
+    }
+    //=======================
+    /*
+     if (comicJSONObj.Public == true) {
+     comicTitle.value = comicJSONObj.Title;
 
-         //console.log(comicJSONObj.Panels);
-         renderPanels("pictureContainer", comicJSONObj.Panels, false);
-         } else {
-         comicTitle.value = "This comic is private.";
-         }
-         */
-        //==========================
-    });
+     //console.log(comicJSONObj.Panels);
+     renderPanels("pictureContainer", comicJSONObj.Panels, false);
+     } else {
+     comicTitle.value = "This comic is private.";
+     }
+     */
+    //==========================
 }
 // para: comicJSON object
 // Adds names of contributors to the drop-down bar for edit and view page
@@ -1381,5 +1388,17 @@ function addComicToUser() {
         error: function (xhr, ajaxOptions, thrownError) {
         }
     });
+}
+// para: array of strings where each string is a JSON comic object, id of container ele.
+// and the string representation of userType
+// renders the given search results as thumbnails under the element corresponding to the given id.
+// return: none
+function renderSearchResults(id, comics, uType) {
+    if (uType == "Contributor") {
+        renderThumbnails(id, "searchRes", "edit", comics);
+    }
+    else {
+        renderThumbnails(id, "searchRes", "view", comics);
+    }
 }
 //# sourceMappingURL=typescripts.js.map
