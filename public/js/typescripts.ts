@@ -1210,6 +1210,20 @@ function renderContributed(id: string): void {
     getAndRenderThumbnails(id, "contributed", "edit");
 }
 
+// para: id of favourites container
+// renders thumbnails inside the container corresponding to the given id for the view page
+// return: none
+function renderViewRecentlyViewed(id: string): void {
+    getAndRenderThumbnails(id, "viewed", "view");
+}
+
+// para: id of favourites container
+// renders thumbnails inside the container corresponding to the given id for the edit page
+// return: none
+function renderEditRecentlyViewed(id: string): void {
+    getAndRenderThumbnails(id, "viewed", "edit");
+}
+
 // para: none
 // Delete a comic in the database then redirect user to the account page.
 // return: none
@@ -1287,13 +1301,16 @@ function getAndRenderThumbnails(id: string, type: string, page: string): void {
     });
 }
 
-// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav' || 'searchRes')
+// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav' || 'searchRes'),
+// string for which page to link, string of JSON object which is an array of comic objects
 // creates fav/contributed/search thumbnails in the given container corresponding to the given id
 // return: none
 function renderThumbnails(id: string, type: string, page: string, comics: string) {
     var container = (<HTMLInputElement>  document.getElementById(id));
 
     JSONObj = JSON.parse(comics);
+
+    console.log(JSONObj);
 
     var length = lengthJSON(JSONObj);
     for (var i = 0; i < length; i++) { // for each cont comic

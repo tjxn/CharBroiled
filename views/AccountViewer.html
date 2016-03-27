@@ -30,6 +30,7 @@
             // Animate loader off screen
             setUserEmails();
             renderViewFavourites("favContainer");
+            renderViewRecentlyViewed("viewedContainer");
             setTimeout( function(){
                 $(".se-pre-con").fadeOut("slow")
             }, 1500);
@@ -97,7 +98,16 @@
                     <br>
             </div>
         </div>
-
+        <div class="col-md-6">
+            <div class="panel panel-default" id="viewedContainer">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Recently Viewed
+                    </h3>
+                </div>
+                <br>
+            </div>
+        </div>
 
     </div>
 </div></div>

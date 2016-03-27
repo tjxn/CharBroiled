@@ -32,10 +32,10 @@ var ComicWebService = (function () {
             }
             else {
                 var k = 0;
-                for (var i = 0; i < temp.length; i++) {
-                    for (var j = 0; j < ids.length; j++) {
-                        if (temp[i]._id == ids[j]) {
-                            ans[k] = temp[i];
+                for (var i = 0; i < ids.length; i++) {
+                    for (var j = 0; j < temp.length; j++) {
+                        if (temp[j]._id == ids[i]) {
+                            ans[k] = temp[j];
                             k++;
                         }
                     }
