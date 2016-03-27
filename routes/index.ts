@@ -302,6 +302,43 @@ class Router {
             res.send(JSON.stringify({Status: "Success - ComicID added to Stormpath"}));
         });
 
+        // save viewed array
+        router.put('/user/viewed', function (req, res, next) {
+            var comics:Array<string> = req.user.customData.viewed;
+            var id:string = req.body["comicID"];
+
+            if (comics == undefined) {
+                comics = Array();
+            }
+
+            // Check if the comic is already in the array of comics
+            for (var i = 0; i < comics.length; i++) {
+                if (comics[i] == id) {
+                    res.send(JSON.stringify({Status: "Success - ComicID already in Stormpath"}));
+                    return
+                }
+            }
+
+            comics.push(id);
+            req.user.customData.viewed = comics;
+            req.user.save();
+            res.send(JSON.stringify({Status: "Success - ComicID added to Stormpath"}));
+        });
+
+        // Send JSON array of viewed comic ids
+        router.get('/user/viewed/ids', function (req, res, next) {
+            console.log(req.user.customData.viewed);
+            res.send(JSON.stringify(req.user.customData.viewed));
+        });
+
+        // Send JSON array of viewed comic objects
+        router.get('/user/viewed', function (req, res, next) {
+            var api = new ComicWebService();
+            api.getComics(req.user.customData.viewed, function (request, response, body) {
+                res.send(body);
+            });
+        });
+
 // Remove a string from an array of strings
 // Used for removing a comic ID from a list of comic IDs
 // See router.put('/user/fav'
@@ -358,21 +395,25 @@ class Router {
             console.log(contributed);
             req.user.customData.contributed = contributed;
 
+            var viewed = removeComicFromStormpath(req.params.id, req.user.customData.viewed);
+            console.log(viewed);
+            req.user.customData.viewed = viewed;
+
             var fav = removeFavourite(req.user.customData.favourites, req.params.id);
             req.user.customData.favourites = fav;
             req.user.save();
 
         });
 
-        function removeComicFromStormpath(id:string, contributed:Array<string>):Array<string>{
+        function removeComicFromStormpath(id:string, comicIds:Array<string>):Array<string>{
 
-            for (var i = 0; i < contributed.length; i++) {
-                if (contributed[i] == id) {
-                    contributed.splice(i, 1);
+            for (var i = 0; i < comicIds.length; i++) {
+                if (comicIds[i] == id) {
+                    comicIds.splice(i, 1);
                 }
             }
 
-            return contributed;
+            return comicIds;
         }
 
         function jsonToComic(data:Object):Comic {
