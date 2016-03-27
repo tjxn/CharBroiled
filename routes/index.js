@@ -244,11 +244,11 @@ var Router = (function () {
             // Check if the comic is already in the array of comics
             for (var i = 0; i < comics.length; i++) {
                 if (comics[i] == id) {
-                    res.send(JSON.stringify({ Status: "Success - ComicID already in Stormpath" }));
-                    return;
+                    // if comic is in array, remove it
+                    comics.splice(i, 1);
                 }
             }
-            comics.push(id);
+            comics.unshift(id); // unshift adds item to the beginning of the array
             req.user.customData.viewed = comics;
             req.user.save();
             res.send(JSON.stringify({ Status: "Success - ComicID added to Stormpath" }));
