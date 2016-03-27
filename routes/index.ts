@@ -48,9 +48,12 @@ class Router {
 
         /* GET edit page. */
         router.get('/edit', function (req, res, next) {
-            res.sendFile(path.join(__dirname, '../views', 'edit.html'));
+            if(req.user.customData.userType == "Contributor") {
+                res.sendFile(path.join(__dirname, '../views', 'edit.html'));
+            } else {
+                res.redirect('view?id='+req.param('id'));
+            }
         });
-
 
         /* GET account page. */
         router.get('/', function (req, res, next) {

@@ -1059,23 +1059,6 @@ function checkIfViewer(){
 }
 
 // para: none
-// Used on the Edit Page to redirect a Viewer to the View Page
-// Does a GET request to check if the user is a Viewer, if so then redirect user
-// to the view page of that comic.
-// return: none
-function checkIfContributor(){
-    $.get('/user/type', function (data) {
-
-        if(data.toString() == "Viewer"){
-            var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
-            window.location.replace("/view?id=" + id);
-        }
-
-
-    });
-}
-
-// para: none
 // Changes the color of the Favourite button, send PUT request to server with indication
 // of whether to add or remove the given comic ID to the Favourite list kept on the Server
 // return: none
