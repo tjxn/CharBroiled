@@ -3,6 +3,18 @@
 /// <reference path="./comic.ts" />
 /// <reference path="./ComicWebService.ts" />
 /// <reference path="./node/node.d.ts" />
+/*
+ *             Libraries Used Throughout Application Class
+ * path - https://www.npmjs.com/package/path
+ * serve-favicon - https://github.com/expressjs/serve-favicon
+ * express-stormpath - https://docs.stormpath.com/nodejs/express/latest/
+ * morgan - https://github.com/expressjs/morgan
+ * cookie-parser - https://www.npmjs.com/package/cookie-parser
+ * body-parser - https://www.npmjs.com/package/body-parser
+ *
+ * */
+var User = require("./user");
+var UserWebService = require("./UserWebService");
 var Application = (function () {
     function Application() {
         var express = require("express");
@@ -30,6 +42,38 @@ var Application = (function () {
         app.use(cookieParser());
         app.use(express.static(path.join(__dirname, 'public')));
         app.use(stormpath.init(app, {
+            postRegistrationHandler: function (account, req, res, next) {
+                var api = new UserWebService();
+                api.newUser(new User("", [], [], account.customData.userType, account.email), function (error, response, body) {
+                    var temp = JSON.parse(body);
+                    console.log(temp['_id']);
+                    account.customData.mongoUserID = temp["_id"];
+                    account.save();
+                });
+                next();
+            },
+            // Function is run after someone logs in
+            // Checks to see if the user exists in the MongoDB
+            postLoginHandler: function (account, req, res, next) {
+                if (req.user.customData.mongoUserID == undefined) {
+                    var api = new UserWebService();
+                    api.getAUserByEmail(req.user.email, function (error, response, body) {
+                        if (body.toString() == "null") {
+                            api.newUser(new User("", [], [], req.user.customData.userType.toString(), req.user.email.toString()), function (error, response, body) {
+                                var temp = JSON.parse(body);
+                                req.user.customData.mongoUserID = temp["_id"];
+                                req.user.save();
+                            });
+                        }
+                        else {
+                            var temp = JSON.parse(body);
+                            req.user.customData.mongoUserID = temp["_id"];
+                            req.user.save();
+                        }
+                    });
+                }
+                next();
+            },
             client: {
                 apiKey: {
                     id: '4F42CDDRB565RJ2LFG9O8IR3F',

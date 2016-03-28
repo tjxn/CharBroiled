@@ -19,6 +19,8 @@ var Comic = require("../comic");
 var ImageWebService = require("../ImageWebService");
 var multer = require('multer');
 var TranslateWebService = require("../TranslateWebService");
+var UserWebService = require("../UserWebService");
+var User = require("../user");
 var Router = (function () {
     function Router() {
         var fs = require("fs");
@@ -61,6 +63,8 @@ var Router = (function () {
             }
         });
         /* POST newComic. */
+        // TODO
+        // IS THIS BEING USED ????
         router.post('/comic', function (req, res, next) {
             var api = new ComicWebService();
             var defaultImage = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
@@ -73,23 +77,33 @@ var Router = (function () {
             var defcontribs = [firstcontrib, "", "", "", ""];
             var currComic = new Comic(defaultTitle, defaultPublicView, defpanels, defcontribs);
             api.newComic(currComic, function (err, response, body) {
-                var id = body['_id'];
-                var comics = req.user.customData.contributed;
-                if (comics == undefined) {
-                    comics = Array();
-                }
-                // Check if the comic is already in the array of comics
-                for (var i = 0; i < comics.length; i++) {
-                    if (comics[i] == id) {
-                        res.send(JSON.stringify({ ComicID: id }));
-                        return;
+                var userAPI = new UserWebService();
+                var comicID = body['_id'];
+                userAPI.getAUser(req.user.customData.mongoUserID, function (error, response, body) {
+                    var comics = body['Contributed'];
+                    if (comics == undefined) {
+                        comics = Array();
                     }
-                }
-                comics.push(id);
-                req.user.customData.comic = comics;
-                req.user.customData.contributed = comics; // not sure if need this or above line !!!
-                req.user.save();
-                res.send(JSON.stringify({ ComicID: id }));
+                    // Check if the comic is already in the array of comics
+                    for (var i = 0; i < comics.length; i++) {
+                        if (comics[i] == comicID) {
+                            res.send(JSON.stringify({ ComicID: comicID }));
+                            return;
+                        }
+                    }
+                    comics.push(comicID);
+                    userAPI.updateUser(new User(body["StormpathID"], body['Favourites'], comics, body["UserType"], body["Email"]), function (error, response, body) {
+                        res.send(JSON.stringify({ ComicID: comicID }));
+                    });
+                });
+            });
+        });
+        /* POST user. */
+        router.post('/user', function (req, res, next) {
+            var api = new UserWebService();
+            var user = new User("", [], [], req.body["UserType"], req.body["Email"]);
+            api.newUser(user, function (err, response, body) {
+                res.send(JSON.stringify({ Status: "Success" }));
             });
         });
         /* GET home page. */
@@ -167,72 +181,107 @@ var Router = (function () {
         });
         // Add/Remove a Favourite Comic
         router.put('/user/fav/ids', function (req, res, next) {
-            var fav = req.user.customData.favourites;
-            var givenFav = req.body['favourite'];
-            // if 1 then add, 0 then remove
-            var addRemove = req.body['action'];
-            if (fav == undefined) {
-                fav = new Array();
-            }
-            if (addRemove == 0) {
-                for (var i = 0; i < fav.length; i++) {
-                    if (fav[i] == givenFav) {
-                        fav = removeFavourite(fav, givenFav);
-                        req.user.customData.favourites = fav;
-                        req.user.save();
-                        res.send(JSON.stringify({ Status: 'Update Successful - Removed Favourite' }));
-                        return;
+            var userAPI = new UserWebService();
+            userAPI.getAUser(req.user.customData.mongoUserID, function (err, resp, bod) {
+                var usr = JSON.parse(bod);
+                var fav = usr["Favourites"];
+                var givenFav = req.body['favourite'];
+                // if 1 then add, 0 then remove
+                var addRemove = req.body['action'];
+                if (fav == undefined) {
+                    fav = new Array();
+                }
+                if (addRemove == 0) {
+                    for (var i = 0; i < fav.length; i++) {
+                        if (fav[i] == givenFav) {
+                            fav = removeFavourite(fav, givenFav);
+                            var user = new User("", fav, bod["Contributed"], bod["UserType"], bod["Email"]);
+                            user.UserID = req.user.customData.mongoUserID;
+                            userAPI.updateUser(user, function (error, response, bd) {
+                                res.send(JSON.stringify({ Status: 'Update Successful - Removed Favourite' }));
+                            });
+                            return;
+                        }
                     }
                 }
-            }
-            else {
-                fav.push(givenFav);
-                req.user.customData.favourites = fav;
-                req.user.save();
-                res.send(JSON.stringify({ Status: "Update Successful - Added Favourite" }));
-            }
-        });
-        // Send JSON array of fav comic ids
-        router.get('/user/fav/ids', function (req, res, next) {
-            res.send(JSON.stringify(req.user.customData.favourites));
-        });
-        //// Send JSON array of comic objects
-        router.get('/user/fav', function (req, res, next) {
-            var api = new ComicWebService();
-            api.getComics(req.user.customData.favourites, function (request, response, body) {
-                res.send(body);
+                else {
+                    fav.push(givenFav);
+                    var user = new User("", fav, bod["Contributed"], bod["UserType"], bod["Email"]);
+                    user.UserID = req.user.customData.mongoUserID;
+                    userAPI.updateUser(user, function (error, response, bd) {
+                        res.send(JSON.stringify({ Status: "Update Successful - Added Favourite" }));
+                    });
+                }
             });
         });
         // Send JSON array of fav comic ids
-        router.get('/user/contributed/ids', function (req, res, next) {
-            console.log(req.user.customData.contributed);
-            res.send(JSON.stringify(req.user.customData.contributed));
+        router.get('/user/fav/ids', function (req, res, next) {
+            var userAPI = new UserWebService();
+            userAPI.getAUser(req.user.customData.mongoUserID, function (err, resp, bod) {
+                var usr = JSON.parse(bod);
+                res.send(JSON.stringify(usr["Favourites"]));
+            });
         });
+        //// Send JSON array of comic objects
+        router.get('/user/fav', function (req, res, next) {
+            var userAPI = new UserWebService();
+            userAPI.getAUser(req.user.customData.mongoUserID, function (err, resp, bod) {
+                var usr = JSON.parse(bod);
+                var api = new ComicWebService();
+                api.getComics(usr["Favourites"], function (request, response, body) {
+                    res.send(body);
+                });
+            });
+        });
+        // TODO
+        // IS THIS BEING USED ???
+        // Send JSON array of fav comic ids
+        router.get('/user/contributed/ids', function (req, res, next) {
+            var userAPI = new UserWebService();
+            userAPI.getAUser(req.user.customData.mongoUserID, function (err, resp, body) {
+                var usr = JSON.parse(body);
+                res.send(JSON.stringify(usr["Contributed"]));
+            });
+        });
+        // TODO
+        // IS THIS BEING USED ???
         // Send JSON array of comic objects
         router.get('/user/contributed', function (req, res, next) {
-            var api = new ComicWebService();
-            api.getComics(req.user.customData.contributed, function (request, response, body) {
-                res.send(body);
+            var userAPI = new UserWebService();
+            userAPI.getAUser(req.user.customData.mongoUserID, function (err, resp, body) {
+                var usr = JSON.parse(body);
+                var api = new ComicWebService();
+                api.getComics(usr["Contributed"], function (request, response, body) {
+                    res.send(body);
+                });
             });
         });
         // save contributed array
         router.put('/user/contributed', function (req, res, next) {
-            var comics = req.user.customData.contributed;
-            var id = req.body["comicID"];
-            if (comics == undefined) {
-                comics = Array();
-            }
-            // Check if the comic is already in the array of comics
-            for (var i = 0; i < comics.length; i++) {
-                if (comics[i] == id) {
-                    res.send(JSON.stringify({ Status: "Success - ComicID already in Stormpath" }));
-                    return;
+            var userAPI = new UserWebService();
+            var comicID = req.body['comicID'];
+            userAPI.getAUser(req.user.customData.mongoUserID, function (error, response, temp) {
+                var body = JSON.parse(temp);
+                var comics = body['Contributed'];
+                if (comics == undefined) {
+                    comics = Array();
                 }
-            }
-            comics.push(id);
-            req.user.customData.contributed = comics;
-            req.user.save();
-            res.send(JSON.stringify({ Status: "Success - ComicID added to Stormpath" }));
+                // Check if the comic is already in the array of comics
+                for (var i = 0; i < comics.length; i++) {
+                    if (comics[i] == comicID) {
+                        res.send(JSON.stringify({ Status: "Success - ComicID already in Stormpath" }));
+                        return;
+                    }
+                }
+                // Add comic to contributed
+                comics.push(comicID);
+                var user = new User(body["StormpathID"], body['Favourites'], comics, body["UserType"], body["Email"]);
+                user.UserID = req.user.customData.mongoUserID;
+                userAPI.updateUser(user, function (error, response, body) {
+                    console.log(user.Contributed);
+                    res.send(JSON.stringify({ Status: "Success - ComicID already in Stormpath" }));
+                });
+            });
         });
         // save viewed array
         router.put('/user/viewed', function (req, res, next) {
@@ -256,11 +305,19 @@ var Router = (function () {
         // Send JSON array of viewed comic ids
         router.get('/user/viewed/ids', function (req, res, next) {
             console.log(req.user.customData.viewed);
+            if (req.user.customData.viewed == undefined) {
+                req.user.customData.viewed = Array();
+                req.user.save();
+            }
             res.send(JSON.stringify(req.user.customData.viewed));
         });
         // Send JSON array of viewed comic objects
         router.get('/user/viewed', function (req, res, next) {
             var api = new ComicWebService();
+            if (req.user.customData.viewed == undefined) {
+                req.user.customData.viewed = Array();
+                req.user.save();
+            }
             api.getComics(req.user.customData.viewed, function (request, response, body) {
                 res.send(body);
             });
@@ -299,28 +356,33 @@ var Router = (function () {
                 res.send(JSON.stringify({ Status: "Image Removed" }));
             });
         });
-        // Retrieve IDs of comic(s) the user has contributed to
         router.delete('/comic/:id', function (req, res, next) {
-            var api = new ComicWebService();
-            api.deleteAComic(req.params.id, function (result) {
-                res.send(JSON.stringify({ Status: "Comic Deleted" }));
+            var userAPI = new UserWebService();
+            var comicID = req.body['comicID'];
+            userAPI.getAllUsers(function (error, response, temp) {
+                var allUsers = JSON.parse(temp);
+                for (var i = 0; i < allUsers.length; i++) {
+                    var api = new ComicWebService();
+                    api.deleteAComic(req.params.id, function () {
+                    });
+                    var viewed = removeComicFromMongo(req.params.id, req.user.customData.viewed);
+                    req.user.customData.viewed = viewed;
+                    req.user.save();
+                    var contributed = removeComicFromMongo(req.params.id, allUsers[i]["Contributed"]);
+                    var fav = removeFavourite(allUsers[i]["Favourites"], req.params.id);
+                    var user = new User("", fav, contributed, allUsers[i]["UserType"], allUsers[i]["Email"]);
+                    user.UserID = allUsers[i]["_id"];
+                    userAPI.updateUser(user, function (error, response, body) { });
+                }
+                res.send(JSON.stringify({ Status: "All User Viewed/Contributed/Favourites Updated" }));
             });
-            console.log('here');
-            console.log(req.user.customData.contributed);
-            var contributed = removeComicFromStormpath(req.params.id, req.user.customData.contributed);
-            console.log(contributed);
-            req.user.customData.contributed = contributed;
-            var viewed = removeComicFromStormpath(req.params.id, req.user.customData.viewed);
-            console.log(viewed);
-            req.user.customData.viewed = viewed;
-            var fav = removeFavourite(req.user.customData.favourites, req.params.id);
-            req.user.customData.favourites = fav;
-            req.user.save();
         });
-        function removeComicFromStormpath(id, comicIds) {
-            for (var i = 0; i < comicIds.length; i++) {
-                if (comicIds[i] == id) {
-                    comicIds.splice(i, 1);
+        function removeComicFromMongo(id, comicIds) {
+            if (comicIds != undefined) {
+                for (var i = 0; i < comicIds.length; i++) {
+                    if (comicIds[i] == id) {
+                        comicIds.splice(i, 1);
+                    }
                 }
             }
             return comicIds;

@@ -18,6 +18,7 @@
 
 
 import User = require("./user");
+import UserWebService = require("./UserWebService");
 class Application {
 
     constructor() {
@@ -52,6 +53,45 @@ class Application {
         app.use(express.static(path.join(__dirname, 'public')));
 
         app.use(stormpath.init(app, {
+            postRegistrationHandler: function (account, req, res, next) {
+                var api = new UserWebService();
+                api.newUser(new User("", [], [], account.customData.userType, account.email), function (error, response, body) {
+                    var temp = JSON.parse(body);
+                    console.log(temp['_id']);
+                    account.customData.mongoUserID = temp["_id"];
+                    account.save();
+                });
+                next();
+            },
+
+            // Function is run after someone logs in
+            // Checks to see if the user exists in the MongoDB
+            postLoginHandler: function (account, req, res, next){
+
+                if(req.user.customData.mongoUserID == undefined){
+
+                    var api = new UserWebService();
+                    api.getAUserByEmail(req.user.email, function(error:string, response:string, body:string){
+
+                        if (body.toString() == "null"){
+                            api.newUser(new User("", [], [], req.user.customData.userType.toString(), req.user.email.toString()), function(error:string, response:string, body:string){
+                                var temp = JSON.parse(body);
+                                req.user.customData.mongoUserID = temp["_id"];
+                                req.user.save();
+                            });
+
+                        }else{
+
+                            var temp = JSON.parse(body);
+                            req.user.customData.mongoUserID = temp["_id"];
+                            req.user.save();
+                        }
+                    });
+
+                }
+
+                next();
+            },
             client: {
                 apiKey: {
                     id: '4F42CDDRB565RJ2LFG9O8IR3F',
@@ -105,6 +145,7 @@ class Application {
         app.get('/image', function (req, res) {
             res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
         });
+
         app.use('/', stormpath.loginRequired, routes);
         app.use('/profile', stormpath.loginRequired, profile);
 

@@ -1065,6 +1065,8 @@ function checkIfViewer(){
 // return: none
 function saveFavourites() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;
+    var btn = (<HTMLButtonElement>  document.getElementById("FavouriteButton"));
+    btn.disabled = true;
 
     // return: 1 = Icon is yellow (favourite); 0 = Icon is white (not a favourite)
     var color = changeFavIcon();
@@ -1083,9 +1085,8 @@ function saveFavourites() {
         data: fav,
         async: true,
         dataType: 'json',
-        timeout: 4000,
+        timeout: 5000,
         success: function (data) {
-            amIFavourite();
 
             var note = $.notify({
                 // options
@@ -1133,10 +1134,10 @@ function saveFavourites() {
                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
                 '</div>'
             });
+            btn.disabled = false;
             amIFavourite();
         },
         error: function (xhr, status, thrownError) {
-            amIFavourite();
 
             var note = $.notify({
                 // options
@@ -1184,6 +1185,7 @@ function saveFavourites() {
                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
                 '</div>'
             });
+            btn.disabled = false;
             amIFavourite();
         }
     });
@@ -1442,7 +1444,7 @@ function removeUnusedPhoto(){
 }
 
 // para: none
-// Adds the comicID to the user object(StormPath)
+// Adds the comicID to the user object(Mongo User DB)
 // return: none
 function addComicToUser() {
     var id = (<HTMLInputElement>  document.getElementById("comicID")).value;

@@ -60,7 +60,17 @@ class UserWebService {
     getAUser(userId:string, callback:(error:string, response:string, body:string) => void) {
 
         var request = require('request');
-        request.get('http://charbroiled-user-api.herokuapp.com/user/' + userId, callback);
+        request.get('http://charbroiled-user-api.herokuapp.com/user/id/' + userId, callback);
+        return;
+    }
+
+    // para: ids:string - email of user, callback:function(error:string, response:string, body:string) => void - callback with a three string parameters
+    // Given a user email, get the associated JSON user object from the user database
+    // return: none
+    getAUserByEmail(userEmail:string, callback:(error:string, response:string, body:string) => void) {
+
+        var request = require('request');
+        request.get('http://charbroiled-user-api.herokuapp.com/user/email/' + userEmail, callback);
         return;
     }
 

@@ -37,7 +37,7 @@ class User {
             // If so assign UserID to User Database object's ID
             for (var i = 0; i < temp.length; i++) {
 
-                if (temp[i].StormpathID == user.StormpathID) {
+                if (temp[i].Email == user.Email) {
                     user.UserID = temp[i]._id;
                     return;
                 }
