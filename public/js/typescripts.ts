@@ -79,7 +79,6 @@ function translateComic(){
         error: function (xhr, status, thrownError) {
         }
     });
-
 }
 
 // para: none
@@ -616,6 +615,7 @@ function createPanel(url: string, desc: string, numStr: string, edit: boolean, o
 
     var thumbnail = document.createElement("div");
     thumbnail.className = "thumbnail";
+    thumbnail.appendChild(document.createTextNode("\u00A0")); // adds &nbsp
     panel.appendChild(thumbnail);
 
     var img = document.createElement("img");
@@ -630,62 +630,91 @@ function createPanel(url: string, desc: string, numStr: string, edit: boolean, o
     caption.className = "caption";
     thumbnail.appendChild(caption);
 
-    var par = document.createElement("p");
-    par.innerHTML = desc;
-    par.id = "desc_" + numStr;
-    caption.appendChild(par);
+    var par1 = document.createElement("p");
+    par1.innerHTML = desc;
+    par1.id = "desc_" + numStr;
+    caption.appendChild(par1);
+
+    var par2 = document.createElement("p");
+    caption.appendChild(par2);
+
+    var butDiv = document.createElement("div");
+    butDiv.className = "btn-group pull-center";
+    par2.appendChild(butDiv);
 
     if (edit) {
         if(omission != "left") {
             // create "Swap Left" button
             var button1 = document.createElement("button");
             button1.id = "buttonSwapL_" + numStr;
-            button1.className = "btn btn-primary";
-            button1.innerHTML = "Swap Left";
+            button1.className = "btn btn-default";
+            button1.setAttribute("type", "button");
             button1.setAttribute("role", "button");
             button1.setAttribute("onclick", "swapPanelLeft(this)");
-        }
 
-        if(omission != "right") {
-            // create "Swap Right" button
-            var button2 = document.createElement("button");
-            button2.id = "buttonSwapR_" + numStr;
-            button2.className = "btn btn-primary";
-            button2.innerHTML = "Swap Right";
-            button2.setAttribute("role", "button");
-            button2.setAttribute("onclick", "swapPanelRight(this)");
+            var em1 = document.createElement("em");
+            em1.className = "glyphicon glyphicon-chevron-left";
+            em1.textContent = "Left";
+
+            button1.appendChild(em1);
         }
 
         // create " Edit Panel" button
-        var button3 = document.createElement("button");
-        button3.id = "button_" + numStr;
-        button3.className = "btn btn-primary";
-        button3.innerHTML = "Edit Panel";
-        button3.setAttribute("data-toggle", "modal");
-        button3.setAttribute("role", "button");
-        button3.setAttribute("href", "#modal-container-94539");
-        button3.setAttribute("onclick", "updateModal(this)");
+        var button2 = document.createElement("button");
+        button2.id = "button_" + numStr;
+        button2.className = "btn btn-default";
+        button2.setAttribute("data-toggle", "modal");
+        button2.setAttribute("type", "button");
+        button2.setAttribute("role", "button");
+        button2.setAttribute("href", "#modal-container-94539");
+        button2.setAttribute("onclick", "updateModal(this)");
+
+        var em2 = document.createElement("em");
+        em2.className = "glyphicon glyphicon-pencil";
+        em2.textContent = "Edit";
+
+        button2.appendChild(em2);
+
+        if(omission != "right") {
+            // create "Swap Right" button
+            var button3 = document.createElement("button");
+            button3.id = "buttonSwapR_" + numStr;
+            button3.className = "btn btn-default";
+            button3.setAttribute("type", "button");
+            button3.setAttribute("role", "button");
+            button3.setAttribute("onclick", "swapPanelRight(this)");
+
+            var em3 = document.createElement("em");
+            em3.className = "glyphicon glyphicon-chevron-right";
+            em3.textContent = "Right";
+
+            button3.appendChild(em3);
+        }
 
         // create "Delete Panel" button
         var button4 = document.createElement("button");
         button4.id = "buttonRem_" + numStr;
-        button4.className = "btn btn-primary";
-        button4.innerHTML = "Delete Panel";
+        button4.className = "btn btn-default pull-right";
+        button4.textContent = "Delete";
+        button4.setAttribute("type", "button");
         button4.setAttribute("role", "button");
         button4.setAttribute("onclick", "removePanel(this)");
 
-        // buttons are held within a "p" element
-        var par1 = document.createElement("p");
-        caption.appendChild(par);
-        caption.appendChild(par1);
+        var span4 = document.createElement("span");
+        span4.className = "glyphicon glyphicon-trash";
+        span4.setAttribute("aria-hidden", "true");
+
+        button4.appendChild(span4);
+
+        // buttons are held within a "div" element
         if(omission != "left") {
-            par1.appendChild(button1);
+            butDiv.appendChild(button1);
         }
         if(omission != "right") {
-            par1.appendChild(button2);
+            butDiv.appendChild(button3);
         }
-        par1.appendChild(button3);
-        par1.appendChild(button4);
+        butDiv.appendChild(button2);
+        par2.appendChild(button4);
     }
     container.appendChild(panel);
 }
@@ -1212,6 +1241,20 @@ function renderContributed(id: string): void {
     getAndRenderThumbnails(id, "contributed", "edit");
 }
 
+// para: id of favourites container
+// renders thumbnails inside the container corresponding to the given id for the view page
+// return: none
+function renderViewRecentlyViewed(id: string): void {
+    getAndRenderThumbnails(id, "viewed", "view");
+}
+
+// para: id of favourites container
+// renders thumbnails inside the container corresponding to the given id for the edit page
+// return: none
+function renderEditRecentlyViewed(id: string): void {
+    getAndRenderThumbnails(id, "viewed", "edit");
+}
+
 // para: none
 // Delete a comic in the database then redirect user to the account page.
 // return: none
@@ -1289,13 +1332,16 @@ function getAndRenderThumbnails(id: string, type: string, page: string): void {
     });
 }
 
-// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav' || 'searchRes')
+// para: id of container to put elements in, string of thumbnail type (type == 'contributed' || 'fav' || 'searchRes'),
+// string for which page to link, string of JSON object which is an array of comic objects
 // creates fav/contributed/search thumbnails in the given container corresponding to the given id
 // return: none
 function renderThumbnails(id: string, type: string, page: string, comics: string) {
     var container = (<HTMLInputElement>  document.getElementById(id));
 
     JSONObj = JSON.parse(comics);
+
+    console.log(JSONObj);
 
     var length = lengthJSON(JSONObj);
     for (var i = 0; i < length; i++) { // for each cont comic
@@ -1604,5 +1650,19 @@ function renderSearchResults(id: string, comics: string, uType: string) {
         renderThumbnails(id, "searchRes", "edit", comics);
     } else {
         renderThumbnails(id, "searchRes", "view", comics);
+    }
+}
+
+// para: string translated title, string JSON array where each element is a panel translated description.
+// updates the rendered view of the comic to use the translated text.
+// return: none
+function renderLanguage(title: string, panels: string) {
+    var panelsJSON = JSON.parse(panels);
+
+    document.getElementById("comicTitle").value = title;
+
+    // for each panel given, update the desc
+    for(var i=1; i<lengthJSON(panelsJSON); i++) {
+        document.getElementById("desc_"+i).textContent = panelsJSON[i];
     }
 }

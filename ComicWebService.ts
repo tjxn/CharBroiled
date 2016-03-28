@@ -45,10 +45,10 @@ class ComicWebService {
                 //console.log("given list of ids is empty");
             } else {
                 var k=0;
-                for (var i = 0; i < temp.length; i++) {
-                    for (var j = 0; j < ids.length; j++) {
-                        if (temp[i]._id == ids[j]) { // if this comic is a fav
-                            ans[k] = temp[i];
+                for (var i = 0; i < ids.length; i++) {
+                    for (var j = 0; j < temp.length; j++) {
+                        if (temp[j]._id == ids[i]) { // if this comic is requested
+                            ans[k] = temp[j];
                             k++;
                         }
                     }
