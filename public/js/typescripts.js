@@ -1495,4 +1495,15 @@ function renderSearchResults(id, comics, uType) {
         renderThumbnails(id, "searchRes", "view", comics);
     }
 }
+// para: string translated title, string JSON array where each element is a panel translated description.
+// updates the rendered view of the comic to use the translated text.
+// return: none
+function renderLanguage(title, panels) {
+    var panelsJSON = JSON.parse(panels);
+    document.getElementById("comicTitle").value = title;
+    // for each panel given, update the desc
+    for (var i = 1; i < lengthJSON(panelsJSON); i++) {
+        document.getElementById("desc_" + i).textContent = panelsJSON[i];
+    }
+}
 //# sourceMappingURL=typescripts.js.map
