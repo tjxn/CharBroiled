@@ -195,10 +195,15 @@ class Router {
         // Get the search results for given text
         router.get('/search/text', function (req, res, next) {
             var api = new ComicWebService();
+            var query:string = req.query["comicQuery"];
+            console.log(query);
             api.getAllComics(function (err:string, response:string, body:string) {
-
-                //var searchManager = new ComicSearchManager();
-
+                var array = JSON.parse(body);
+                console.log(array.length);
+                var searchManager = new ComicSearchManager(query, ["Text"], array);
+                var results = searchManager.getResults();
+                console.log(results.length);
+                res.send(JSON.stringify(results));
             });
 
         });
@@ -219,10 +224,16 @@ class Router {
         // Get the search results for given text
         router.get('/search/contributor', function (req, res, next) {
             var api = new ComicWebService();
+            //console.log(req);
+            var query:string = req.query["contribQuery"];
+            console.log(query);
             api.getAllComics(function (err:string, response:string, body:string) {
-
-                //var searchManager = new ComicSearchManager();
-
+                var array = JSON.parse(body);
+                //console.log(array);
+                var searchManager = new ComicSearchManager(query, ["Contributor"], array);
+                var results = searchManager.getResults();
+                console.log(results.length);
+                res.send(JSON.stringify(results));
             });
 
         });

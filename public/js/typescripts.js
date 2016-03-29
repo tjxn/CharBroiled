@@ -1507,6 +1507,49 @@ function addComicToViewed() {
         }
     });
 }
+// para: none
+// runs a search on comics after clicking "Search Comic" on search.html
+// return: none
+function comicSearch() {
+    //var comicID = (<HTMLInputElement> document.getElementById("comicID"));
+    var query = document.getElementById("searchQuery").value;
+    var cquery = { "comicQuery": query };
+    $.ajax({
+        type: "GET",
+        url: "/search/text",
+        contentType: "application/json; charset=utf-8",
+        data: cquery,
+        async: true,
+        timeout: 4000,
+        dataType: 'json',
+        success: function (data) {
+            renderSearchResults("searchResContainer", data, userType);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        }
+    });
+}
+// para: none
+// runs a search on comics after clicking "Search Contributor" on search.htm
+// return: none
+function contribSearch() {
+    var query = document.getElementById("searchQuery").value;
+    var cquery = { "contribQuery": query };
+    $.ajax({
+        type: "GET",
+        url: "/search/contributor",
+        contentType: "application/json; charset=utf-8",
+        data: cquery,
+        async: true,
+        timeout: 4000,
+        dataType: 'json',
+        success: function (data) {
+            renderSearchResults("searchResContainer", data, userType);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+        }
+    });
+}
 // para: array of strings where each string is a JSON comic object, id of container ele.
 // and the string representation of userType
 // renders the given search results as thumbnails under the element corresponding to the given id.

@@ -94,14 +94,14 @@
 
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">
-                        <input type="text" class="form-control" />
+                        <input id="searchQuery" value="" type="text" class="form-control" />
                     </div>
 
-                    <button class="btn btn-default" type ="submit">
+                    <button onclick="comicSearch()" class="btn btn-default" type ="submit">
                        Search Comic
                     </button>
 
-                    <button class="btn btn-default" type ="submit">
+                    <button onclick="contribSearch()" class="btn btn-default" type ="submit">
                         Search User
                     </button>
                 </form>

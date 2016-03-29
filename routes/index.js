@@ -18,6 +18,7 @@ var Panel = require("../panel");
 var Comic = require("../comic");
 var ImageWebService = require("../ImageWebService");
 var multer = require('multer');
+var ComicSearchManager = require("../search");
 var TranslateWebService = require("../TranslateWebService");
 var UserWebService = require("../UserWebService");
 var User = require("../user");
@@ -150,8 +151,15 @@ var Router = (function () {
         // Get the search results for given text
         router.get('/search/text', function (req, res, next) {
             var api = new ComicWebService();
+            var query = req.query["comicQuery"];
+            console.log(query);
             api.getAllComics(function (err, response, body) {
-                //var searchManager = new ComicSearchManager();
+                var array = JSON.parse(body);
+                console.log(array.length);
+                var searchManager = new ComicSearchManager(query, ["Text"], array);
+                var results = searchManager.getResults();
+                console.log(results.length);
+                res.send(JSON.stringify(results));
             });
         });
         // Get Translated Text
@@ -167,8 +175,16 @@ var Router = (function () {
         // Get the search results for given text
         router.get('/search/contributor', function (req, res, next) {
             var api = new ComicWebService();
+            //console.log(req);
+            var query = req.query["contribQuery"];
+            console.log(query);
             api.getAllComics(function (err, response, body) {
-                //var searchManager = new ComicSearchManager();
+                var array = JSON.parse(body);
+                //console.log(array);
+                var searchManager = new ComicSearchManager(query, ["Contributor"], array);
+                var results = searchManager.getResults();
+                console.log(results.length);
+                res.send(JSON.stringify(results));
             });
         });
         // Update a comic in the database
