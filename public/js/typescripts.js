@@ -553,18 +553,25 @@ function renderPanels(elId, jsonPanels, edit) {
     var el = document.getElementById(elId);
     var panels = jsonPanels;
     var length = lengthJSON(panels);
-    for (var i = 1; i <= length; i++) {
-        var url = panels['Panel_' + i].Image_URL;
-        var desc = panels['Panel_' + i].Text;
-        if (url != "" || desc != "") {
-            if (i == 1) {
-                createPanel(url, desc, i.toString(), edit, "left", el);
-            }
-            else if (i == countPanels()) {
-                createPanel(url, desc, i.toString(), edit, "right", el);
-            }
-            else {
-                createPanel(url, desc, i.toString(), edit, "", el);
+    var url = panels['Panel_1'].Image_URL;
+    var desc = panels['Panel_1'].Text;
+    if ((url != "" || desc != "") && (countPanels() == 1)) {
+        createPanel(url, desc, "1", edit, "both", el);
+    }
+    else {
+        for (var i = 1; i <= length; i++) {
+            url = panels['Panel_' + i].Image_URL;
+            desc = panels['Panel_' + i].Text;
+            if (url != "" || desc != "") {
+                if (i == 1) {
+                    createPanel(url, desc, i.toString(), edit, "left", el);
+                }
+                else if (i == countPanels()) {
+                    createPanel(url, desc, i.toString(), edit, "right", el);
+                }
+                else {
+                    createPanel(url, desc, i.toString(), edit, "", el);
+                }
             }
         }
     }
@@ -611,7 +618,7 @@ function createPanel(url, desc, numStr, edit, omission, container) {
     butDiv.className = "btn-group pull-center";
     par2.appendChild(butDiv);
     if (edit) {
-        if (omission != "left") {
+        if ((omission != "left") && (omission != "both")) {
             // create "Swap Left" button
             var button1 = document.createElement("button");
             button1.id = "buttonSwapL_" + numStr;
@@ -637,7 +644,7 @@ function createPanel(url, desc, numStr, edit, omission, container) {
         em2.className = "glyphicon glyphicon-pencil";
         em2.textContent = "Edit";
         button2.appendChild(em2);
-        if (omission != "right") {
+        if ((omission != "right") && (omission != "both")) {
             // create "Swap Right" button
             var button3 = document.createElement("button");
             button3.id = "buttonSwapR_" + numStr;
@@ -663,10 +670,10 @@ function createPanel(url, desc, numStr, edit, omission, container) {
         span4.setAttribute("aria-hidden", "true");
         button4.appendChild(span4);
         // buttons are held within a "div" element
-        if (omission != "left") {
+        if ((omission != "left") && (omission != "both")) {
             butDiv.appendChild(button1);
         }
-        if (omission != "right") {
+        if ((omission != "right") && (omission != "both")) {
             butDiv.appendChild(button3);
         }
         butDiv.appendChild(button2);
