@@ -1376,8 +1376,6 @@ function renderThumbnails(id: string, type: string, page: string, comics: string
 
     JSONObj = JSON.parse(comics);
 
-    console.log(JSONObj);
-
     var length = lengthJSON(JSONObj);
     for (var i = 0; i < length; i++) { // for each cont comic
 
@@ -1693,9 +1691,10 @@ function comicSearch() {
         timeout: 4000,
         dataType: 'json',
         success: function(data) {
-            renderSearchResults("searchResContainer", data, userType);
+            renderSearchResults("searchResContainer", JSON.stringify(data), userType);
         },
         error: function (xhr, ajaxOptions, thrownError) {
+            alert("error");
         }
     });
 }
@@ -1716,7 +1715,7 @@ function contribSearch() {
         timeout: 4000,
         dataType: 'json',
         success: function(data) {
-            renderSearchResults("searchResContainer", data, userType);
+            renderSearchResults("searchResContainer", JSON.stringify(data), userType);
         },
         error: function (xhr, ajaxOptions, thrownError) {
         }
@@ -1728,6 +1727,8 @@ function contribSearch() {
 // renders the given search results as thumbnails under the element corresponding to the given id.
 // return: none
 function renderSearchResults(id: string, comics: string, uType: string) {
+    // delete previous search results
+    removeNodeList(document.getElementById(id).children);
     if(uType == "Contributor") {
         renderThumbnails(id, "searchRes", "edit", comics);
     } else {

@@ -155,10 +155,8 @@ var Router = (function () {
             console.log(query);
             api.getAllComics(function (err, response, body) {
                 var array = JSON.parse(body);
-                console.log(array.length);
                 var searchManager = new ComicSearchManager(query, ["Text"], array);
                 var results = searchManager.getResults();
-                console.log(results.length);
                 res.send(JSON.stringify(results));
             });
         });
@@ -183,7 +181,6 @@ var Router = (function () {
                 //console.log(array);
                 var searchManager = new ComicSearchManager(query, ["Contributor"], array);
                 var results = searchManager.getResults();
-                console.log(results.length);
                 res.send(JSON.stringify(results));
             });
         });

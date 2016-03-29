@@ -199,10 +199,8 @@ class Router {
             console.log(query);
             api.getAllComics(function (err:string, response:string, body:string) {
                 var array = JSON.parse(body);
-                console.log(array.length);
                 var searchManager = new ComicSearchManager(query, ["Text"], array);
                 var results = searchManager.getResults();
-                console.log(results.length);
                 res.send(JSON.stringify(results));
             });
 
@@ -232,7 +230,6 @@ class Router {
                 //console.log(array);
                 var searchManager = new ComicSearchManager(query, ["Contributor"], array);
                 var results = searchManager.getResults();
-                console.log(results.length);
                 res.send(JSON.stringify(results));
             });
 

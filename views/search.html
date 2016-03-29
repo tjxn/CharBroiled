@@ -25,9 +25,10 @@
 
         $(window).load(function() {
             // Animate loader off screen
-            setUserEmails();
-            renderEditFavourites("favContainer");
-            renderContributed("contContainer");
+            setUserType();
+            //setUserEmails();
+            //renderEditFavourites("favContainer");
+            //renderContributed("contContainer");
             setTimeout( function(){
                 $(".se-pre-con").fadeOut("slow")
             }, 1500);
@@ -97,11 +98,11 @@
                         <input id="searchQuery" value="" type="text" class="form-control" />
                     </div>
 
-                    <button onclick="comicSearch()" class="btn btn-default" type ="submit">
+                    <button onclick="comicSearch()" class="btn btn-default" type ="button">
                        Search Comic
                     </button>
 
-                    <button onclick="contribSearch()" class="btn btn-default" type ="submit">
+                    <button onclick="contribSearch()" class="btn btn-default" type ="button">
                         Search User
                     </button>
                 </form>
@@ -125,7 +126,17 @@
                 </p>
             </div>
         </div>-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Search Results:
+                </h3>
+            </div>
+            <div id="searchResContainer">
 
+            </div>
+            <br>
+        </div>
     </div>
 </div>
 </div>
