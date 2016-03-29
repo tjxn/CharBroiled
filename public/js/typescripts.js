@@ -50,22 +50,44 @@ function changeFavIcon() {
     }
 }
 function translateComic() {
-    var texts;
+    var comicTitle = document.getElementById("comicTitle").value;
+    var panelsJSON = comicJSONObj["Panels"];
+    var texts = new Array();
+    texts.push(comicTitle);
+    // for each panel given, get desc
+    for (var i = 1; i < lengthJSON(panelsJSON); i++) {
+        if (comicJSONObj["Panels"]["Panel_" + i].Text != "") {
+            texts.push(comicJSONObj["Panels"]["Panel_" + i].Text);
+        }
+    }
+    var translateComic = {
+        "Text": texts,
+        "ToLang": "fr"
+    };
+    var txt = JSON.stringify(translateComic);
     // TODO
     // get all text from comic object that needs translating
     // place text in texts array
     // place response back into comic object, update comic viewer sees
     $.ajax({
-        type: "GET",
+        type: "PUT",
         url: "/translate",
         contentType: "application/json; charset=utf-8",
-        data: texts,
+        data: txt,
         async: true,
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
+            var title = document.getElementById("comicTitle");
+            title.value = data[0];
+            // for each panel given, set desc
+            for (var i = 1; i < data.length; i++) {
+                document.getElementById("desc_" + i).textContent = data[i];
+                comicJSONObj["Panels"]["Panel_" + i].Text = data[i];
+            }
         },
         error: function (xhr, status, thrownError) {
+            console.log(xhr);
         }
     });
 }
@@ -1502,7 +1524,8 @@ function renderSearchResults(id, comics, uType) {
 // return: none
 function renderLanguage(title, panels) {
     var panelsJSON = JSON.parse(panels);
-    document.getElementById("comicTitle").value = title;
+    var id = document.getElementById("comicTitle");
+    id.value = title;
     // for each panel given, update the desc
     for (var i = 1; i < lengthJSON(panelsJSON); i++) {
         document.getElementById("desc_" + i).textContent = panelsJSON[i];

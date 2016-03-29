@@ -204,12 +204,15 @@ class Router {
         });
 
         // Get Translated Text
-        router.get('/translate', function (req, res, next) {
+        router.put('/translate', function (req, res, next) {
+
             var api = new TranslateWebService();
             var text:Array<string> = req.body["Text"];
             var toLang:string = req.body["ToLang"];
-            api.translateText(text, toLang, function (error:string, response:string, body:string){
-                res.send(body);
+
+            api.translateText(text, "en", toLang, function (error:string, response:string, body:string){
+                var translated = JSON.parse(body);
+                res.send(translated.text);
             });
         });
 

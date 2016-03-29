@@ -155,12 +155,13 @@ var Router = (function () {
             });
         });
         // Get Translated Text
-        router.get('/translate', function (req, res, next) {
+        router.put('/translate', function (req, res, next) {
             var api = new TranslateWebService();
             var text = req.body["Text"];
             var toLang = req.body["ToLang"];
-            api.translateText(text, toLang, function (error, response, body) {
-                res.send(body);
+            api.translateText(text, "en", toLang, function (error, response, body) {
+                var translated = JSON.parse(body);
+                res.send(translated.text);
             });
         });
         // Get the search results for given text
