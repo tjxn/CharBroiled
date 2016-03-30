@@ -1525,6 +1525,12 @@ function renderThumbnails(id: string, type: string, page: string, comics: string
             a2.href = "/"+page+"?id=" + JSONObj[i]._id;
             if(page == "edit") {
                 a2.innerHTML = "Edit";
+
+                var a3 = document.createElement("a");
+                a3.className = "btn btn-primary";
+                a3.href = "/view?id=" + JSONObj[i]._id;
+                a3.innerHTML = "View";
+                p2.appendChild(a3);
             } else {
                 a2.innerHTML = "View";
             }
