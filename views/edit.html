@@ -109,7 +109,7 @@
 
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-search-navbar-collapse-1">
                             <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                        </button> <a class="navbar-brand" >Title</a>
+                        </button> <a class="navbar-brand" ></a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-search-navbar-collapse-1">
                         <form class="navbar-form navbar-left">
@@ -128,16 +128,28 @@
                             &nbsp;
                             <button type="button" onclick="deleteComic()" class="btn btn-default">Delete Comic</button>
                             &nbsp;
-                            <button type="button" onclick="translateComic()" class="btn btn-default">Translate To French</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Translate <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li id="t1" onclick="translateComic('english')" ><a  href="#">English</a></li>
+                                    <li id="t2" onclick="translateComic('french')"><a  href="#">French</a></li>
+                                    <li id="t3" onclick="translateComic('spanish')"><a  href="#">Spanish</a></li>
+                                    <li id="t4" onclick="translateComic('german')"><a  href="#">German </a></li>
+                                    <li id="t5" onclick="translateComic('italian')"><a  href="#">Italian </a></li>
+                                </ul>
+                            </div>
                             &nbsp;
 
-                            <div class = "btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 Contributors <span class="caret"></span></button>
 
                             <ul class="dropdown-menu" id="contributors" role="cList" aria-labelledby="cList"></ul>
                             </div>
+
                         </form>
+            </div>
                     </div>
                 </nav>
             </div>

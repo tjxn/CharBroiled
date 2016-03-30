@@ -57,10 +57,42 @@ function changeFavIcon():number{
     }
 }
 
-function translateComic(){
+function updateTransText(lang:string){
+    var transName = (<HTMLInputElement> document.getElementById("t1"));
+    transName.setAttribute("class", "");
+    var transName = (<HTMLInputElement> document.getElementById("t2"));
+    transName.setAttribute("class", "");
+    var transName = (<HTMLInputElement> document.getElementById("t3"));
+    transName.setAttribute("class", "");
+    var transName = (<HTMLInputElement> document.getElementById("t4"));
+    transName.setAttribute("class", "");
+    var transName = (<HTMLInputElement> document.getElementById("t5"));
+    transName.setAttribute("class", "");
+
+    if (lang == "english")
+    { var transName = (<HTMLInputElement> document.getElementById("t1"));
+        transName.setAttribute("class", "active");
+    } else if (lang == "french") {
+        var transName = (<HTMLInputElement> document.getElementById("t2"));
+        transName.setAttribute("class", "active");
+    } else if (lang == "spanish") {
+        var transName = (<HTMLInputElement> document.getElementById("t3"));
+        transName.setAttribute("class", "active");
+    } else if (lang == "german") {
+        var transName = (<HTMLInputElement> document.getElementById("t4"));
+        transName.setAttribute("class", "active");
+    } else if (lang == "italian") {
+        var transName = (<HTMLInputElement> document.getElementById("t5"));
+        transName.setAttribute("class", "active");
+    }
+}
+
+function translateComic(lang: string){
 
     var comicTitle = (<HTMLInputElement> document.getElementById("comicTitle")).value;
     var panelsJSON = comicJSONObj["Panels"];
+
+    updateTransText(lang);
 
     var texts = new Array();
     texts.push(comicTitle);
