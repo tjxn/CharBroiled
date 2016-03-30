@@ -386,13 +386,18 @@ function setUserEmail() {
 // return: none
 function setUserEmails() {
     var ID = (<HTMLInputElement> document.getElementById("userEmail"));
-    var userEmail = (<HTMLInputElement> document.getElementById("userEmail2"));
 
     $.get('/user/email', function (data) {
         ID.value = data.toString();
-        userEmail.textContent = "Welcome "+data.toString()+" to our Comic Maker!";
     });
 }
+
+function setUserName(){
+    var userName = (<HTMLInputElement> document.getElementById("welcomeMessage"));
+
+    $.get('/user/name', function (data) {
+        userName.textContent = "Welcome "+data.toString()+" to our Comic Maker!";
+    });}
 
 // para: none
 // sends GET request to get user's type. Sets value of userType element.
