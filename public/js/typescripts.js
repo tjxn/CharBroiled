@@ -16,6 +16,7 @@ var myDrop;
 var comicJSONObj;
 var JSONObj;
 var userType;
+var currentLang = "";
 // para: none
 // Removes all thumbnails from the dropzone modal
 // Called when modal is closed
@@ -60,28 +61,30 @@ function updateTransText(lang) {
     transName.setAttribute("class", "");
     var transName = document.getElementById("t5");
     transName.setAttribute("class", "");
-    if (lang == "english") {
+    if (lang == "en") {
         var transName = document.getElementById("t1");
         transName.setAttribute("class", "active");
     }
-    else if (lang == "french") {
+    else if (lang == "fr") {
         var transName = document.getElementById("t2");
         transName.setAttribute("class", "active");
     }
-    else if (lang == "spanish") {
+    else if (lang == "es") {
         var transName = document.getElementById("t3");
         transName.setAttribute("class", "active");
     }
-    else if (lang == "german") {
+    else if (lang == "de") {
         var transName = document.getElementById("t4");
         transName.setAttribute("class", "active");
     }
-    else if (lang == "italian") {
+    else if (lang == "it") {
         var transName = document.getElementById("t5");
         transName.setAttribute("class", "active");
     }
 }
 function translateComic(lang) {
+    var translateBtn = document.getElementById("translateButton");
+    translateBtn.disabled = true;
     var comicTitle = document.getElementById("comicTitle").value;
     var panelsJSON = comicJSONObj["Panels"];
     updateTransText(lang);
@@ -95,13 +98,13 @@ function translateComic(lang) {
     }
     var translateComic = {
         "Text": texts,
-        "ToLang": "fr"
+        "ToLang": lang,
+        "FromLang": currentLang
     };
+    console.log(currentLang);
+    console.log(lang);
     var txt = JSON.stringify(translateComic);
-    // TODO
-    // get all text from comic object that needs translating
-    // place text in texts array
-    // place response back into comic object, update comic viewer sees
+    notifyUser("Translating Comic", 'glyphicon glyphicon-retweet', "info");
     $.ajax({
         type: "PUT",
         url: "/translate",
@@ -111,6 +114,7 @@ function translateComic(lang) {
         dataType: 'json',
         timeout: 4000,
         success: function (data) {
+            currentLang = lang;
             var title = document.getElementById("comicTitle");
             title.value = data[0];
             // for each panel given, set desc
@@ -118,10 +122,62 @@ function translateComic(lang) {
                 document.getElementById("desc_" + i).textContent = data[i];
                 comicJSONObj["Panels"]["Panel_" + i].Text = data[i];
             }
+            notifyUser("Comic Successfully Translated", 'glyphicon glyphicon-ok', "success");
+            translateBtn.disabled = false;
         },
         error: function (xhr, status, thrownError) {
             console.log(xhr);
+            notifyUser("Error: Retry Translating Comic", 'glyphicon glyphicon-remove', "danger");
+            translateBtn.disabled = false;
         }
+    });
+}
+function notifyUser(msg, icon, type) {
+    var note = $.notify({
+        // options
+        icon: icon,
+        title: '',
+        message: msg,
+        url: '',
+        target: '_blank'
+    }, {
+        // settings
+        element: 'body',
+        position: null,
+        type: type,
+        allow_dismiss: true,
+        newest_on_top: false,
+        showProgressbar: false,
+        placement: {
+            from: "top",
+            align: "right"
+        },
+        offset: 20,
+        spacing: 10,
+        z_index: 1031,
+        delay: 5000,
+        timer: 1000,
+        url_target: '_blank',
+        mouse_over: null,
+        animate: {
+            enter: 'animated fadeInDown',
+            exit: 'animated fadeOutUp'
+        },
+        onShow: null,
+        onShown: null,
+        onClose: null,
+        onClosed: null,
+        icon_type: 'class',
+        template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+            '<span data-notify="icon"></span> ' +
+            '<span data-notify="title">{1}</span> ' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '<a href="{3}" target="{4}" data-notify="url"></a>' +
+            '</div>'
     });
 }
 // para: none
