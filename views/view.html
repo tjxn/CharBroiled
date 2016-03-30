@@ -102,6 +102,20 @@
                 </h1>
                 <ul align ="center">
                     <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
+                    &nbsp;
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Translate <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li id="t1" onclick="translateComic('english')" ><a  href="#">English</a></li>
+                            <li id="t2" onclick="translateComic('french')"><a  href="#">French</a></li>
+                            <li id="t3" onclick="translateComic('spanish')"><a  href="#">Spanish</a></li>
+                            <li id="t4" onclick="translateComic('german')"><a  href="#">German </a></li>
+                            <li id="t5" onclick="translateComic('italian')"><a  href="#">Italian </a></li>
+                        </ul>
+                    </div>
+
                 <div class = "btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" >
                                 Contributors <span class="caret"></span>
