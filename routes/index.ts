@@ -212,8 +212,9 @@ class Router {
             var api = new TranslateWebService();
             var text:Array<string> = req.body["Text"];
             var toLang:string = req.body["ToLang"];
+            var fromLang:string = req.body["FromLang"];
 
-            api.translateText(text, "en", toLang, function (error:string, response:string, body:string){
+            api.translateText(text, fromLang, toLang, function (error:string, response:string, body:string){
                 var translated = JSON.parse(body);
                 res.send(translated.text);
             });

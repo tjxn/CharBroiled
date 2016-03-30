@@ -28,7 +28,12 @@ class TranslateWebService {
             translateURL = translateURL.concat("&text=" + text);
         }
 
-        translateURL = translateURL.concat("&lang=" + fromLang + "-" + toLang);
+        if(fromLang == ""){
+            translateURL = translateURL.concat("&lang=" + toLang);
+        }else{
+            translateURL = translateURL.concat("&lang=" + fromLang + "-" + toLang);
+        }
+
         request.get(translateURL, callback);
         return;
     }

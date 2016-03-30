@@ -165,7 +165,8 @@ var Router = (function () {
             var api = new TranslateWebService();
             var text = req.body["Text"];
             var toLang = req.body["ToLang"];
-            api.translateText(text, "en", toLang, function (error, response, body) {
+            var fromLang = req.body["FromLang"];
+            api.translateText(text, fromLang, toLang, function (error, response, body) {
                 var translated = JSON.parse(body);
                 res.send(translated.text);
             });
