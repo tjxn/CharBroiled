@@ -49,9 +49,42 @@ function changeFavIcon() {
         return 0;
     }
 }
-function translateComic() {
+function updateTransText(lang) {
+    var transName = document.getElementById("t1");
+    transName.setAttribute("class", "");
+    var transName = document.getElementById("t2");
+    transName.setAttribute("class", "");
+    var transName = document.getElementById("t3");
+    transName.setAttribute("class", "");
+    var transName = document.getElementById("t4");
+    transName.setAttribute("class", "");
+    var transName = document.getElementById("t5");
+    transName.setAttribute("class", "");
+    if (lang == "english") {
+        var transName = document.getElementById("t1");
+        transName.setAttribute("class", "active");
+    }
+    else if (lang == "french") {
+        var transName = document.getElementById("t2");
+        transName.setAttribute("class", "active");
+    }
+    else if (lang == "spanish") {
+        var transName = document.getElementById("t3");
+        transName.setAttribute("class", "active");
+    }
+    else if (lang == "german") {
+        var transName = document.getElementById("t4");
+        transName.setAttribute("class", "active");
+    }
+    else if (lang == "italian") {
+        var transName = document.getElementById("t5");
+        transName.setAttribute("class", "active");
+    }
+}
+function translateComic(lang) {
     var comicTitle = document.getElementById("comicTitle").value;
     var panelsJSON = comicJSONObj["Panels"];
+    updateTransText(lang);
     var texts = new Array();
     texts.push(comicTitle);
     // for each panel given, get desc

@@ -1,45 +1,75 @@
-<html>
+<!--/*
+~ Copyright 2015 Stormpath, Inc.
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~     http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+*/-->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <meta name="description" content="Scott's Awesome and snuck this into a commit!">
-    <meta name="author" content="LayoutIt!">
-
-    <link href="css/dropzone.css" rel="stylesheet">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/basic.css" rel="stylesheet">
-
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap-notify.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/typescripts.js"></script>
-    <script src="js/comic.js"></script>
-    <script src="js/panel.js"></script>
-    <script src="js/ComicWebService.js"></script>
-    <script src="js/dropzone.js"></script>
-
-    <script>
-        Dropzone.autoDiscover = false;
-        window.onload = function (event) {
-            initDropzone();
-        };
-    </script>
-
+    <title th:text="#{stormpath.web.register.title}">|Register|</title>
+    <!--/*/ <th:block th:include="${headViewName} :: ${headFragmentSelector}"/> /*/-->
 </head>
-<body>
+<body class="register">
+<div class="container custom-container">
+    <div class="va-wrapper">
+        <div class="view registration-view container">
 
+            <div class="box row">
+                <div class="col-sm-12">
 
-<div id="dropzone"><form method="post" action="/image" class="dropzone needsclick" enctype="multipart/form-data" id="demoUpload">
+                    <div class="header">
+                        <span th:text="#{stormpath.web.register.title}">|Register|</span>
+                    </div>
 
-    <div class="dz-message needsclick">
-        Drop files here or click to upload.<br />
-        <span class="note needsclick">(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</span>
+                    <div class="alert alert-dismissable alert-danger"
+                         th:if="${errors != null and not #lists.isEmpty(errors)}">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <!--/*/ <th-block data-th-each="error : ${errors}"> /*/-->
+                        <p th:text="${error}">|Error message here.|</p>
+                        <!--/*/ </th-block> /*/-->
+                    </div>
+
+                    <form method="post" th:action="@{${form.action}}" role="form" class="registration-form form-horizontal sp-form">
+
+                        <input th:each="field : ${form.hiddenFields}" th:name="${field.name}" th:type="${field.type}" th:value="${field.value}"/>
+
+                        <div th:each="field : ${form.visibleFields}" form-group="true"
+                             th:class="'form-group group-' + ${field.name}">
+                            <label class="col-sm-4" th:text="#{${field.label}}">|Field label|</label>
+
+                            <div class="col-sm-8">
+                                <input th:name="${field.name}" th:value="${field.value}" th:type="${field.type}"
+                                       th:placeholder="#{${field.placeholder}}"
+                                       th:autofocus="${field.autofocus}"
+                                       th:required="${field.required}" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="submit" class="btn btn-register btn-sp-green"
+                                    th:text="#{stormpath.web.register.form.button.value}">|Register|
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <a th:href="@{${loginUri}}" class="to-login" th:text="#{stormpath.web.register.form.loginLink.text}">|Back
+                to Login|</a>
+        </div>
     </div>
-
-</form></div>
-
+</div>
 </body>
 </html>

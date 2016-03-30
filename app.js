@@ -101,7 +101,7 @@ var Application = (function () {
                             required: true
                         },
                         userType: {
-                            enabled: true,
+                            enabled: false,
                             label: 'User Type',
                             name: 'userType',
                             placeholder: 'Enter Contributor or Viewer',
@@ -121,6 +121,9 @@ var Application = (function () {
         // -----------------------------------
         app.get('/image', function (req, res) {
             res.sendFile(path.join(__dirname, 'views', 'TestImageUpload.html'));
+        });
+        app.get('/test', function (req, res) {
+            res.sendFile(path.join(__dirname, 'views', 'test.html'));
         });
         app.use('/', stormpath.loginRequired, routes);
         app.use('/profile', stormpath.loginRequired, profile);
