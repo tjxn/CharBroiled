@@ -20,7 +20,8 @@ import Panel = require("../panel");
 import Comic = require("../comic");
 import ImageWebService = require("../ImageWebService");
 import multer = require('multer');
-import ComicSearchManager = require("../search");
+import ComicSearch = require("../comicSearch");
+import ContributorSearch = require("../contributorSearch");
 import TranslateWebService = require("../TranslateWebService");
 import UserWebService = require("../UserWebService");
 import User = require("../user");
@@ -202,10 +203,9 @@ class Router {
         router.get('/search/text', function (req, res, next) {
             var api = new ComicWebService();
             var query:string = req.query["comicQuery"];
-            console.log(query);
             api.getAllComics(function (err:string, response:string, body:string) {
                 var array = JSON.parse(body);
-                var searchManager = new ComicSearchManager(query, ["Text"], array);
+                var searchManager = new ComicSearch(query, array);
                 var results = searchManager.getResults();
                 res.send(JSON.stringify(results));
             });
@@ -228,18 +228,18 @@ class Router {
 
         // Get the search results for given text
         router.get('/search/contributor', function (req, res, next) {
+            var uapi = new UserWebService();
             var api = new ComicWebService();
-            //console.log(req);
             var query:string = req.query["contribQuery"];
-            console.log(query);
-            api.getAllComics(function (err:string, response:string, body:string) {
-                var array = JSON.parse(body);
-                //console.log(array);
-                var searchManager = new ComicSearchManager(query, ["Contributor"], array);
-                var results = searchManager.getResults();
-                res.send(JSON.stringify(results));
+            uapi.getAllUsers(function (err:string, response:string, body:string) {
+                var uarray = JSON.parse(body);
+                var searchManager = new ContributorSearch(query, uarray);
+                var ures = searchManager.getResults();
+                api.getComics(ures, function (error:string, resp:string, bdy:string) {
+                    //var carr = JSON.parse(body);
+                    res.send(bdy);
+                });
             });
-
         });
 
 // Update a comic in the database

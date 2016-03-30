@@ -346,14 +346,10 @@ function setUserEmail() {
 // return: none
 function setUserEmails() {
     var ID = document.getElementById("userEmail");
+    var userEmail = document.getElementById("userEmail2");
     $.get('/user/email', function (data) {
         ID.value = data.toString();
-    });
-}
-function setUserName() {
-    var userName = document.getElementById("welcomeMessage");
-    $.get('/user/name', function (data) {
-        userName.textContent = "Welcome " + data.toString() + " to our Comic Maker!";
+        userEmail.textContent = "Welcome " + data.toString() + " to our Comic Maker!";
     });
 }
 // para: none

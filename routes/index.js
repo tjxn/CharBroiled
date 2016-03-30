@@ -18,7 +18,8 @@ var Panel = require("../panel");
 var Comic = require("../comic");
 var ImageWebService = require("../ImageWebService");
 var multer = require('multer');
-var ComicSearchManager = require("../search");
+var ComicSearch = require("../comicSearch");
+var ContributorSearch = require("../contributorSearch");
 var TranslateWebService = require("../TranslateWebService");
 var UserWebService = require("../UserWebService");
 var User = require("../user");
@@ -148,19 +149,13 @@ var Router = (function () {
                 //res.json(body);
             });
         });
-        /* GET home page. */
-        router.get('/user/name', function (req, res, next) {
-            var name = req.user.givenName.toString() + " " + req.user.surname.toString();
-            res.send(name);
-        });
         // Get the search results for given text
         router.get('/search/text', function (req, res, next) {
             var api = new ComicWebService();
             var query = req.query["comicQuery"];
-            console.log(query);
             api.getAllComics(function (err, response, body) {
                 var array = JSON.parse(body);
-                var searchManager = new ComicSearchManager(query, ["Text"], array);
+                var searchManager = new ComicSearch(query, array);
                 var results = searchManager.getResults();
                 res.send(JSON.stringify(results));
             });
@@ -178,16 +173,17 @@ var Router = (function () {
         });
         // Get the search results for given text
         router.get('/search/contributor', function (req, res, next) {
+            var uapi = new UserWebService();
             var api = new ComicWebService();
-            //console.log(req);
             var query = req.query["contribQuery"];
-            console.log(query);
-            api.getAllComics(function (err, response, body) {
-                var array = JSON.parse(body);
-                //console.log(array);
-                var searchManager = new ComicSearchManager(query, ["Contributor"], array);
-                var results = searchManager.getResults();
-                res.send(JSON.stringify(results));
+            uapi.getAllUsers(function (err, response, body) {
+                var uarray = JSON.parse(body);
+                var searchManager = new ContributorSearch(query, uarray);
+                var ures = searchManager.getResults();
+                api.getComics(ures, function (error, resp, bdy) {
+                    //var carr = JSON.parse(body);
+                    res.send(bdy);
+                });
             });
         });
         // Update a comic in the database
