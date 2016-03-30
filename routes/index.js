@@ -148,6 +148,11 @@ var Router = (function () {
                 //res.json(body);
             });
         });
+        /* GET home page. */
+        router.get('/user/name', function (req, res, next) {
+            var name = req.user.givenName.toString() + " " + req.user.surname.toString();
+            res.send(name);
+        });
         // Get the search results for given text
         router.get('/search/text', function (req, res, next) {
             var api = new ComicWebService();
