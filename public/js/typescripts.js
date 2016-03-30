@@ -346,10 +346,14 @@ function setUserEmail() {
 // return: none
 function setUserEmails() {
     var ID = document.getElementById("userEmail");
-    var userEmail = document.getElementById("userEmail2");
     $.get('/user/email', function (data) {
         ID.value = data.toString();
-        userEmail.textContent = "Welcome " + data.toString() + " to our Comic Maker!";
+    });
+}
+function setUserName() {
+    var userName = document.getElementById("welcomeMessage");
+    $.get('/user/name', function (data) {
+        userName.textContent = "Welcome " + data.toString() + " to our Comic Maker!";
     });
 }
 // para: none
@@ -1369,6 +1373,12 @@ function renderThumbnails(id, type, page, comics) {
             a2.href = "/" + page + "?id=" + JSONObj[i]._id;
             if (page == "edit") {
                 a2.innerHTML = "Edit";
+                var a3 = document.createElement("a");
+                a3.style.marginRight = "15px";
+                a3.className = "btn btn-primary";
+                a3.href = "/view?id=" + JSONObj[i]._id;
+                a3.innerHTML = "View";
+                p2.appendChild(a3);
             }
             else {
                 a2.innerHTML = "View";

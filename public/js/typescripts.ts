@@ -386,13 +386,18 @@ function setUserEmail() {
 // return: none
 function setUserEmails() {
     var ID = (<HTMLInputElement> document.getElementById("userEmail"));
-    var userEmail = (<HTMLInputElement> document.getElementById("userEmail2"));
 
     $.get('/user/email', function (data) {
         ID.value = data.toString();
-        userEmail.textContent = "Welcome "+data.toString()+" to our Comic Maker!";
     });
 }
+
+function setUserName(){
+    var userName = (<HTMLInputElement> document.getElementById("welcomeMessage"));
+
+    $.get('/user/name', function (data) {
+        userName.textContent = "Welcome "+data.toString()+" to our Comic Maker!";
+    });}
 
 // para: none
 // sends GET request to get user's type. Sets value of userType element.
@@ -1525,6 +1530,13 @@ function renderThumbnails(id: string, type: string, page: string, comics: string
             a2.href = "/"+page+"?id=" + JSONObj[i]._id;
             if(page == "edit") {
                 a2.innerHTML = "Edit";
+
+                var a3 = document.createElement("a");
+                a3.style.marginRight = "15px";
+                a3.className = "btn btn-primary";
+                a3.href = "/view?id=" + JSONObj[i]._id;
+                a3.innerHTML = "View";
+                p2.appendChild(a3);
             } else {
                 a2.innerHTML = "View";
             }
@@ -1781,6 +1793,7 @@ function comicSearch() {
     //var comicID = (<HTMLInputElement> document.getElementById("comicID"));
     var query = (<HTMLInputElement> document.getElementById("searchQuery")).value;
     var cquery = {"comicQuery":query};
+    notifyUser('Searching Through Comics', 'glyphicon glyphicon-retweet', "info");
 
     $.ajax({
         type: "GET",
@@ -1792,9 +1805,10 @@ function comicSearch() {
         dataType: 'json',
         success: function(data) {
             renderSearchResults("searchResContainer", JSON.stringify(data), userType);
+            notifyUser('Showing Search Results', 'glyphicon glyphicon-ok', "success");
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert("error");
+            notifyUser('Error: Retry Search', 'glyphicon glyphicon-remove', "danger");
         }
     });
 }
@@ -1805,7 +1819,7 @@ function comicSearch() {
 function contribSearch() {
     var query = (<HTMLInputElement> document.getElementById("searchQuery")).value;
     var cquery = {"contribQuery":query};
-
+    notifyUser('Searching Through Users', 'glyphicon glyphicon-retweet', "info");
     $.ajax({
         type:"GET",
         url: "/search/contributor",
@@ -1816,8 +1830,10 @@ function contribSearch() {
         dataType: 'json',
         success: function(data) {
             renderSearchResults("searchResContainer", JSON.stringify(data), userType);
+            notifyUser('Showing Search Results', 'glyphicon glyphicon-ok', "success");
         },
         error: function (xhr, ajaxOptions, thrownError) {
+            notifyUser('Error: Retry Search', 'glyphicon glyphicon-remove', "danger");
         }
     });
 }
