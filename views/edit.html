@@ -26,9 +26,9 @@
 
 
     <script>
-        $(window).load(function() {
+        $(window).load(function () {
             // Animate loader off screen
-            setTimeout( function(){
+            setTimeout(function () {
                 $(".se-pre-con").fadeOut("slow")
             }, 2000);
         });
@@ -55,8 +55,10 @@
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-        </button> <a class="navbar-brand" href="/account">Comic</a>
+            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                class="icon-bar"></span><span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/account">Comic</a>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
@@ -109,62 +111,69 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="jumbotron">
+            <div>
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
 
-                <nav class="navbar navbar-default">
-                    <div class="navbar-header">
-
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-search-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                        </button> <a class="navbar-brand" ></a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="bs-search-navbar-collapse-1">
-                        <form class="navbar-form navbar-left">
-                            <div class="form-group">
-                                <input id="comicTitle" type="text" value="" class="form-control" />
-                            </div>
-                            &nbsp;
-                            <label class="radio-inline"><input type="radio" id="publicBtn" name="optradio">Public</label>
-                            <label class="radio-inline"><input type="radio" id="privateBtn" name="optradio">Private</label>
-                            &nbsp;
-                            <button type="button" onclick="saveComic(true)" class="btn btn-default" data-toggle="modal">Save</button>
-                            &nbsp;
-                            <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()"><span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span> </button>
-                            &nbsp;
-                            <button type="button" onclick="addPanel()" class="btn btn-default">Add Panel</button>
-                            &nbsp;
-                            <button type="button" onclick="deleteComic()" class="btn btn-default">Delete Comic</button>
-                            &nbsp;
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="translateButton" aria-haspopup="true" aria-expanded="false">
-                                    Translate <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li id="t1" onclick="translateComic('en')" ><a  href="#">English</a></li>
-                                    <li id="t2" onclick="translateComic('fr')"><a  href="#">French</a></li>
-                                    <li id="t3" onclick="translateComic('es')"><a  href="#">Spanish</a></li>
-                                    <li id="t4" onclick="translateComic('de')"><a  href="#">German </a></li>
-                                    <li id="t5" onclick="translateComic('it')"><a  href="#">Italian </a></li>
-                                </ul>
-                            </div>
-                            &nbsp;
-                            <div class="btn-group">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-search-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                            class="icon-bar"></span><span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">Toolbar</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-search-navbar-collapse-1">
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input id="comicTitle" type="text" value="" class="form-control"/>
+                        </div>
+                        &nbsp;
+                        <label class="radio-inline"><input type="radio" id="publicBtn" name="optradio">Public</label>
+                        <label class="radio-inline"><input type="radio" id="privateBtn" name="optradio">Private</label>
+                        &nbsp;
+                        <button type="button" onclick="saveComic(true)" class="btn btn-default" data-toggle="modal">
+                            Save
+                        </button>
+                        &nbsp;
+                        <button type="button" id="FavouriteButton" class="btn btn-primary" onclick="saveFavourites()">
+                            <span id="FavIcon" class="glyphicon glyphicon-star white" style="color:white"></span>
+                        </button>
+                        &nbsp;
+                        <button type="button" onclick="addPanel()" class="btn btn-default">Add Panel</button>
+                        &nbsp;
+                        <button type="button" onclick="deleteComic()" class="btn btn-default">Delete Comic</button>
+                        &nbsp;
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    id="translateButton" aria-haspopup="true" aria-expanded="false">
+                                Translate <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li id="t1" onclick="translateComic('en')"><a href="#">English</a></li>
+                                <li id="t2" onclick="translateComic('fr')"><a href="#">French</a></li>
+                                <li id="t3" onclick="translateComic('es')"><a href="#">Spanish</a></li>
+                                <li id="t4" onclick="translateComic('de')"><a href="#">German </a></li>
+                                <li id="t5" onclick="translateComic('it')"><a href="#">Italian </a></li>
+                            </ul>
+                        </div>
+                        &nbsp;
+                        <div class="btn-group">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 Contributors <span class="caret"></span></button>
 
                             <ul class="dropdown-menu" id="contributors" role="cList" aria-labelledby="cList"></ul>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
 
-                        </form>
-                </nav>
-        </div>
-                    </div>
-                </nav>
-            </div>
+                </form>
+            </nav>
         </div>
     </div>
+    </div>
+    </nav>
+</div>
+</div>
 
 
 <div id="pictureContainer"></div>
@@ -173,7 +182,8 @@
         <div class="modal-content">
             <div class="modal-header">
 
-                <button type="button" class="close" onClick="clearDropzone(); removeUnusedPhoto();" data-dismiss="modal" aria-hidden="true">
+                <button type="button" class="close" onClick="clearDropzone(); removeUnusedPhoto();" data-dismiss="modal"
+                        aria-hidden="true">
                     ×
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
@@ -205,11 +215,13 @@
                     </div>
 
 
-                    <input type="button" onClick="updatePanel(this); cleanUpCloudinary();" class="btn btn-primary" value="Save"></input>
+                    <input type="button" onClick="updatePanel(this); cleanUpCloudinary();" class="btn btn-primary"
+                           value="Save"></input>
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="button" onClick="clearDropzone(); removeUnusedPhoto();" class="btn btn-default" data-dismiss="modal">
+                <button type="button" onClick="clearDropzone(); removeUnusedPhoto();" class="btn btn-default"
+                        data-dismiss="modal">
                     Close
                 </button>
             </div>
