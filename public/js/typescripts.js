@@ -1668,7 +1668,7 @@ function contribSearch() {
 function renderSearchResults(id, comics, uType) {
     // delete previous search results
     removeNodeList(document.getElementById(id).children);
-    if (comics == "{}") {
+    if ((comics == "{}") || (comics == "[]")) {
         var container = document.getElementById(id);
         var thumbnail = document.createElement("div");
         thumbnail.className = "thumbnail";

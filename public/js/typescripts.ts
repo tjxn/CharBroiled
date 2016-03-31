@@ -1845,7 +1845,7 @@ function contribSearch() {
 function renderSearchResults(id: string, comics: string, uType: string) {
     // delete previous search results
     removeNodeList(document.getElementById(id).children);
-    if (comics == "{}") {
+    if ((comics == "{}") || (comics == "[]")) {
         var container = (<HTMLInputElement>  document.getElementById(id));
 
         var thumbnail = document.createElement("div");
