@@ -22,7 +22,6 @@ require.config({
 
   paths: {
     'request': 'node_modules/request/request',
-    'ComicSearchManager' : 'comicSearch',
     'Panel' : 'panel'
   },
 

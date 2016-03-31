@@ -39,11 +39,13 @@ describe("Testing default", function() {
         });
     });
 });
-xdescribe("testing /login", function() {
-    xdescribe("bad login attempt", function() {
-       xit("returns status code 400", function() {
+describe("testing /login", function() {
+    describe("bad login attempt", function() {
+       it("returns status code 400", function() {
     request( {method: 'POST',
      url: base_url + "/login",
+        contentType: "application/json; charset=utf-8",
+        dataType:'json',
      json: {
      "username": "bad@mbad.com",
      "password": "doublebad"}
@@ -53,10 +55,12 @@ xdescribe("testing /login", function() {
     });
     });
     });
-    xdescribe("good login attempt", function() {
-        xit("returns status code 200", function() {
+    describe("good login attempt", function() {
+        it("returns status code 200", function() {
             request( {method: 'POST',
                 url: base_url + "/login",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
                 json: {
                     "username": "charbroiledtestcontrib@mailinator.com",
                     "password": "charbroiledtestcontrib"}
@@ -64,6 +68,7 @@ xdescribe("testing /login", function() {
                 expect(response.statusCode).toBe(200);
                 done();
             });
+
         });
     });
 });
