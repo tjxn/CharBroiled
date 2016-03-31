@@ -1687,4 +1687,23 @@ function renderLanguage(title, panels) {
         document.getElementById("desc_" + i).textContent = panelsJSON[i];
     }
 }
+// para: none
+// checks if URL parameters are set and calls a search if necesasrry.
+// return: none
+function checkSearchQuery() {
+    var query = getURLParameterByName("searchQuery");
+    var type = getURLParameterByName("type");
+    if (query != "") {
+        document.getElementById("searchQuery").value = query;
+        comicSearch();
+    }
+}
+// para: string which represents the type of search to perform ("user" || "comic")
+// sends the user to the search page and sets the URL parameters needed to initiate a search.
+// return: none
+function submitSearch(type) {
+    //var form = (<HTMLInputElement>  document.getElementById("searchForm"));
+    var query = document.getElementById("searchQuery").value;
+    window.location.href = "/search?searchQuery=" + query + "&type=" + type;
+}
 //# sourceMappingURL=typescripts.js.map
