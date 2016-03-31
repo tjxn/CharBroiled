@@ -20,8 +20,11 @@ module.exports = function(config) {
         {pattern: 'panel.ts', included: false},
       {pattern: 'app.ts', included: false},
         {pattern: 'comic.ts', included: false},
+      {pattern: 'user.ts', included: false},
+      {patter: 'UserWebService.ts', included:false},
       //{pattern: 'routes/index.ts', include: false},
-      {pattern: 'test/restfulspec.js', included: false}
+      {pattern: 'test/restfulspec.js', included: false},
+      {pattern: 'test/userdbdpec.js', included: false}
     ],
 
 
