@@ -1889,7 +1889,7 @@ function checkSearchQuery() {
     var query = getURLParameterByName("searchQuery");
     var type = getURLParameterByName("type");
 
-    if(query != "") { // search was requested!
+    if(query != null) { // search was requested!
         (<HTMLInputElement>  document.getElementById("searchQuery")).setAttribute("value", query);
         if(type == "comic") {
             comicSearch();

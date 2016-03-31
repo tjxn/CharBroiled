@@ -1705,7 +1705,7 @@ function renderLanguage(title, panels) {
 function checkSearchQuery() {
     var query = getURLParameterByName("searchQuery");
     var type = getURLParameterByName("type");
-    if (query != "") {
+    if (query != null) {
         document.getElementById("searchQuery").setAttribute("value", query);
         if (type == "comic") {
             comicSearch();
