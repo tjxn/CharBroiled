@@ -41,4 +41,13 @@ describe("Testing userdb calls", function() {
             done();
         });
     });
+
+    describe("returns 200 with an invalid user email get call", function() {
+        request( {method: 'GET',
+        url: baseurl + "email/bad@bad.com"},
+        function(response) {
+            expect(response.statusCode.toBe(200));
+            done();
+        });
+    });
 });
