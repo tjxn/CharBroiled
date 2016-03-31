@@ -15,6 +15,9 @@ class ComicSearch {
     // Should return a list of Comic that has matched one of the queries set in the constructor.
     getResults():Object[]{
         var results:Object[] = [];
+        if (this.QUERY == '' || this.QUERY == ' '){
+            results = this.COMICS;
+        }
         for (var c of this.COMICS){
                 if (this.searchComic(c)){
                     results.push(c);

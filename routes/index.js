@@ -162,7 +162,13 @@ var Router = (function () {
                 var array = JSON.parse(body);
                 var searchManager = new ComicSearch(query, array);
                 var results = searchManager.getResults();
-                res.send(JSON.stringify(results));
+                if (req.user.customData.userType == "Viewer") {
+                    var reslts = privateCheck(results);
+                    res.send(JSON.stringify(reslts));
+                }
+                else {
+                    res.send(JSON.stringify(results));
+                }
             });
         });
         // Get Translated Text
@@ -186,8 +192,14 @@ var Router = (function () {
                 var searchManager = new ContributorSearch(query, uarray);
                 var ures = searchManager.getResults();
                 api.getComics(ures, function (error, resp, bdy) {
-                    //var carr = JSON.parse(body);
-                    res.send(bdy);
+                    var carr = JSON.parse(bdy);
+                    if (req.user.customData.userType == "Viewer") {
+                        var check = privateCheck(carr);
+                        res.send(JSON.stringify(check));
+                    }
+                    else {
+                        res.send(JSON.stringify(carr));
+                    }
                 });
             });
         });
@@ -407,6 +419,17 @@ var Router = (function () {
                 }
             }
             return comicIds;
+        }
+        function privateCheck(comics) {
+            var results = [];
+            var leng = Object.keys(comics).length;
+            for (var i = 0; i < leng; i++) {
+                var si = i.toString();
+                if (comics[i]['Public']) {
+                    results.push(comics[i]);
+                }
+            }
+            return results;
         }
         function jsonToComic(data) {
             /* CODE IS FOR DYNAMIC PANEL SUPPORT
