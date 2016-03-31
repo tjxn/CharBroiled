@@ -17,10 +17,14 @@ module.exports = function(config) {
     files: [
       'test-main.js',
         {pattern: 'node_modules/request/request.js', included: false},
+        {pattern: 'panel.ts', included: false},
       {pattern: 'app.ts', included: false},
+      {pattern: 'search.ts', included: false},
+        {pattern: 'comic.ts', included: false},
       //{pattern: 'routes/index.ts', include: false},
-      {pattern: 'test/restfulspec.js', included: false},
-      {pattern: 'test/comicthruindexspec.js', include: false}
+      //{pattern: 'test/restfulspec.js', included: false},
+      {pattern: 'test/comicthruindexspec.js', include: false},
+      {pattern: 'test/searchspec.js', include: false}
     ],
 
 

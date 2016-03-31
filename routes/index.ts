@@ -237,21 +237,21 @@ class Router {
             var uapi = new UserWebService();
             var api = new ComicWebService();
             var query:string = req.query["contribQuery"];
-            uapi.getAllUsers(function (err:string, response:string, body:string) {
-                var uarray = JSON.parse(body);
-                var searchManager = new ContributorSearch(query, uarray);
-                var ures = searchManager.getResults();
-                api.getComics(ures, function (error:string, resp:string, bdy:string) {
-                    var carr = JSON.parse(bdy);
-                    if (req.user.customData.userType == "Viewer") {
-                        var check = privateCheck(carr);
-                        res.send(JSON.stringify(check));
-                    }
-                    else {
-                        res.send(JSON.stringify(carr));
-                    }
+                uapi.getAllUsers(function (err:string, response:string, body:string) {
+                    var uarray = JSON.parse(body);
+                    var searchManager = new ContributorSearch(query, uarray);
+                    var ures = searchManager.getResults();
+                    api.getComics(ures, function (error:string, resp:string, bdy:string) {
+                        var carr = JSON.parse(bdy);
+                        if (req.user.customData.userType == "Viewer") {
+                            var check = privateCheck(carr);
+                            res.send(JSON.stringify(check));
+                        }
+                        else {
+                            res.send(JSON.stringify(carr));
+                        }
+                    });
                 });
-            });
         });
 
 // Update a comic in the database

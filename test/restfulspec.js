@@ -39,9 +39,9 @@ describe("Testing default", function() {
         });
     });
 });
-describe("testing /login", function() {
-    describe("bad login attempt", function() {
-       it("returns status code 400", function() {
+xdescribe("testing /login", function() {
+    xdescribe("bad login attempt", function() {
+       xit("returns status code 400", function() {
     request( {method: 'POST',
      url: base_url + "/login",
      json: {
@@ -53,8 +53,8 @@ describe("testing /login", function() {
     });
     });
     });
-    describe("good login attempt", function() {
-        it("returns status code 200", function() {
+    xdescribe("good login attempt", function() {
+        xit("returns status code 200", function() {
             request( {method: 'POST',
                 url: base_url + "/login",
                 json: {

@@ -14,7 +14,7 @@ class ContributorSearch {
         var rawarr = new Array<string>();
         for (var u of this.USERS){
             if (u['UserType'] == 'Contributor'){
-                if (u['Email'].indexOf(this.QUERY) > -1){
+                if (u['Email'].indexOf(this.QUERY) > -1 || this.QUERY == '' || this.QUERY == ' '){
                     var uarr = u['Contributed'];
                     for (var ua of uarr){
                         if (rawarr.indexOf(ua) < 0){

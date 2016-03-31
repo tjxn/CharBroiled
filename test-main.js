@@ -21,7 +21,9 @@ require.config({
   baseUrl: '/base',
 
   paths: {
-    'request': 'node_modules/request/request'
+    'request': 'node_modules/request/request',
+    'ComicSearchManager' : 'comicSearch',
+    'Panel' : 'panel'
   },
 
   // dynamically load all test files
