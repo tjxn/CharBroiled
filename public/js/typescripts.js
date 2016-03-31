@@ -1668,7 +1668,10 @@ function contribSearch() {
 function renderSearchResults(id, comics, uType) {
     // delete previous search results
     removeNodeList(document.getElementById(id).children);
-    if (uType == "Contributor") {
+    if (comics == "[]") {
+        var container = document.getElementById(id);
+    }
+    else if (uType == "Contributor") {
         renderThumbnails(id, "searchRes", "edit", comics);
     }
     else {
@@ -1694,8 +1697,13 @@ function checkSearchQuery() {
     var query = getURLParameterByName("searchQuery");
     var type = getURLParameterByName("type");
     if (query != "") {
-        document.getElementById("searchQuery").value = query;
-        comicSearch();
+        document.getElementById("searchQuery").setAttribute("value", query);
+        if (type == "comic") {
+            comicSearch();
+        }
+        else {
+            contribSearch();
+        }
     }
 }
 // para: string which represents the type of search to perform ("user" || "comic")

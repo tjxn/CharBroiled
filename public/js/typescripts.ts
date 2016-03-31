@@ -1845,7 +1845,11 @@ function contribSearch() {
 function renderSearchResults(id: string, comics: string, uType: string) {
     // delete previous search results
     removeNodeList(document.getElementById(id).children);
-    if(uType == "Contributor") {
+    if (comics == "[]") {
+        var container = (<HTMLInputElement>  document.getElementById(id));
+
+
+    } else if(uType == "Contributor") {
         renderThumbnails(id, "searchRes", "edit", comics);
     } else {
         renderThumbnails(id, "searchRes", "view", comics);
@@ -1874,8 +1878,12 @@ function checkSearchQuery() {
     var type = getURLParameterByName("type");
 
     if(query != "") { // search was requested!
-        (<HTMLInputElement>  document.getElementById("searchQuery")).value = query;
-        comicSearch();
+        (<HTMLInputElement>  document.getElementById("searchQuery")).setAttribute("value", query);
+        if(type == "comic") {
+            comicSearch();
+        } else {
+            contribSearch();
+        }
     }
 }
 
