@@ -1845,9 +1845,21 @@ function contribSearch() {
 function renderSearchResults(id: string, comics: string, uType: string) {
     // delete previous search results
     removeNodeList(document.getElementById(id).children);
-    if (comics == "[]") {
+    if (comics == "{}") {
         var container = (<HTMLInputElement>  document.getElementById(id));
 
+        var thumbnail = document.createElement("div");
+        thumbnail.className = "thumbnail";
+
+        var caption = document.createElement("div");
+        caption.className = "caption";
+
+        var h5 = document.createElement("h5");
+        h5.innerHTML = "No search results found.";
+        caption.appendChild(h5);
+
+        thumbnail.appendChild(caption);
+        container.appendChild(thumbnail);
 
     } else if(uType == "Contributor") {
         renderThumbnails(id, "searchRes", "edit", comics);
