@@ -17,6 +17,7 @@ class ComicSearch {
         var results:Object[] = [];
         if (this.QUERY == '' || this.QUERY == ' '){
             results = this.COMICS;
+            return results;
         }
 
         for (var c of this.COMICS){
