@@ -50,6 +50,9 @@ function changeFavIcon() {
         return 0;
     }
 }
+// para: lang:string, a string representation of a language: en, es, de, it or fr
+// Updates the Translate ComboBox to highlight the selected language
+// return: void
 function updateTransText(lang) {
     var transName = document.getElementById("t1");
     transName.setAttribute("class", "");
@@ -82,6 +85,10 @@ function updateTransText(lang) {
         transName.setAttribute("class", "active");
     }
 }
+// para: language code: en, fr, it, de, es
+// Translate the comic from it's current langauge into the one specified in lang
+// Update the comic the user is seeing to reflect the translation
+// return: void
 function translateComic(lang) {
     var translateBtn = document.getElementById("translateButton");
     translateBtn.disabled = true;
@@ -132,6 +139,11 @@ function translateComic(lang) {
         }
     });
 }
+// para: msg - Message to be displayed to user
+//      icon - the name of a glyphicon icon from bootstrap
+//      type - a valid type from bootstrap eg danger, success, info
+// Displays a notification to the user
+// return: void
 function notifyUser(msg, icon, type) {
     var note = $.notify({
         // options
@@ -215,52 +227,7 @@ function initDropzone() {
     });
     myDrop.on('success', function (file, data) {
         if (data == "Error Uploading Image") {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-remove',
-                title: '',
-                message: data,
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "danger",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser(data, 'glyphicon glyphicon-ok', "danger");
         }
         else {
             // Do something with url
@@ -269,52 +236,7 @@ function initDropzone() {
             var panelURL = document.getElementById("modalURL");
             panelURL.value = url;
             cloudinary_URL.value = url;
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-ok',
-                title: '',
-                message: "Image Upload Successful",
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "success",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser("Image Upload Successful", 'glyphicon glyphicon-ok', "success");
         }
     });
 }
@@ -350,6 +272,9 @@ function setUserEmails() {
         ID.value = data.toString();
     });
 }
+// para: none
+// sets the Welcome message on the Account page with the name of the User
+// return: none
 function setUserName() {
     var userName = document.getElementById("welcomeMessage");
     $.get('/user/name', function (data) {
@@ -402,15 +327,6 @@ function renderEditComic(id) {
             var publicPrivate = document.getElementById("privateBtn");
             publicPrivate.checked = true;
         }
-        //var contrib1 = (<HTMLInputElement> document.getElementById("C1"));
-        //contrib1.innerHTML = comicJSONObj["Contributors"]["Contributor_1"];
-        //console.log(comicJSONObj.Contributors);
-        //if comic is favourited by the user, needs to also be updated in savefourite
-        //var favoriteButton = (<HTMLInputElement>  document.getElementById("FavouriteButton"));
-        //favoriteButton.setAttribute("class","btn btn-primary");
-        //favoriteButton.setAttribute("class","btn btn-primary active");
-        //button.setAttribute("data-toggle", "modal");
-        //console.log(comicJSONObj.Panels);
         renderPanels("pictureContainer", comicJSONObj.Panels, true);
         addComicToUser();
         addUserToComic();
@@ -477,101 +393,11 @@ function saveComic(notify) {
         timeout: 4000,
         success: function (data) {
             if (notify) {
-                var note = $.notify({
-                    // options
-                    icon: 'glyphicon glyphicon-ok',
-                    title: '',
-                    message: data.Status,
-                    url: '',
-                    target: '_blank'
-                }, {
-                    // settings
-                    element: 'body',
-                    position: null,
-                    type: "success",
-                    allow_dismiss: true,
-                    newest_on_top: false,
-                    showProgressbar: false,
-                    placement: {
-                        from: "top",
-                        align: "right"
-                    },
-                    offset: 20,
-                    spacing: 10,
-                    z_index: 1031,
-                    delay: 5000,
-                    timer: 1000,
-                    url_target: '_blank',
-                    mouse_over: null,
-                    animate: {
-                        enter: 'animated fadeInDown',
-                        exit: 'animated fadeOutUp'
-                    },
-                    onShow: null,
-                    onShown: null,
-                    onClose: null,
-                    onClosed: null,
-                    icon_type: 'class',
-                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                        '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                        '<span data-notify="icon"></span> ' +
-                        '<span data-notify="title">{1}</span> ' +
-                        '<span data-notify="message">{2}</span>' +
-                        '<div class="progress" data-notify="progressbar">' +
-                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                        '</div>' +
-                        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                        '</div>'
-                });
+                notifyUser(data.Status, 'glyphicon glyphicon-ok', "success");
             }
         },
         error: function (xhr, status, thrownError) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-remove',
-                title: '',
-                message: 'ERROR - Comic Could Not Be Saved',
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "danger",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser('ERROR - Comic Could Not Be Saved', 'glyphicon glyphicon-remove', 'danger');
         }
     });
 }
@@ -590,52 +416,7 @@ function newComic() {
             window.location.replace("/edit?id=" + data.ComicID);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-remove',
-                title: '',
-                message: 'ERROR - Could Not Create New Comic',
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "danger",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser("ERROR - Could Not Create New Comic", 'glyphicon glyphicon-remove', "danger");
         }
     });
 }
@@ -816,52 +597,7 @@ function addPanel() {
     var i = document.getElementsByClassName("panel").length;
     var numStr = (i + 1).toString();
     if (i > 8) {
-        var note = $.notify({
-            // options
-            icon: 'glyphicon glyphicon-remove',
-            title: '',
-            message: 'Only 9 Panels are Allowed in a Comic',
-            url: '',
-            target: '_blank'
-        }, {
-            // settings
-            element: 'body',
-            position: null,
-            type: "danger",
-            allow_dismiss: true,
-            newest_on_top: false,
-            showProgressbar: false,
-            placement: {
-                from: "top",
-                align: "right"
-            },
-            offset: 20,
-            spacing: 10,
-            z_index: 1031,
-            delay: 5000,
-            timer: 1000,
-            url_target: '_blank',
-            mouse_over: null,
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-            onShow: null,
-            onShown: null,
-            onClose: null,
-            onClosed: null,
-            icon_type: 'class',
-            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                '<span data-notify="icon"></span> ' +
-                '<span data-notify="title">{1}</span> ' +
-                '<span data-notify="message">{2}</span>' +
-                '<div class="progress" data-notify="progressbar">' +
-                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                '</div>' +
-                '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                '</div>'
-        });
+        notifyUser('Only 9 Panels are Allowed in a Comic', 'glyphicon glyphicon-remove', "danger");
     }
     else {
         var url = "http://strategyjournal.ru/wp-content/themes/strategy/img/default-image.jpg";
@@ -922,52 +658,7 @@ function removePanel(ele) {
         saveComic(true);
     }
     else {
-        var note = $.notify({
-            // options
-            icon: 'glyphicon glyphicon-remove',
-            title: '',
-            message: 'There Are No Panels To Remove',
-            url: '',
-            target: '_blank'
-        }, {
-            // settings
-            element: 'body',
-            position: null,
-            type: "danger",
-            allow_dismiss: true,
-            newest_on_top: false,
-            showProgressbar: false,
-            placement: {
-                from: "top",
-                align: "right"
-            },
-            offset: 20,
-            spacing: 10,
-            z_index: 1031,
-            delay: 5000,
-            timer: 1000,
-            url_target: '_blank',
-            mouse_over: null,
-            animate: {
-                enter: 'animated fadeInDown',
-                exit: 'animated fadeOutUp'
-            },
-            onShow: null,
-            onShown: null,
-            onClose: null,
-            onClosed: null,
-            icon_type: 'class',
-            template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                '<span data-notify="icon"></span> ' +
-                '<span data-notify="title">{1}</span> ' +
-                '<span data-notify="message">{2}</span>' +
-                '<div class="progress" data-notify="progressbar">' +
-                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                '</div>' +
-                '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                '</div>'
-        });
+        notifyUser('There Are No Panels To Remove', 'glyphicon glyphicon-remove', "danger");
     }
 }
 // para: none
@@ -1122,102 +813,12 @@ function saveFavourites() {
         dataType: 'json',
         timeout: 5000,
         success: function (data) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-ok',
-                title: '',
-                message: data.Status,
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "success",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser(data.Status, 'glyphicon glyphicon-ok', "success");
             btn.disabled = false;
             amIFavourite();
         },
         error: function (xhr, status, thrownError) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-remove',
-                title: '',
-                message: 'ERROR - Favourite Not Saved',
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "danger",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser('ERROR - Favourite Not Saved', "glyphicon glyphicon-remove", "danger");
             btn.disabled = false;
             amIFavourite();
         }
@@ -1265,52 +866,7 @@ function deleteComic() {
         dataType: 'json',
         timeout: 4000,
         error: function (xhr, status, thrownError) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-remove',
-                title: '',
-                message: 'ERROR - Could Not Delete Comic',
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "danger",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<div class="progress" data-notify="progressbar">' +
-                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                    '</div>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            });
+            notifyUser('ERROR - Could Not Delete Comic', 'glyphicon glyphicon-remove', "danger");
         }
     });
     window.location.replace("/account");
@@ -1389,18 +945,6 @@ function renderThumbnails(id, type, page, comics) {
         }
         container.appendChild(thumbnail);
     }
-    //=======================
-    /*
-     if (comicJSONObj.Public == true) {
-     comicTitle.value = comicJSONObj.Title;
-
-     //console.log(comicJSONObj.Panels);
-     renderPanels("pictureContainer", comicJSONObj.Panels, false);
-     } else {
-     comicTitle.value = "This comic is private.";
-     }
-     */
-    //==========================
 }
 // para: comicJSON object
 // Adds names of contributors to the drop-down bar for edit and view page
@@ -1485,57 +1029,6 @@ function addComicToUser() {
         async: true,
         timeout: 4000,
         dataType: 'json',
-        /*
-        success:
-            function (data) {
-            var note = $.notify({
-                // options
-                icon: 'glyphicon glyphicon-ok',
-                title: '',
-                message: data.Status,
-                url: '',
-                target: '_blank'
-            }, {
-                // settings
-                element: 'body',
-                position: null,
-                type: "success",
-                allow_dismiss: true,
-                newest_on_top: false,
-                showProgressbar: false,
-                placement: {
-                    from: "top",
-                    align: "right"
-                },
-                offset: 20,
-                spacing: 10,
-                z_index: 1031,
-                delay: 5000,
-                timer: 1000,
-                url_target: '_blank',
-                mouse_over: null,
-                animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
-                },
-                onShow: null,
-                onShown: null,
-                onClose: null,
-                onClosed: null,
-                icon_type: 'class',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                '<span data-notify="icon"></span> ' +
-                '<span data-notify="title">{1}</span> ' +
-                '<span data-notify="message">{2}</span>' +
-                '<div class="progress" data-notify="progressbar">' +
-                '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                '</div>' +
-                '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                '</div>'
-            });
-        },
-        */
         error: function (xhr, ajaxOptions, thrownError) {
         }
     });
@@ -1557,57 +1050,6 @@ function addComicToViewed() {
         async: true,
         timeout: 4000,
         dataType: 'json',
-        /*
-                 success:
-                 function (data) {
-                 var note = $.notify({
-                 // options
-                 icon: 'glyphicon glyphicon-ok',
-                 title: '',
-                 message: data.Status,
-                 url: '',
-                 target: '_blank'
-                 }, {
-                 // settings
-                 element: 'body',
-                 position: null,
-                 type: "success",
-                 allow_dismiss: true,
-                 newest_on_top: false,
-                 showProgressbar: false,
-                 placement: {
-                 from: "top",
-                 align: "right"
-                 },
-                 offset: 20,
-                 spacing: 10,
-                 z_index: 1031,
-                 delay: 5000,
-                 timer: 1000,
-                 url_target: '_blank',
-                 mouse_over: null,
-                 animate: {
-                 enter: 'animated fadeInDown',
-                 exit: 'animated fadeOutUp'
-                 },
-                 onShow: null,
-                 onShown: null,
-                 onClose: null,
-                 onClosed: null,
-                 icon_type: 'class',
-                 template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                 '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                 '<span data-notify="icon"></span> ' +
-                 '<span data-notify="title">{1}</span> ' +
-                 '<span data-notify="message">{2}</span>' +
-                 '<div class="progress" data-notify="progressbar">' +
-                 '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                 '</div>' +
-                 '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                 '</div>'
-                 });
-                 },
-        */
         error: function (xhr, ajaxOptions, thrownError) {
         }
     });
@@ -1705,7 +1147,7 @@ function renderLanguage(title, panels) {
 function checkSearchQuery() {
     var query = getURLParameterByName("searchQuery");
     var type = getURLParameterByName("type");
-    if (query != "") {
+    if (query != null) {
         document.getElementById("searchQuery").setAttribute("value", query);
         if (type == "comic") {
             comicSearch();

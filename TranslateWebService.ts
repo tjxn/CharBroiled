@@ -8,7 +8,7 @@
 /*
  *             Libraries Used Throughout TranslateWebService Class
  * request - https://github.com/request/request
- *
+ * Uses the Yandex Translation API - https://translate.yandex.com/developers
  * */
 
 class TranslateWebService {

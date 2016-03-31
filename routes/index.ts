@@ -240,6 +240,7 @@ class Router {
                 uapi.getAllUsers(function (err:string, response:string, body:string) {
                     var uarray = JSON.parse(body);
                     var searchManager = new ContributorSearch(query, uarray);
+
                     var ures = searchManager.getResults();
                     api.getComics(ures, function (error:string, resp:string, bdy:string) {
                         var carr = JSON.parse(bdy);
