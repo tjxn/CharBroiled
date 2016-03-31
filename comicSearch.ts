@@ -18,10 +18,10 @@ class ComicSearch {
         if (this.QUERY == '' || this.QUERY == ' '){
             results = this.COMICS;
         }
+
         for (var c of this.COMICS){
                 if (this.searchComic(c)){
                     results.push(c);
-                    break;
                 }
         }
         return results;
